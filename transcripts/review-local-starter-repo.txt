@@ -1,0 +1,46 @@
+Now that the starter repo has been created and cloned to your local computer, let's review.
+
+You will rename the environment file to .env, from .envsample.
+
+This is important as .env is a recognized name using the "dotenv" package, while "envsample" is not.
+
+As we will be using a Model - View - Controller, commonly known as MVC, design pattern for all development, it is also critical that the folders to hold the respective files also be created.
+
+Finally, we will make extensive use of routes to direct incoming requests to the appropriate location to be processed and the resulting response to be returned to the client.
+
+When creating new folders in VS Code, be sure to click in a blank area of the "Explorer" pane prior to creating the folder, assuming the folder belongs at the root of the project.
+
+If the folder belongs inside another folder, click the parent folder prior to creating the new folder.
+
+Take a minute to review the folders and files that should exist when done. From top to bottom, the folders should be: controllers, database, models, public, routes, utilities, views, .env, .gitignore, package.json, readme.md, and server.js.
+
+Please note that all folders and files, except for the readme file should be lowercase and contain no spaces.
+
+Let's take a moment and review what each of these do.
+
+A controller is what it sounds like, it contains the code to control the process to deliver a response to an incoming request. It is the "brain" of the operation. All controllers will be stored in the controllers folder.
+
+The database folder will hold file that describes how the application will interact with the database server. It will also be used to store SQL files.
+
+A model is where SQL-based functions are stored to actually carry out data interactions between the project and the database server. All models will be stored in the models folder.
+
+The public folder is where static files are stored. A static file is one that contains no dynamic code. Examples are images, CSS and client-side JavaScript files. All static files will be stored in the public folder.
+
+A route file is one which describes a path that leads to the controller to process an incoming request. A typical application will consist of many routes stored in files. All route files will be stored in the routes folder.
+
+Utilities are functions, stored in files that contain reusable code, that does not fall neatly into the MVC. All utility files will be stored in the utilities folder.
+
+A view is a dynamic web page that is built by the server, with data retrieved from the database. It is referred to as a view, because it is typically delivered to a brower to be "viewed" by the client. All view files will be stored in the views folder.
+
+As mentioned earlier, the .env file is where local environment variables are stored. These variables are typically for storing sensitive values.
+
+The .gitignore file is where we list files and folders that will not be uploaded to GitHub.
+
+The package.json file, as discussed in previous content, is the manifest of all resources needed in order for our project to function.
+
+The readme.md file is  a markdown file, typically used to describe a github repository. This file is leftover from the template used to create this repository.
+
+The server.js file is the project server. It describes how the application will work.
+
+These are the basic folders and files of the project which imposes organization for us to use.
+

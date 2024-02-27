@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Login: JWT and Cookie | Web Backend Development</title>
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="/340-js/css/340course-min.css" type="text/css" media="screen">
+  <link rel="stylesheet" href="/340-js/css/prism-coy-dev.min.css" media="screen">
+  <script defer src="/340-js/js/prism-coy-dev.min.js"></script>
+</head>
+
+<body>
+  <div id="wrapper">
+    <header><img src="/340-js/images/small_banner.jpg" alt="Course Banner"></header>
+    <main>
+      <h1>Login: JWT and Cookie</h1>
+
+      <h2>Introduction</h2>
+      <p>Having added the packages to the project, let's now put them to work. By adding the login process to our project.</p>
+
+      <h2>Video Overview</h2>
+      <p>The video provides a general overview of the activity, but does not contain the detail needed to complete each process. Watch the video to obtain a general idea, but follow the written steps to complete the activity. This is the <a target="_blank" href="../transcripts/authentication-jwt.txt">Transcript</a> of the video.</p>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/vqCWUqt8heQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+      <h3>cookie-parser</h3>
+      <ol>
+        <li>Open the <span class="fn">server.js</span> file.</li>
+        <li>At the top, in the "Require Statements" area require the cookie-parser:
+          <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-javascript">const cookieParser = require("cookie-parser")</code></pre>
+        </li>
+        <li>Scroll down to the "Middleware" section of the same file.</li>
+        <li>Beneath the existing use statements, add one for the cookieParser:
+          <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-javascript">app.use(cookieParser())</code></pre>
+        </li>
+        <li>The code in the Middleware section will allow the cookie parser to be implemented throughout the project.</li>
+        <li>Ensure that no warnings or errors are reported by <span title='Visual Studio Code'>VSC</span>.
+        </li>
+        <li>Save and close the file.</li>
+      </ol>
+
+      <h2>Login Process</h2>
+      <p>Currently, we have the means of delivering the login and registration views and registering a client. What we don't have is the login process itself, to authenticate a site visitor. Let's add that now.</p>
+
+      <h3>login View</h3>
+      <ol>
+        <li>Find and open the <span class="fn">account &gt; login</span> file in the <span class="fn">views</span> folder.</li>
+        <li>Look carefully at the opening form tag. It should look similar to this:
+          <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-markup">&lt;form id="loginForm" action="/account/login" method="post"&gt;&lt;/form&gt;</code></pre>
+        </li>
+        <li>All data within the form will be sent to the server using a post method.</li>
+        <li>All data will be sent through the <span class="fn">account/login</span> route. <span class="notice">Remember though that it is the combination of handler "post" and route that determines what happens on the server</span>.</li>
+        <li>Alter the method and action, if needed.</li>
+        <li>Save and close the view.</li>
+      </ol>
+
+      <h3>accountRoute Router</h3>
+      <ol>
+        <li>Find and open the <span class="fn">routes > accountRoute</span> file.</li>
+        <li>Locate the <b>login process route</b>, not the route to deliver the login view.</li>
+        <li>Remove the existing arrow function that was used during the validation testing.</li>
+        <li>In its place add a controller-based function (that doesn't yet exist) that will process the login request. For example:
+        <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-javascript">accountController.accountLogin</code></pre>
+        </li>
+        <li>Be sure to wrap it in our error handler function.</li>
+        <li>Be sure to add the login validation rules and check functions.</li>
+        <li>When done, the route could look similar to this:
+<pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-javascript">// Process the login request
+router.post(
+  "/login",
+  regValidate.loginRules(),
+  regValidate.checkLoginData,
+  utilities.handleErrors(accountController.accountLogin)
+)</code></pre>
+
+        </li>
+        <li>Ensure that no warnings or errors are reported by <span title='Visual Studio Code'>VSC</span>.
+        </li>
+        <li>Save the file.</li>
+      </ol>
+
+      <h3>Account Controller File</h3>
+      <ol>
+        <li>Open the <span class="fn">accountController</span> file from the "controllers" folder.</li>
+        <li>At the top of the file, require the "jsonwebtoken" and "dotenv" packages:
+          <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-javascript">const jwt = require("jsonwebtoken")
+require("dotenv").config()</code></pre>
+        </li>
+        <li>Ensure that no warnings or errors are reported by <span title='Visual Studio Code'>VSC</span>.
+        </li>
+        <li>Save the file.</li>
+      </ol>
+
+      <h3>The Login Process</h3>
+      <p>As done during the registration process, the incoming data must be validated (already done in the route), collected in the controller, checked against the existing data in the database, processed, and the client informed. Collectively, this entire process is to "<b>authenticate</b>" a client.</p>
+
+      <ol>
+        <li>Scroll down to the bottom of the last function in the controller.</li>
+        <li>Add a few empty lines.</li>
+        <li>Leave at least one empty line between the existing function and the new function.</li>
+        <li>Add the following function to the file:
+<pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-javascript">/* ****************************************
+ *  Process login request
+ * ************************************ */
+async function accountLogin(req, res) {
+ let nav = await utilities.getNav()
+ const { account_email, account_password } = req.body
+ const accountData = await accountModel.getAccountByEmail(account_email)
+ if (!accountData) {
+  req.flash("notice", "Please check your credentials and try again.")
+  res.status(400).render("account/login", {
+   title: "Login",
+   nav,
+   errors: null,
+   account_email,
+  })
+ return
+ }
+ try {
+  if (await bcrypt.compare(account_password, accountData.account_password)) {
+  delete accountData.account_password
+  const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 * 1000 })
+  res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 })
+  return res.redirect("/account/")
+  }
+ } catch (error) {
+  return new Error('Access Forbidden')
+ }
+}</code></pre>
+        </li>
+        <li>When done, add the new function to the module.exports object at the bottom of the file.</li>
+        <li>Check for any warnings or errors.</li>
+        <li>Save the file.</li>
+        <li><h3>An explanation</h3>
+        <ul>
+          <li><strong>Lines 1-3 - </strong> a multi-line comment for the function.</li>
+          <li><strong>Line 4 - </strong> opens the async function, and accepts the request and response objects as parameters.</li>
+          <li><strong>Line 5 - </strong> builds the navigation bar for use in views.</li>
+          <li><strong>Line 6 - </strong> collects the incoming data from the request body.</li>
+          <li><strong>Line 7 - </strong> makes a call to a model-based function to locate data associated with an existing email (this function does not yet exist). Returned data, if any, is stored into the "accountData" variable.</li>
+          <li><strong>Line 8 - </strong> an "if" to test if nothing was returned.</li>
+          <li><strong>Line 9 - If the variable is empty, a message is set.</strong></li>
+          <li><strong>Line 10 - </strong> the response object is used to return the login view to the browser.</li>
+          <li><strong>Lines 11-14 - </strong> data to be returned to the view. <span class="notice">Note that the password is NOT part of the clientData object.</span>.</li>
+          <li><strong>Line 15 - </strong> closes the data object and render function.</li>
+          <li><strong>Line 16 - </strong> return control back to the project process.</li>
+          <li><strong>Line 17 - </strong> ends the "if" test.</li>
+          <li><strong>Line 18 - </strong> opens a try-catch block.</li>
+          <li><strong>Line 19 - </strong> uses the bcrypt.compare() function which takes the incoming, plain text password and the hashed password from the database and compares them to see if they match. (The plain text password is hashed using the same algorithm and secret used with the original password. The two hashes are compared to see if they match.) The resulting "TRUE" or "FALSE" is evaluated by the "if".</li>
+          <li><strong>Line 20 - </strong> If the passwords match, then the JavaScript delete function is used to remove the hashed password from the accountData array.</li>
+          <li><strong>Line 21 - </strong> the JWT token is created. The accountData is inserted as the payload. The secret is read from the <span class="fn">.env</span> file. When the token is ready, it is stored into an "accessToken" variable. <span class="notice">Note! The token expiration must be set in milliseconds. Thus, 60 seconds x 60 minutes = 3600 seconds. Multiply that by 1000 to convert it to milliseconds. In short, the token will be given a life of 1 hour, measured in milliseconds</span>.
+          </li>
+          <li><strong>Line 22 - </strong> a new cookie is created, named "jwt", the JWT token is stored in the cookie, and the options of "httpOnly: true" and "maxAge: 3600 * 1000" are set. This means that the cookie can only be passed through the HTTP protocol and cannot be accessed by client-side JavaScript. It will also expire in 1 hour.</li>
+          <li><strong>Line 23 - </strong> the application then redirects to the default account route. This should deliver an <span class="fn">account management</span> view (you'll create this later in this activity).</li>
+          <li><strong>Line 24 - </strong> ends the if block.</li>
+          <li><strong>Line 25 - </strong> ends the try block and begins the catch block and stores any errors in the "error" variable.</li>
+          <li><strong>Line 26 - </strong> an error will occur if the passwords do not match and the token and cookie cannot be created. A new error is created and should be picked up by the error handler.</li>
+          <li><strong>Line 27 - </strong> ends the catch block.</li>
+          <li><strong>Line 28 - </strong> ends the function.</li>
+        </ul>
+        </li>
+        <li>Examine the code and ensure that no warnings or errors are present.</li>
+        <li>Save the file.</li>
+      </ol>
+
+      <h2>.env File</h2>
+      <p>In the code we indicated that the JWT secret would be stored in the <span class="fn">.env</span> file for use in the JWT creation process. Let's now create that "secret" value.</p>
+
+<ol>
+  <li>Open the <span class="fn">.env</span> file from the root of the project.</li>
+  <li>Beneath the existing name - value pairs add the following:
+<pre><code class="language-javascript">ACCESS_TOKEN_SECRET=
+</code></pre>
+  </li>
+  <li>With the name in place, let's create the actual value for the ACCESS_TOKEN_SECRET. It is critical that the secret value be random, so that it cannot be guessed. We will use the same process that was used to create the SESSION_SECRET value in Unit 4:
+    <ol>
+      <li>Open a new <span title='Visual Studio Code'>VSC</span> terminal.</li>
+      <li>Type "<mark>node</mark>", press "Enter".</li>
+      <li>Type "<mark><code>require('crypto').randomBytes(64).toString('hex')</code></mark>", press "Enter".</li>
+      <li>Copy the generated string, including the single quotes on either end, and paste it as the value for the ACCESS_TOKEN_SECRET.</li>
+      <li>Type "Control + C" in the terminal window to exit Node. Reduce or close the terminal.</li>
+    </ol>
+  </li>
+  <li>Ensure that no warnings or errors are indicated in the <span class="fn">.env</span> file.</li>
+  <li>Save the file.</li>
+</ol>
+<p>Recall that the <span class="fn">.env</span> file is ONLY for testing locally. Because it is our intent to deploy this to a live server, the values that were just created need to also be present in our production environment. Let's do that now.</p>
+
+<h2>Render.com Environment Variables</h2>
+<ol>
+  <li>In a browser, login to <span class="fn">render.com</span> using your GitHub sign-in.</li>
+  <li>In the dashboard, click on the web server.</li>
+  <li>In the dashboard, click on <span class="fn">Environment</span> on the left-side of the screen.
+  </li>
+  <li>Click the <span class="fn">Add Environment Variable</span> button.</li>
+  <li>In the first empty Key text box, copy and paste the name from your own <span class="fn">.env</span> file: ACCESS_TOKEN_SECRET</li>
+  <li>Copy the actual value from the <span class="fn">.env</span> file for the ACCESS_TOKEN_SECRET, and paste it into the "value" textarea. Do NOT include the equal sign or surrounding quotes, just the string between the quotes.</li>
+  <li>Visually compare everything from the two locations for identical values.</li>
+  <li>Click the "Save Changes" button in the render.com window.</li>
+  <li>When the save is complete, ensure that the new item has a small checkmark in the bottom right-corner of the "value" textarea.</li>
+  <li>The value will be replaced by bullets to hide the value from anyone who may look over your shoulder. To view the value, hover over or click in the textarea.</li>
+</ol>
+
+<h2>The Account by Email Function</h2>
+<p>To be able to compare the submitted password against the stored password hash, the hash must be retrieved from the database. The means of doing so is by seeing if a matching email address exists and retrieve the entire record based on the email.</p>
+<ol>
+  <li>Find and open the <span class="fn">account-model</span> file.</li>
+  <li>Scroll to the bottom of the file and create empty lines between the last existing function and the module.exports line.</li>
+  <li>Leave at least one empty line between the bottom of the previous function and the top of the new function.</li>
+  <li>Add the function as shown below:
+<pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-javascript">/* *****************************
+* Return account data using email address
+* ***************************** */
+async function getAccountByEmail (account_email) {
+  try {
+    const result = await pool.query(
+      'SELECT account_id, account_firstname, account_lastname, account_email, account_type, account_password FROM account WHERE account_email = $1',
+      [account_email])
+    return result.rows[0]
+  } catch (error) {
+    return new Error("No matching email found")
+  }
+}
+</code></pre>
+  </li>
+  <li>Add the function to the module.exports object at the bottom of the file.</li>
+  <li>Ensure that no warnings or errors exist in the file.</li>
+  <li>Save the file.</li>
+  <li><h3>An Explanation</h3>
+  <ul>
+    <li><strong>Lines 1-3 - </strong> a multi-line comment</li>
+    <li><strong>Line 4 - </strong> creates the function, makes it asyncronous, and adds the client_email as a parameter.</li>
+    <li><strong>Line 5 - </strong> begins a try - catch block.</li>
+    <li><strong>Line 6 - </strong> creates a variable to store the results of the query.</li>
+    <li><strong>Line 7 - </strong> a SQL SELECT query using the prepared statement syntax. This is the first argument in the pool.query function.</li>
+    <li><strong>Line 8 - </strong> passes in the client_email, as an array element to replace the placeholder at the end of the SQL statement. This is the second argument in the pool.query function. That function ends on this line.</li>
+    <li><strong>Line 9 - </strong> sends the first record, from the result set returned by the query, back to where this function was called.</li>
+    <li><strong>Line 10 - </strong> ends the "try" block and begins the "catch" block, with the "error" variable to store any errors that are thrown by the "try" block.</li>
+    <li><strong>Line 11 - </strong> sends the error, if any, to the console for review.</li>
+    <li><strong>Line 12 - </strong> ends the "catch" block.</li>
+    <li><strong>Line 13 - </strong> ends the function.</li>
+  </ul>
+  </li>
+</ol>
+
+<h2>Account Management View</h2>
+<p>As mentioned in the login code explanation, when a client is successful in a login attempt, they are redirected to an account management view. The view must be reachable via the default location "/" attached to  the "/account" route. As a team exercise, do the following:</p>
+<ol>
+  <li>Add the new default route for accounts to the <span class="fn">accountRoute</span> file.</li>
+  <li>Create a new view in the <span class="fn">views &gt; account</span> folder. It should have the normal components as all the other views and also be able to display a flash message and errors.</li>
+  <li>For now, the only content will be "You're logged in".</li>
+  <li>Build the function in the <span class="fn">accountController</span> to process the request and deliver the view.</li>
+  <li>Once the view is in place, test the application to see if you can log in, and be successfully redirected to the <span class="fn">account management</span> view. <span class="notice">Note: You may have to register a new account if you don't know the password of an already existing account, and the password must meet the requirements.</span> Keep at it, working together, until everyone in your team is successful.</li>
+</ol>
+
+<h2>Check the JWT</h2>
+<p>With the login process in place and successful, it is time to add a means of checking the JWT to confirm that it matches the one we created. Let's add that middleware now.</p>
+
+<h3>The Middleware Function</h3>
+<ol>
+  <li>Open the <span class="fn">utilities > index.js</span> file.</li>
+  <li>At the top of the file, add two require statements for the "jsonwebtoken" and "dotenv" packages:
+<pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">const jwt = require("jsonwebtoken")
+require("dotenv").config()
+</code></pre>
+  </li>
+  <li>Scroll down to the bottom of the page and add some blank lines below the last function and before the module.exports statement. Leave at least one blank line between the bottom of the previous function and the new function.</li>
+  <li>Add the new function as shown:
+<pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">/* ****************************************
+* Middleware to check token validity
+**************************************** */
+Util.checkJWTToken = (req, res, next) => {
+ if (req.cookies.jwt) {
+  jwt.verify(
+   req.cookies.jwt,
+   process.env.ACCESS_TOKEN_SECRET,
+   function (err, accountData) {
+    if (err) {
+     req.flash("Please log in")
+     res.clearCookie("jwt")
+     return res.redirect("/account/login")
+    }
+    res.locals.accountData = accountData
+    res.locals.loggedin = 1
+    next()
+   })
+ } else {
+  next()
+ }
+}</code></pre>
+</li>
+  <li>Ensure that no warnings or errors exist in the file.</li>
+  <li>Save the file.</li>
+  <li><h3>An Explanation</h3>
+  <ul>
+    <li><strong>Lines 1-3 - </strong> a multi-line comment for the function.</li>
+    <li><strong>Line 4 - </strong> begins the function and assigns it to the "checkJWTToken" property of the Util object. The function accepts the request, response and next parameters.</li>
+    <li><strong>Line 5 - </strong> an "if" check to see if the JWT cookie exists.</li>
+    <li><strong>Line 6 - </strong> if the cookie exists, uses the jsonwebtoken "verify" function to check the validity of the token. The function takes three arguments: 1) the token (from the cookie), 2) the secret value stored as an environment variable, and 3) a callback function.</li>
+    <li><strong>Line 7 - </strong> the JWT token from the cookie.</li>
+    <li><strong>Line 8 - </strong> the "secret" which is stored in the <span class="fn">.env</span> file.</li>
+    <li><strong>Line 9 - </strong> the callback function (which returns an error or the account data from the token payload).</li>
+    <li><strong>Line 10 - </strong> an "if" to see if an error exists.</li>
+    <li><strong>Line 11 - </strong> if an error, meaning the token is not valid, a flash message is created.</li>
+    <li><strong>Line 12 - </strong> the cookie is deleted.</li>
+    <li><strong>Line 13 - </strong> redirects to the "login" route, so the client can "login".</li>
+    <li><strong>Line 14 - </strong> ends the "if" started on line 10.</li>
+    <li><strong>Line 15 - </strong> adds the accountData object to the response.locals object to be forwarded on through the rest of this request - response cycle.</li>
+    <li><strong>Line 16 - </strong> adds "loggedin" flag with a value of "1" (meaning true) to the response.locals object to be forwarded on through the rest of this request - response cycle.</li>
+    <li><strong>Line 17 - </strong> calls the "next()" function directing the Express server to move to the next step in the application's work flow.</li>
+    <li><strong>Line 18 - </strong> ends the callback function and the jwt.verify function.</li>
+    <li><strong>Line 19 - </strong> ends the "if" started on line 5 and begins an "else" block.</li>
+    <li><strong>Line 20 - </strong> calls the next() function, to move forward in the application process. In this case, there is no JWT cookie, so the process moves to the next step.</li>
+    <li><strong>Line 21 - </strong> ends the "else" block.</li>
+    <li><strong>Line 22 - </strong> ends the middleware function, started on line 4.</li>
+  </ul>
+  </li>
+  <li>Close the file.</li>
+</ol>
+
+<h3>Apply the Middleware</h3>
+<p>Normally, middleware is applied in a "route", between the handler and the controller function. However, in certain instances, a piece of middleware can be "universal", and be applied to all routes. In this case, that is exactly what we want. If a token is present, we will validate it. If there is no token, we simply move on. Let's apply this now.</p>
+<ol>
+  <li>Find and open the <span class="fn">server.js</span> file.</li>
+  <li>Ensure that the <span class="fn">utilities &gt; index.js</span> file has been required into the file, at the top of the file, (e.g. "<code class="language-javascript">const utilities = require("../utilities/")</code>").</li>
+  <li>Find the "Middleware" section of the file and create an empty line at the bottom of the existing middleware listed there.</li>
+  <li>Add the middleware function you just wrote in the empty line, as shown below:
+    <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">app.use(utilities.checkJWTToken)
+</code></pre>
+  </li>
+  <li>Ensure there are no warnings or errors in the file.</li>
+  <li>Save the file.</li>
+</ol>
+
+<h2>Test Now</h2>
+<p>You've done a lot of work in the past several activities. Now is a good time to test and make sure things are working.</p>
+<ol>
+  <li>Make sure all of the files are saved.</li>
+  <li>Start the local, development server.</li>
+  <li>Open your development server in a browser tab.</li>
+  <li>Register a new account. Be sure to remember the email and password.</li>
+  <li>Login using the new account.</li>
+  <li>Check the cookies to see if you have a sessionId cookie and a JWt cookie.</li>
+  <li>If everything worked, then you're a real pro! Pat yourself on the back.</li>
+  <li>If things didn't work, carefully review your code, visit with members of your learning team or get help. But make sure it is working prior to moving on.</li>
+  <li>Shut down the local server when done.</li>
+</ol>
+
+
+<h2>What's Next?</h2>
+<p>With the basics in place we can now use the cookie and JWT to authorize clients. We will do that in the next activity.</p>
+
+    </main>
+    <footer>
+      <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="//i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a> All materials (except as
+      noted) are by Blaine Robertson and licensed under a <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US">Creative Commons Attribution-ShareAlike 3.0
+        License</a>.
+    </footer>
+  </div>
+</body>
+
+</html>

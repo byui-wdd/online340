@@ -1,0 +1,30 @@
+Perhaps you'll recall that EJS, our view engine, is responsible for compiling all aspects of the view, prior to returning it to the client via the HTTP Response.
+
+These aspects, in our situation, involve the template file, and partials, including the head, header, navigation and footer.
+
+Appropriate CSS file(s) and client-side JavaScript can also be attached and will be sent to the client as well.
+
+However, within the template you'll notice the body script block. This represents the content of the view. We build this content in the form of an EJS file, and indicate that it will be the content using the res.render() function, within a controller function or method.
+
+In this short video, we will discuss the creation of the EJS file that will present all of the vehicles in inventory, that belong to a selected classification.
+
+In the previous video, the various components: route, controller, model and utility were shown and discussed. These components actually built the content, based on the incoming request, in preparation to provide it to the file that you are building now.
+
+This file, because it is related to the inventory of the application, will be stored into an "inventory" folder within the views folder. This allows us to provide an organized approach to storing views.
+
+The view itself will use the same value as the main content heading as used in the title element. This should provide a clear connection between these two elements, but will also assist with the Search Engine Optimization (SEO) of the view.
+
+It will also contain the ability to display a message. Although, at this point, it will be inserted as an EJS comment, as we are not ready to display messages.
+
+Finally, and EJS code block will be added. This block will actually display the HTML structure that was built in our utility function, and which will be passed to the view for display.
+
+You will notice that there really is not a lot of code in the view. Instead, the "heavy lifting" of building all of the actual content and other elements of the view have been done previously. EJS simply compiles all of it.
+
+The CSS needed to style the result will have to be written in the CSS file, that is already linked in the head partial, or added to the head partial so that it will be delivered to the client.
+
+The final step is to test. This is done by starting the local node server, opening the application in a browser. Then, click on one of the navigation items. Each item represents a classification of vehicle. If everything works, the view should be delivered that shows the vehicles from inventory that match. Keep in mind, that it is the same document, just different data, that is delivered for each navigation item.
+
+If everything works, then you're well on your way to building a robust Node application.
+
+A reminder. Be sure to stop the local server by typing "Control + C" into the VS Code built-in terminal when done testing.
+

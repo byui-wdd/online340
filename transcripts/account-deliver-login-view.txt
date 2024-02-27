@@ -1,0 +1,40 @@
+When the EJS view engine was configured and the partial files created, a link was added to the header.ejs partial file.
+
+This link is meant to request the login view. To this point, the process to fulfill this request is absent.
+
+This video provides a brief overview of the process to fulfill the request triggered when this link is clicked.
+
+To begin, an account router file will be created in the "routes" folder. Like the inventory router file, built previously, it will require Express, a utilities library file, and the account controller, which will also be begun in this video.
+
+Once the resources have been required, the express.Router() will be instantiated and a GET route created to monitor if the route found in the header partial is received.
+
+Within the route, the error handler middleware will be implemented and finally, the controller-based request handler will be added.
+
+When done, the route will be exported.
+
+To enable this account router file, it will be imported into the server.js file, along with the "account" route indicator. This means that when a route is seen by the server.js file, if it contains "account", it will be forwarded to the account router file for handling.
+
+Next, the account controller will be created within the controllers folder. An MVC design pattern is being used, so all controllers will be stored in a "controllers" folder within the application.
+
+For now, the utilities index file is the only required resource being brought into scope.
+
+Build the request handler function as shown and when done export it for use, in the router file built previously.
+
+In this instance, the function accepts the request, response and next items as parameters. It then builds the navigation bar using the function from the utilities library, then calls the res.render function to deliver the login view and passes a title and the navigation string to the EJS view engine to incorporate into the login view.
+
+Finally, the view itself is built. The view will be stored into an "account" folder, within the view folder.
+
+It will use the title passed to the view as the main page heading, have the ability to display a flash message from the session, and contain a form.
+
+The form should accept an email address and password, and contain a submit button.
+
+Below the form should be a link containing a route that will request delivery of the registration view, if the client is not yet registered.
+
+The view should be valid HTML and use valid CSS to style things professionally.
+
+Once everything is built, it is time to start the development server.
+
+In the browser, open localhost:5500 and click the "My Account" link in the header. If everything works, the login view, containing the login form should be delivered to the browser.
+
+Assuming everything is working, stop the development server.
+

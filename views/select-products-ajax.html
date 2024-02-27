@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>AJAX Select Inventory | Web Backend Development</title>
+  <meta name="description" content="Selecting Inventory for facilitating an update or delete process using AJAX and JSON for the CSE Motors application of CSE 340">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="/340-js/css/340course-min.css" type="text/css" media="screen">
+  <link rel="stylesheet" href="/340-js/css/prism-coy-dev.min.css" media="screen">
+  <script defer src="/340-js/js/prism-coy-dev.min.js"></script>
+</head>
+
+<body>
+  <div id="wrapper">
+    <header><img src="/340-js/images/small_banner.jpg" alt="Course Banner"></header>
+    <main>
+      <h1>Select Inventory Items</h1>
+      <h2>Overview</h2>
+      <p>When a site administrator needs to update or delete a inventory item from the database it is helpful if a list of potential items is provided. This allows for quick identification prior to beginning the actual update or delete process. This activity will do just that, it will select a list of vehicles in inventory from the database
+        <mark>based on the classification_id, using an AJAX request</mark> and then display a mechanism to begin the update and/or delete process <mark>from the content stored in the returned JSON object</mark>.
+      </p>
+      <h2>Video Demonstration</h2>
+      <p>The video provides a general overview of the activity, but does not contain the detail needed to complete each process. Watch the video to obtain a general idea, but follow the written steps to complete the activity. This is the <a target="_blank" href="../transcripts/ajax-data.txt">Transcript</a> of the video.</p>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/KvVf1kVECDE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+      <h2>Inventory Model</h2>
+      <p>You already have a function in the <span class="fn">inventory model</span> that will return all inventory items based on a classification_id. You will reuse this function. You may want to open the model, find the function, and refresh your knowledge of its name for use again in the <span class="fn">inventory controller</span>.</p>
+
+      <h2>Inventory Controller</h2>
+      <p>Earlier you built into the <span class="fn">invController</span> the ability to deliver a <span class="fn">Inventory Management</span> view. It is in the <span class="fn">Inventory Management</span> view that we will display the list of inventory items based on the classification to which they belong. By doing this we limit the number of items displayed, keeping things somewhat manageable. In addition, it provides a means of introducing the ability of Node / Express to generate JSON data and allows a review of AJAX interactions which you should have been introduced to in your earlier frontend development course.</p>
+
+      <h3>Deliver Inventory Management Function</h3>
+      <ol>
+        <li>Locate and open the <span class="fn">invController</span>.</li>
+        <li>Within the controller find the function that is responsible for delivering the <span class="fn">inventory management</span> view.</li>
+        <li>Create some space between where the navigation bar is built and res.render is used to deliver the management view. In my code the created space looks like this (your names may be different):
+          <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code	class="language-JavaScript">invCont.buildManagementView = async function (req, res, next){
+  let nav = await utilities.getNav()
+  ... This is the empty space ...
+  res.render("./inventory/management", {
+  ... remaining render code is not shown ...</code></pre>
+        </li>
+        <li>Within the empty space we will call a function and store the results that will create a select list to be displayed in the inventory management view. The function to create the select list is the same one used in the "Add New Inventory" form. My code looks like this and should be found in the function that delivers the <span class="fn">Add New Inventory</span> view, in this same controller.
+          <pre><code class="language-JavaScript">const classificationSelect = await utilities.buildClassificationList()</code></pre>
+        </li>
+        <li>With the code to create the select list in place, be sure to add it to the render data object, so it is passed on to the view.</li>
+        <li>Ensure that no warnings or errors exist in the file.</li>
+        <li>Save the file.</li>
+      </ol>
+
+      <h2>The Inventory Management View</h2>
+      <p>With the controller and model ready, we're ready to turn our attention to the <span class="fn">Inventory Management</span> view. The view itself will contain a few added items:</p>
+      <ol>
+        <li>Below the links to add new classification or add a new vehicle to inventory, add a &lt;h2&gt; heading, to manage inventory (e.g.&lt;h2&gt;Manage Inventory&lt;/h2&gt;).</li>
+        <li>Below the heading add a paragraph that tells the user to select a classification from the list to see the items belonging to the classification.</li>
+        <li>Below the paragraph, add an EJS code block to display the classification list.</li>
+        <li>Below where the list will be displayed, create an empty HTML table. It is within this table that inventory items returned from the controller will be displayed. Like so:
+          <pre><code class="language-markup">&lt;table id="inventoryDisplay"&gt;&lt;/table&gt;</code></pre>
+          <p>Typically when an HTML table is built it consists of the &lt;table&gt; element, then inside you may find
+            &lt;thead&gt;, &lt;tfoot&gt; and &lt;tbody&gt; elements. In our case, the view will only contain the basic &lt;table&gt; element. All the interior elements and content will be created by JavaScript, then "injected" into the table element &mdash;
+            this is known as <abbr title="Document Object Model">DOM</abbr> manipulation.</p>
+            <p><mark>Note the id attribute and its value.</mark> They will be used as a JavaScript hook to know where to inject the inventory data.</p>
+        </li>
+        <li>Below the empty table, add a <code>&lt;noscript&gt;</code> element that will display a message if JavaScript is disabled, like so:
+          <pre><code class="language-markup">&lt;noscript&gt;JavaScript must be enabled to use this page.&lt;/noscript&gt;</code></pre>
+          If the browser detects that JavaScript is disabled, it will show the &lt;noscript&gt; element and its
+          contents. If JavaScript is enabled the &lt;noscript&gt; element is hidden.
+        </li>
+        <li>Next, you will create and hook up a JavaScript file that will watch for changes in the select list and request data from the application. When the data is returned, it will wrap it up in HTML and inject it into the table created in #4 above.</li>
+        <li>Ensure that no warnings or errors exist in the file.</li>
+        <li>Save the file.</li>
+      </ol>
+
+      <h3>The JavaScript File</h3>
+      <p>Hopefully you'll remember from the Frontend development class that best practice is to write HTML, CSS and JavaScript in separate files, then connect them together. You already have HTML
+        within the EJS file, layout and partial files, and a CSS file, and they are separate from one another but connected using a &lt;link&gt; element. We want to create a JavaScript file and connect it to the management view.</p>
+      <ol>
+        <li>Scroll to the bottom of the management view.</li>
+        <li>Add the following HTML code:
+          <pre><code class="language-markup">&lt;script src="../../js/inventory.js"&gt;&lt;/script&gt;</code></pre>
+          Don't worry that the file doesn't exist. We'll create it next.
+        </li>
+      </ol>
+
+      <h2>The JavaScript File</h2>
+      <p>Our JavaScript file will do two things for us: 1) listen to the classifications select element to detect when
+        a new classification is selected. When a change occurs it will send a request which will ask the inventory controller to fetch the
+        items from inventory based on the classification and send them back, and 2) when the inventory data is returned,
+        it will send the data, as a JavaScript object, to a new JavaScript function to build the table structure
+        around it, then inject it into the table that we just added to the inventory management view.</p>
+
+      <h3>Create inventory.js</h3>
+      <p>Inside the "public > js" folder, create a new file named "<b>inventory.js</b>". As always, we want our files to represent what they do. In this case, the file will work with inventory items.</p>
+
+      <h3>The eventListener</h3>
+      <p>Modern JavaScript has what is called an "eventListener" method. It does what it sounds like, it listens for an event to occur. In our case, the event will be when the select element "changes".
+      </p>
+      <p>Beginning at the top of the new JavaScript file, add the following code:</p>
+      <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-javascript">'use strict' 
+ 
+ // Get a list of items in inventory based on the classification_id 
+ let classificationList = document.querySelector("#classificationList")
+ classificationList.addEventListener("change", function () { 
+  let classification_id = classificationList.value 
+  console.log(`classification_id is: ${classification_id}`) 
+  let classIdURL = "/inv/getInventory/"+classification_id 
+  fetch(classIdURL) 
+  .then(function (response) { 
+   if (response.ok) { 
+    return response.json(); 
+   } 
+   throw Error("Network response was not OK"); 
+  }) 
+  .then(function (data) { 
+   console.log(data); 
+   buildInventoryList(data); 
+  }) 
+  .catch(function (error) { 
+   console.log('There was a problem: ', error.message) 
+  }) 
+ })</code></pre>
+      <h4>An Explanation</h4>
+      <ul>
+        <li><b>Line 1:</b> the 'use strict' directive tells the JavaScript parser to follow all rules strictly.</li>
+        <li><b>Line 3:</b> A comment about the code.</li>
+        <li><b>Line 4:</b> Finds the classification select element in the inventory management view, based on its ID, and
+          stores its reference into a local JavaScript variable.</li>
+        <li><b>Line 5:</b> Attaches the eventListener to the variable representing the classification select element and listens for any "change". When a change occurs an anonymous function is executed.</li>
+        <li><b>Line 6:</b> Captures the new value from the classification select element and stores it into a JavaScript variable.</li>
+        <li><b>Line 7:</b> Writes the value as part of a string to the console log for testing purposes. <mark>Note
+            that the text is surrounded by "ticks", not single quotes. The "tick" key is to the left of the 1 on your
+            keyboard. Text that is surrounded by ticks is known as a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals" title="Open in a new tab" target="_blank"> JavaScript template literal</a>.</mark> A JavaScript template literal allows the value of a variable to be rendered within a string without the use of concatenation.</li>
+        <li><b>Line 8:</b> The URL that will be used to request inventory data from the inventory controller. Notice
+          the parameter of the classification_id at the end.</li>
+        <li><b>Line 9:</b> The JavaScript "Fetch" which is a modern method of initiating an AJAX request.</li>
+        <li><b>Line 10:</b> A "then" method that waits for data to be returned from the fetch. The response object is
+          passed into an anonymous function for processing.</li>
+        <li><b>Line 11:</b> An "if" test to see if the response was retuned successfully. If not, the error on line 14
+          occurs.</li>
+        <li><b>Line 12:</b> If the response was successful, then the JSON object that was returned is converted to a
+          JavaScript object and passed on to the next "then" statement on line 16.</li>
+        <li><b>Line 13:</b> Ends the "if" test begun on line 11.</li>
+        <li><b>Line 14:</b> The error that occurs if the "if" test (line 11) fails.</li>
+        <li><b>Line 15:</b> Ends the "then" process begun on line 10.</li>
+        <li><b>Line 16:</b> Accepts the JavaScript object from line 12, and passes it as a parameter into an anonymous
+          function.</li>
+        <li><b>Line 17:</b> Sends the JavaScript object to the console log for testing purposes. </li>
+        <li><b>Line 18:</b> Sends the JavaScript object to a new function that will parse the data into HTML table
+          elements and inject them into the inventory management view.</li>
+        <li><b>Line 19:</b> Ends the "then" process which began on line 16.</li>
+        <li><b>Line 20:</b> A "catch" which captures any errors and sends them into an anonymous function.</li>
+        <li><b>Line 21:</b> Writes the caught error to the console log for us to see for troubleshooting.</li>
+        <li><b>Line 22:</b> Ends the "catch" begun on line 20.</li>
+        <li><b>Line 23:</b> Ends the eventListener.</li>
+      </ul>
+      <p>In short, the function shown above requests the data, based on the classification_id and catches any errors if they exist, and sends the retrieved data to the <b>buildInventoryList</b> function for building it into HTML
+        and then displays it into the management view.</p>
+
+      <h2>The buildInventoryList Function</h2>
+      <p>Finally, let's build the function that will parse the JavaScript object and wrap it up into HTML, then inject
+        it into the inventory management view.</p>
+        <p>Add a few empty lines beneath the eventListener that you just created. Add the following function to the bottom of the "inventory.js" file.</p>
+      <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-javascript">// Build inventory items into HTML table components and inject into DOM 
+function buildInventoryList(data) { 
+ let inventoryDisplay = document.getElementById("inventoryDisplay"); 
+ // Set up the table labels 
+ let dataTable = '&lt;thead&gt;'; 
+ dataTable += '&lt;tr&gt;&lt;th&gt;Vehicle Name&lt;/th&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;td&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;'; 
+ dataTable += '&lt;/thead&gt;'; 
+ // Set up the table body 
+ dataTable += '&lt;tbody&gt;'; 
+ // Iterate over all vehicles in the array and put each in a row 
+ data.forEach(function (element) { 
+  console.log(element.inv_id + ", " + element.inv_model); 
+  dataTable += `&lt;tr&gt;&lt;td&gt;${element.inv_make} ${element.inv_model}&lt;/td&gt;`; 
+  dataTable += `&lt;td&gt;&lt;a href='/inv/edit/${element.inv_id}' title='Click to update'&gt;Modify&lt;/a&gt;&lt;/td&gt;`; 
+  dataTable += `&lt;td&gt;&lt;a href='/inv/delete/${element.inv_id}' title='Click to delete'&gt;Delete&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;`; 
+ }) 
+ dataTable += '&lt;/tbody&gt;'; 
+ // Display the contents in the Inventory Management view 
+ inventoryDisplay.innerHTML = dataTable; 
+}</code></pre>
+      <h4>An Explanation</h4>
+      <ul>
+        <li><b>Line 1:</b> A comment about the function's operation</li>
+        <li><b>Line 2:</b> Declares the function and indicates the JavaScript object is a required parameter.</li>
+        <li><b>Line 3:</b> Reaches into the HTML document, uses the ID to capture the element and assigns it to a
+          JavaScript variable for use later.</li>
+        <li><b>Line 4:</b> A comment concerning lines 5 through 7.</li>
+        <li><b>Line 5:</b> Creates a JavaScript variable and stores the beginning HTML element into it as a string.
+        </li>
+        <li><b>Line 6:</b> Creates the table row and three table cells as a string and appends it to the variable
+          created on line 5.</li>
+        <li><b>Line 7:</b> Adds the closing <b>thead</b> element to the variable using the append operator.</li>
+        <li><b>Line 8:</b> A comment concerning lines 9 through 17.</li>
+        <li><b>Line 9:</b> Appends the opening <b>tbody</b> tag to the string stored in the variable. </li>
+        <li><b>Line 10:</b> A comment about lines 11 through 16.</li>
+        <li><b>Line 11:</b> Implements the foreach method on the data object. Each element in the object is sent into
+          an anonymous function as a parameter.</li>
+        <li><b>Line 12:</b> Sends the name and id of each element to the console log for testing purposes.</li>
+        <li><b>Line 13:</b> Creates a table cell with the vehicle name and appends it to the variable. </li>
+        <li><b>Line 14:</b> Creates a table cell with a link to begin the update process for this item (note the
+          inclusion of the action indicator and inv_id in the URL) and appends it to the variable.</li>
+        <li><b>Line 15:</b> Creates a table cell with a link to begin the delete process for this item (note the
+          inclusion of similar items as in the update path) and appends it to the
+          variable.</li>
+        <li><b>Line 16:</b> Ends the forEach loop and its embeded anonymous function.</li>
+        <li><b>Line 17:</b> Appends the closing <b>tbody</b> element to the variable.</li>
+        <li><b>Line 18:</b> A comment about line 19.</li>
+        <li><b>Line 19:</b> Injects the finished table components into the inventory management view DOM element that
+          was identified on line 3.</li>
+        <li><b>Line 20:</b> Ends the function.</li>
+      </ul>
+      <p>Ensure that no warnings or errors appear in the JavaScript file.</p>
+      <p>Save the file.</p>
+
+      <h2>Edit the Inventory Routes</h2>
+      <p>For this entire process to work, a new route needs to be added to the "inventoryRoute" file.</p>
+      <ol>
+        <li>Open the "inventoryRoute" file in the "routes" folder.</li>
+        <li>Add a new route, that works with the URL in the JavaScript file that you just built:
+          <pre><code class="language-markup">/inv/getInventory/:classification_id</code></pre>
+          [<b>Remember:</b> the "inv" portion already exists in the "server.js" file. You only need to account for the rest in the route.]
+        </li>
+        <li>Be sure to use a function from the inventory controller to process the route and return the data as JSON. For example:
+          <pre><code class="language-javascript">router.get("/getInventory/:classification_id", utilities.handleErrors(invController.getInventoryJSON))</code></pre>
+        </li>
+        <li>Ensure there are no warnings or errors.</li>
+        <li>Save the file.</li>
+      </ol>
+
+      <h2>Build the Controller Function</h2>
+      <p>Finally, return to the inventory controller, to add the function that will return the JSON data.</p>
+      <ol>
+        <li>Open the "inventory controller" file, if it is not already open.</li>
+        <li>Scroll to the bottom of the file and add some empty lines beneath the last function and before the module.exports statement.</li>
+        <li>Add the following function in the empty space:
+<pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-javascript">/* ***************************
+ *  Return Inventory by Classification As JSON
+ * ************************** */
+invCont.getInventoryJSON = async (req, res, next) => {
+  const classification_id = parseInt(req.params.classification_id)
+  const invData = await invModel.getInventoryByClassificationId(classification_id)
+  if (invData[0].inv_id) {
+    return res.json(invData)
+  } else {
+    next(new Error("No data returned"))
+  }
+}</code></pre>
+</li>
+        <li><h3>An Explanation</h3>
+        <ul>
+          <li><b>Lines 1-3 -</b> a multi-line comment for the function.</li>
+          <li><b>Line 4 -</b> the opening of the function.</li>
+          <li><b>Line 5 -</b> collects and stores the classification_id that has been passed as a parameter through the URL. Uses the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt" target="_blank">JavaScript parseInt()</a> function to cast it as an integer, which is also a security step.</li>
+          <li><b>Line 6 -</b> calls the model-based function to get the data based on the classification_id.</li>
+          <li><b>Line 7 -</b> checks to make sure there is a value in the first element of the array being returned.</li>
+          <li><b>Line 8 -</b> if data is present, returns the result set as a JSON object.</li>
+          <li><b>Line 9 -</b> ends the "if" check and opens an "else" structure.</li>
+          <li><b>Line 10 -</b> throws an error for the Express error handler if no data is found.</li>
+          <li><b>Line 11 -</b> ends the "else" structure.</li>
+          <li><b>Line 12 -</b> ends the function.</li>
+        </ul>
+</li>
+        <li>Ensure that no warnings or errors exist.</li>
+        <li>Save the file.</li>
+      </ol>
+
+      <h2>Time to Test</h2>
+      <ol>
+        <li>Save all files if you haven't already done so.</li>
+        <li>Make sure the local server is running and go the local site in a browser.</li>
+        <li>If you are not logged in as an employee or adminstrative user, do so.
+        </li>
+        <li>Once logged in, alter the URL to point to the inventory control process (e.g.
+          http://localhost:5500/inv/) and press the "Enter" key.</li>
+        <li>If things worked correctly, you should be looking at the management view and a heading and paragraph should appear
+          indicating that you should choose a classification item from the select list.
+        </li>
+        <li>The select list should appear below the heading and paragraph.</li>
+        <li>When you change the list to select a classification, there should be a very short pause and then the table
+          of vehicles from inventory, based on the classification selected, should appear immediately below the select list.</li>
+        <li>Every time you change the list to a different classification, the table of items should change too.</li>
+        <li>If you open the browser inspect tools, and then click the "Console" tab you should see the log items that
+          were part of the JavaScript eventListener and function.</li>
+        <li>You will need to add some CSS to your external style sheet to dress up the table and make things easier to view.</li>
+        <li>If things worked as planned you are ready to move on. If they didn't work, get help from your learning team, from the TA or your professor. But it has to work before
+          moving to the next activity.</li>
+      </ol>
+    </main>
+    <footer>
+      <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US" target="_blank"><img alt="Creative Commons License" style="border-width:0" src="//i.creativecommons.org/l/by-sa/3.0/88x31.png"></a>
+      All materials (except as noted) are by
+      Blaine Robertson and licensed under a <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US" title="Read the license" target="_blank">Creative Commons Attribution-ShareAlike 3.0 License</a>.
+    </footer>
+  </div>
+</body>
+
+</html>

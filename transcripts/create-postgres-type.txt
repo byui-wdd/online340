@@ -1,0 +1,26 @@
+PostgreSQL does not natively support the Enum (enumerated) data structure. It does, however, support the "Type" structure, which is equivelent. In this video, we will create a Type structure.
+
+Open pgAdmin4 on your local computer and connect to your remote render.com database service.
+
+Expand the server,  then the  database, then Schemas until you can see the "Types" item.
+
+Right-click on "Types", and select "Create > Type...".
+
+Click in the Name text box and provide the name of the type. We will use "account_type" (all lowercase and and an underscore, not a space).
+
+Click the "Definition" item in the navigation bar.
+
+Change the type to "Enumeration" using the dropdown arrow.
+
+Click the plus sign three times and add "Client", "Employee", and "Admin" in the three text boxes.
+
+If you click the "SQL" navigation item, you will see the SQL code that is being written by pgAdmin to create the type. 
+
+If you are a student in the course, you will want to highlight, copy and save this SQL code as directed in the course materials.
+
+Click the "Save" button to create the type.
+
+In the database panel, on the left, you should be able to expand the "Types" item and now see the new "account_type" listed.
+
+That's it. As you create new tables, you can use the type as a data source in a table.
+

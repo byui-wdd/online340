@@ -1,0 +1,30 @@
+This short video will cover several important, but quick, items dealing with GitHub.
+
+First, you will delete a repository (also commonly referred to as a "Repo").
+
+Navigate to the repo to be deleted.
+
+Locate the settings icon, and click it.
+
+Scroll to the bottom and locate the "Danger Zone".
+
+The last item should be "Delete this repository". 
+
+Click the "Delete this repository" button.
+
+You will be asked to type the full name of the repo and only after doing so, can you delete it.
+
+Be aware that once deleted, the repository is gone and cannot be restored. Therefore, it is critical that you mean to delete it before doing so.
+
+You will also have to provide your GitHub password to prove ownership. Only after doing so will the repository be deleted.
+
+Next, you will use a template repository to create a new repository. It is necessary to be logged in to GitHub to do this.
+
+In the course materials, find and click the link to open the template repository. 
+
+If things are in order, the green button will read "Use this template". If not, log in to GitHub.
+
+Click the green button and you will go through a series of steps which will result in you having a new repository in your own account.
+
+When done, you can now clone the new repo to your own computer to begin working with it.
+

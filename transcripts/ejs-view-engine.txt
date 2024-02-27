@@ -1,0 +1,50 @@
+When developing a Node application, not an API, a frontend system must be in place to provide information to the client.
+
+In this instance, the application will be responsible for dynamically building the views and delivering the appropriate content to the client.
+
+What do we mean by this? Let's look at target.com as an example.
+
+When the browser navigates to target.com a "home" view is delivered. Note the header area contains navigation items, a corporate logo and other items.
+
+Below is content in the form of a hero area and other sales information.
+
+If you scroll to the bottom, you will find a footer with social media, copyright informations and legal items.
+
+The client, looking at this in the browser, can interact with it. On the server, all of this was built and delivered based on the URL of https://www.target.com.
+
+To facilitate our implementation of building views we will use two packages or tools: EJS and express-ejs-layouts.
+
+Both will be installed using the VS Code terminal command, "pnpm add ejs express-ejs-layouts.
+
+Once installed, they will be added to the server.js file, which remember is the server for our application.
+
+What is EJS? In short, it is the "view engine" or the means we use to build dynamic views to deliver the content. So, what's a view?
+
+Returning to target.com, let's click on the hero image. A landing page full of toys is delivered to the browser. Note the URL has changed.
+
+Now, we can click on an type of toy. Again, a landing page is delivered consisting of toys, but only for that type. Note the URL has changed again.
+
+Eventually we can get to a toy and all of the details about it. But, if we click back and click on a different toy, we get new data, but note the layout is identical. That's because only the content changed. Pause the video and look closely at the URL, then go back and look a the previous URL. The URL is a "route", which describes for the server what content is desired. The content changes, but the page structure does not. That's why it is a "view", because it provides a single structure to present any number of content changes, all based on the URL's route.
+
+The structure for our view engine is manages by the express-ejs-layouts package. It allows us to build a framework describing all of the component parts and store it as an EJS file.
+
+The component pieces, the header, a navigation bar, a footer and even a head are each stored as "partial" files. A partial is exactly what it sounds like, a small "part" of the larger, whole view.
+
+EJS, is the code that puts everything together to build the finished view on the server, then delivers the finished product to the browser.
+
+Note the various code blocks that EJS uses to do all of this. The blocks, explanations and examples can be found at ejs.co.
+
+If you look at the structure in VS Code you'll notice that all of these are stored in a "views" folder because that is were EJS expects to find them. The subfolders are to add order so that everything is not just "thrown" into the folder.
+
+Let's illustrate why this is desireable.
+
+I will start the local express server and bring up the home page in a browser. 
+
+Now, I'll open the header partial and make a simple change.
+
+Returning to the browser and refreshing, you can see the change.
+
+This means that maintaining these common elements of the site are greatly simplified. All you have to do is change one partial and all views that use that file automatically update to reflect the change.
+
+That is a general overview of using EJS and the layout engine in a Node application to deliver content via views to the client for consumption.
+

@@ -1,0 +1,22 @@
+JWT or JSON Web Token is a modern standard used to indicate that a client is known, and can be used for authorizing that client within a web application.
+
+This video provides an overview of this process.
+
+A client submits credential as part of a login process.
+
+Assuming that the credentials are correct, the application uses a signature to create the JWT, which contains encrypted data.
+
+In our use, the token is stored in an HTTPOnly cookie. This type of cookie cannot be accessed by client-side JavaScript and is considered a better option than storing the token in the browser's local storage.
+
+The cookie is then sent to the browser as part of the HTTP Response.
+
+For each subsequent request made by the browser the cookie is sent to the server.
+
+The application checks the validity of the token, using the same signature as was used to create the token.
+
+If the token is valid, then, again, the token is returned to the client in an HTTPOnly cookie.
+
+However, if the token is invalid, meaning it has been tampered with or has expired, the cookie is destroyed, and the token is no longer forwarded to the client. The response is then typically redirected to an error view or the login view.
+
+This represents the login process to be implemented in the next activity.
+

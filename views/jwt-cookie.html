@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <title>JSON Web Tokens &amp; Cookies | Web Backend Development</title>
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="/340-js/css/340course-min.css" type="text/css" media="screen">
+</head>
+
+<body>
+  <div id="wrapper">
+    <header><img src="/340-js/images/small_banner.jpg" alt="Course Banner"></header>
+    <main>
+      <h1>JSON Web Tokens &amp; Cookies</h1>
+      <h2>Introduction</h2>
+      <p>Authentication, the validating of the site visitor as a known entity, and a determination of the rights the visitor possesses within the site, is critical to site security. We will use a fairly traditional process of checking an email address and matching password to handle authentication. However, we will use JSON Web Tokens, more commonly known as "JWT"'s as the mechanism for authorizing visitors to move in areas that an unauthorized visitor would be denied access to.</p>
+
+      <h2>Video Overview</h2>
+      <p>This video represents a high-level overview of the process to be implemented using JSON web tokens. It is not meant to replace reading the content of this document. Be sure to carefully consider both. This is the <a target="_blank" href="../transcripts/jwt-theory.txt">Transcript</a> of the video.</p>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/V6i9z4_tcIU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+      <h2>Background</h2>
+      <p>A token is simply a "ticket", which is carried from one location to another. Upon arrival, the ticket is examined for authenticity. If valid, the ticket holder is admitted. In our case, the JWT is created on our server and sent to the client's browser within a cookie. The client will automatically send the cookie back to our server with every request. When the cookie arrives, the server checks the token it carries. If valid, the server allows the request to be carried out. If the token is missing or not valid, the request is denied.</p>
+
+      <h3 class="warning">Warning!</h3>
+      <p>Unfortunately, using a cookie as the transfer mechanism creates a potential means of attacking our server, known as a <i>Cross Site Request Forgery</i> attack. In short, another site steals the cookie, then sends the cookie to our server, pretending to be the browser to whom the cookie was originally sent. <span class="notice">If this were a security course, we would take steps to mitigate the CSRF attack. Since it is not, we will ackowledge that the potential for this type of attack exists, but we will not deal with it.</span> If you are interested in learning more about CSRF, visit the <a href="https://owasp.org/www-community/attacks/csrf" title="Open Web Application Security Project" target="_blank">Open Web Application Security Project (OWASP)</a> site.</p>
+
+      <h2>JWT Website</h2>
+      <p>The official home of JSON Web Tokens is <a href="https://jwt.io" target="_blank">jwt.io</a>. Here you learn more about the how, why and what's of this approach to authorization. In addition, it has a tool, on the home page, that shows the four components of a JWT and the resulting token when all four components are combined correctly. <i>I encourage you to visit the site, scroll down to the tool and play with it for a minute or two to get a feel for what it does. Change the Algorithm, change the payload and change the secret to see the changes that occur to the token.</i></p>
+
+      <h3>JWT Components</h3>
+      <ul>
+        <li><strong>Header</strong> - the header contains information about how the token is created. It contains the token type ("jwt") and the algorithm used to create it (default is HS256).</li>
+        <li><strong>Payload</strong> - this is the data to be encoded within the token and is used by the server to identify the client (e.g. the account id and/or type of account). Even though encoded, no sensitive information should be stored in the payload.</li>
+        <li><strong>Secret</strong> - a secret value that is used in the encoding process. It can be anything, but MUST be stored, usually in an environment variable, where it cannot be accessed from outside the server and cannot be guessed.</li>
+        <li><strong>Signature</strong> - The combined values of the previous three components. However, using the signature allows the token to be decoded if the secret value is available to be used as a key to unlock the token.</li>
+      </ul>
+
+      <h2>Cookie</h2>
+      <p>
+        <b>Cookie?</b> No, not that kind (I love white chocolate chip with macadamia nuts - just in case you are interested)! I know, it's a strange name for a small text file that is created by the server, sent to and stored in the browser. As with most data it consists of a number of "name - value pairs". What is unique is that when the browser visits the website that created the cookie, the cookie is automatically sent back to the server as part of every "http request" until the cookie is destroyed.
+      </p>
+      <p>Cookies are small. The maximum size they can be is 4K (4 kilobytes). In addition, they are typically plain text and can be changed in the browser. As a result, they should <span class="warning">NEVER</span> be used for sensitive information!</p>
+
+      <h2>Types of Cookies</h2>
+      <p>Without getting carried away, you should know that there are several types of cookies:</p>
+      <dl>
+        <dt>
+          <strong>Persistent Cookie</strong>
+        </dt>
+        <dd>A "persistent" cookie is one which lasts beyond the current set of interactions between the browser and the server. These cookies are given a life span at the time they are created. That life span can be increased or decreased by the code on the server. The means of setting the lifespan is by using the <b>expire</b> value, as an option, in the <code class="language-javascript">res.cookie(name, 'value', {expire: 3600000 + Date.now()}) </code>. In the provided example the cookie will expire in one hour (1000 milliseconds * 60 seconds * 60 minutes).</dd>
+
+        <dt>
+          <strong>Session Cookie</strong>
+        </dt>
+        <dd>A "session" cookie is created without an "expire" option and is destroyed when the session ends. Typically, there are three main ways of ending a session:
+          <ol>
+            <li>The browser window is closed.</li>
+            <li>The session "times out" due to inactivity. This time factor can be altered but typically is around 24 minutes.</li>
+            <li>The cookie is given an expiry value in the past or perhaps of 1 millisecond in the future. This can occur at the end of a logout procedure or at the end of a "check-out" process.</li>
+          </ol>
+        </dd>
+      </dl>
+      <p>There are other cookies, but to one extent or another they are variations of the persistent cookie.</p>
+
+      <h3>Using a cookie</h3>
+      <p>Have you ever registered with a website and when you return to the site sometime in the future, the site somehow shows your name, even when you haven't logged into the site? Chances are it is a cookie at work. Some sites use "Third Party Cookies". A third-party cookie is set by one website, but used by another website. This use is usually for advertising but can also be used for tracking your browsing habits. It is this browsing function that has caused a wide variety of new privacy laws to be passed and forced websites to notify you that they use cookies. Perhaps you've seen such notices appear on websites you visit, that show you a warning notice that you have to acknowledge for it to go away. We will not create a third-party cookie, but we will create a cookie to transport a JWT token from the server to the browser and back for authorization purposes.</p>
+
+      <h2>New Packages</h2>
+      <p>In order to implement JWT's and cookies into our authentication / authorization process, we need two new packages: <a href="https://www.npmjs.com/package/jsonwebtoken" target="_blank">jsonwebtoken</a> and <a href="https://www.npmjs.com/package/cookie-parser" target="_blank">cookie-parser</a>. The "jsonwebtoken" package will make working with JWT's easier, while the "cookie-parser" package will do the same for cookies.</p>
+      <ol>
+        <li>Open a new <span title='Visual Studio Code'>VSC</span> terminal.</li>
+        <li>Type the following code, then press "Enter":
+
+          <pre><mark><code>pnpm add jsonwebtoken cookie-parser</code></mark></pre>
+        </li>
+        <li>When done, close the terminal.</li>
+      </ol>
+
+      <h2>Implementation</h2>
+
+      <p>Having provided some background and explanation, as well as installing the packages, let's implement the JWT and the coookie in the next activity.</p>
+    </main>
+    <footer>
+      <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="//i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a> All materials (except as
+      noted) are by Blaine Robertson and licensed under a <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US">Creative Commons Attribution-ShareAlike 3.0
+        License</a>.
+    </footer>
+  </div>
+</body>
+
+</html>

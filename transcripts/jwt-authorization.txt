@@ -1,0 +1,46 @@
+Authentication (AuthN) and authorization (AuthZ) are different, though often confused for being the same.
+
+To authenticate is to present credentials, which are checked against known data, and if a match is made, authentication has occurred.
+
+Authorization is based on privileges attached to an account, which give access to restricted areas of an application. Authorization is only possible after authentication has been confirmed.
+
+In the previous activity, the process of authenticating a client was covered.
+
+In this activity, basic authorization is considered.
+
+You may recall that in the previous activity, two methods were implemented: 1) upon logging in, a JWT was created and stored into a cookie to be returned to the client, and 2) a check for the JWT was created, and if the token was valid, a flag was stored into the response object indicating that the client was "logged in" or "authenticated".
+
+The flag is a means of indicating that the client is "authenticated" and "authorized" at the most basic level.
+
+To begin, we will write a means of checking if the flag exists and apply it to basic routes that should be restricted to authenticated clients.
+
+Open the "utilities > index.js" file. Scroll to the bottom of existing functions and add the new function shown in the video.
+
+As can be seen if the flag exists, the next step in the application flow is called. However, if not, then a message is created and the response object is used to redirect the client to the login view. Save the file.
+
+Open the account route file and locate the default route used to deliver the account management view.
+
+Add the new middleware function, that you just wrote, to the route.
+
+This now protects the route. If the client is not authenticated, then access to this view is forbidden.
+
+Save the file.
+
+Let's test to make sure this works by starting the development server and opening the local server in the browser.
+
+Check the cookies to make sure the JWT cookie does not exist. If so, delete it and close the cookie view tab.
+
+Return to the home view and alter the URL to include "/account/" at the end. Press "Enter".
+
+The login view should be delivered with the error message. If this works, then things are working correctly.
+
+Navigate to the registration view and register three new accounts, one for each account type that exists in the database. Alter the type for each of the new accounts as directed in the written activity.
+
+When done, attempt to login using the credential for each of the three. Following each login, you should be directed to the account management view.
+
+This means that each account is authenticated and authorized,  allowing access to the view.
+
+Adding more advanced authorization checks will be discussed in the next activity.
+
+Stop the development server when everything is working as described.
+

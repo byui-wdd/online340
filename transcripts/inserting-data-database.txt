@@ -1,0 +1,34 @@
+With the database tables created, it's time to add some data.
+
+There are two tables that will receive data: classification and inventory.
+
+The classification data is limited to a single field per record and a total of five records. The table's other field, the primary key, is auto incrementing and we do not have to account of it in the INSERT query.
+
+Open pgAdmin and expand the server list. Right-click the remote render.com server and select "Connect to Server".
+
+Expand the database and schema items until the tables are visible.
+
+Right-click on the "classification" table and select "Query Tool".
+
+Type the SQL statement shown into the new query area. When done,click the "Execute / Refresh" button.
+
+To check that it worked, right-click the table again, and select "View/Edit Data > All Rows".
+
+All five records should appear in the the "Data Output" tab in the lower frame.
+
+The data for the inventory table is much larger. Download the file from the course activity where this video is located. Open the file in VS Code. Select everything in the file and copy it.
+
+Return to pgAdmin, right-click on the "inventory" table, select "Query Tool".
+
+Paste the copied code into the new query tool work space. Click the "Execute / Refresh" button.
+
+When done, repeat the process used earlier to see the data now stored in the table: Right-click the inventory table, select "View/Edit Data > All Rows".
+
+The data should appear in the bottom panel.
+
+If you are a member of the class, be sure to follow the directions to copy and paste both queries used to populate the two tables.
+
+No data will be added to the "account" table using this process. It will be added using Node/Express as part of the registration process.
+
+When done, close the connection to the remote database server.
+

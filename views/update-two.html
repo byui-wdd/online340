@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>Update Inventory (Step 2) | Web Backend Development</title>
+    <meta
+      name="description"
+      content="The update process for an inventory item concludes with this activity for the CSE 340 learning project."
+    />
+    <meta name="viewport" content="width=device-width" />
+    <link
+      rel="stylesheet"
+      href="/340-js/css/340course-min.css"
+      type="text/css"
+      media="screen"
+    />
+    <link
+      rel="stylesheet"
+      href="/340-js/css/prism-coy-dev.min.css"
+      media="screen"
+    />
+    <script defer src="/340-js/js/prism-coy-dev.min.js"></script>
+  </head>
+
+  <body>
+    <div id="wrapper">
+      <header id="header">
+        <img src="/340-js/images/small_banner.jpg" alt="CSE 340 Banner Image" />
+      </header>
+      <main>
+        <h1>Update Inventory Information (Step 2)</h1>
+        <h2>Updating is a Two-Step Process</h2>
+        <p>
+          An update requires two steps: 1) Once it is determined an update is
+          occurring, the information to be changed has to be requested from the
+          database and made available to be edited; 2) When the edit is
+          completed, the data must then be stored back into the database and the
+          user informed of the success or failure of the change. This document
+          covers step 2: Making changes to the data, submitting it to the
+          server, checking the data and ultimately updating the data to the
+          database and notifying the site visitor of the outcome. Step 1 in the
+          update process was covered in the
+          <a href="update-one.html" title="Opens in a new tab" target="_blank"
+            >Step 1 activity</a
+          >.
+        </p>
+
+        <h2>Video Demonstration</h2>
+        <p>The video provides a general overview of the activity, but does not contain the detail needed to complete each process. Watch the video to obtain a general idea, but follow the written steps to complete the activity. This is the <a target="_blank" href="../transcripts/update-step2.txt">Transcript</a> of the video.</p>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/TuVCPUUGCEE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+        <h2>The Update View</h2>
+        <p>
+          The view where the data will be modified is nearly complete. The form
+          inputs should display the data that was queried from the database.
+        </p>
+        <p>
+          What is equally important is that the view should already have the
+          means to display error messages and be "sticky" if incomplete data is
+          submitted to the controller and is returned for correction.
+        </p>
+        <p>
+          When the data was inserted into the form for editing, what was not
+          included was the inventory id. This is a critical value that
+          will be needed to actually do the update in the database. Let's
+          include it into the form.
+        </p>
+        <ol>
+          <li>Open the view where the update inventory form is located.</li>
+          <li>
+            Scroll to the bottom of the form and locate the "submit" button or
+            input.
+          </li>
+          <li>Below the "submit" button or input add an empty line.</li>
+          <li>
+            In the empty line, add a hidden input containing the name - value
+            pair, which looks like this:
+            <pre><code class="language-markup">&lt;input type="hidden" name="inv_id"
+&lt;% if(locals.inv_id) { %&gt; value="&lt;%= locals.inv_id %&gt;"
+&lt;% } %&gt;&gt;</code></pre>
+          </li>
+          <li>
+            This allows us to submit the primary key for the item without it
+            being obvious to the client looking at the form. In addition, if the
+            page is included for error correction the value of the primary key
+            (from the error check process) is returned and re-inserted into the
+            hidden field.
+          </li>
+          <li>Ensure that there are no warnings or errors.</li>
+          <li>Save the view.</li>
+        </ol>
+
+        <h2>The Inventory Route</h2>
+        <p>
+          As with all of our processes, there needs to be an appropriate route
+          handler to watch for and direct the incoming request to the controller
+          for processing. Let's make sure that route is present.
+        </p>
+        <ol>
+          <li>Find and open the inventory route file in the routes folder.</li>
+          <li>
+            Add a new route with comment to handle the incoming request, like
+            so:
+            <pre
+              class="line-numbers"
+              title="Copy - Paste does NOT help you learn. Type it."
+            ><code class="language-javascript">router.post("/update/", invController.updateInventory)</code></pre>
+          </li>
+          <li>
+            Notice that "update" matches the value in the form's action
+            attribute.
+          </li>
+          <li><mark>The error handler is not shown in the example above, be sure you add it to your route!</mark></li>
+          <li>
+            The controller method does not exist, but we will create it in a few
+            minutes.
+          </li>
+          <li>Ensure there are no warnings or errors.</li>
+          <li>Save the file.</li>
+        </ol>
+
+        <h2>Data Checking Middleware</h2>
+        <p>
+          The data incoming from the update process should meet the same
+          requirements as the original data during the "add" process. But, we
+          are now also passing the inv_id and if there are errors, they need to
+          be redirected to the "edit" view, not the "add" view. So, some
+          modifications are in order.
+        </p>
+
+        <ol>
+          <li>
+            Find and open the "inventory-validation" file in the "utilities"
+            folder.
+          </li>
+          <li>Copy the "checkInventoryData" function and its comment.</li>
+          <li>
+            Paste the copied comment and function immediately beneath the just
+            copied function, leaving at least one empty line between the old and
+            new functions.
+          </li>
+          <li>
+            Change the comment to reflect that errors will be directed back to
+            the edit view.
+          </li>
+          <li>Change the function name to "checkUpdateData".</li>
+          <li>
+            Add the "inv_id" to the list of variables to hold data from the
+            request body.
+          </li>
+          <li>
+            Change the render view to the "edit" view for inventory items.
+          </li>
+          <li>
+            Change the title: to be the same as the title when delivering the
+            edit view in the inventory controller.
+          </li>
+          <li>
+            Add the "inv_id" to the list of variables being sent back to the
+            view in the data object.
+          </li>
+          <li>Make sure no warnings or errors exist in the file.</li>
+          <li>Save the file.</li>
+        </ol>
+
+        <p>
+          With the file changed, add the "newInventoryRules()" function and the
+          "checkUpdateData" middleware to the "update" route in the
+          inventoryRoute file. Similar to the middleware used in the "add new
+          inventory" route.
+        </p>
+
+        <h2>The Inventory Controller</h2>
+        <p>
+          As with all other processes, the controller is responsible for the
+          logic to carry out the update for the data sent from the view and
+          report the result back to the client. Because much of this process is
+          similar to that of adding an item to inventory, we will do some copy and paste
+          to make this process go faster:
+        </p>
+        <ol>
+          <li>Open the inventory controller.</li>
+          <li>
+            Locate and copy the function used to insert a new inventory item, including
+            the comment.
+          </li>
+          <li>
+            Now, find the function which queried the data from the database and
+            built the edit view. Click below it, creating a few empty lines, if
+            needed.
+          </li>
+          <li>
+            Paste the copied code into the second empty line. Be sure there is
+            an empty line between the previous function and the newly pasted
+            function.
+          </li>
+          <li>
+            With the new function in place, let's edit it to not "Add" a new
+            item, but to carry out the "Update" of the item, like this:
+          </li>
+        </ol>
+        <pre
+          class="line-numbers"
+          title="Copy - Paste does NOT help you learn. Type it."
+        ><code class="language-javascript">/* ***************************
+ *  Update Inventory Data
+ * ************************** */
+invCont.updateInventory = async function (req, res, next) {
+  let nav = await utilities.getNav()
+  const {
+    inv_id,
+    inv_make,
+    inv_model,
+    inv_description,
+    inv_image,
+    inv_thumbnail,
+    inv_price,
+    inv_year,
+    inv_miles,
+    inv_color,
+    classification_id,
+  } = req.body
+  const updateResult = await invModel.updateInventory(
+    inv_id,  
+    inv_make,
+    inv_model,
+    inv_description,
+    inv_image,
+    inv_thumbnail,
+    inv_price,
+    inv_year,
+    inv_miles,
+    inv_color,
+    classification_id
+  )
+
+  if (updateResult) {
+    const itemName = updateResult.inv_make + " " + updateResult.inv_model
+    req.flash("notice", `The ${itemName} was successfully updated.`)
+    res.redirect("/inv/")
+  } else {
+    const classificationSelect = await utilities.buildClassificationList(classification_id)
+    const itemName = `${inv_make} ${inv_model}`
+    req.flash("notice", "Sorry, the insert failed.")
+    res.status(501).render("inventory/edit-inventory", {
+    title: "Edit " + itemName,
+    nav,
+    classificationSelect: classificationSelect,
+    errors: null,
+    inv_id,
+    inv_make,
+    inv_model,
+    inv_year,
+    inv_description,
+    inv_image,
+    inv_thumbnail,
+    inv_price,
+    inv_miles,
+    inv_color,
+    classification_id
+    })
+  }
+}</code></pre>
+        <ol start="6">
+          <li>
+            I hope by this point in the semester that as you look at the code
+            you understand what each step in the process does.
+            <mark
+              >Take a minute and go down through the new function and explain it
+              to yourself. Better yet, find another person and explain it to
+              them. If you can explain the code, you probably understand it and
+              can move on. If not, ask someone else in your learning team about
+              the line or lines that you do not understand.</mark
+            >
+          </li>
+          <li>Ensure that there are no warnings or errors.</li>
+          <li>Save the file.</li>
+        </ol>
+
+        <h2>Inventory Model</h2>
+        <p>
+          Finally we will create the updateInventory() function and then be ready
+          to test. I hope you have already guessed that we will create this
+          function by copying and editing your "add inventory" function, since
+          they are so similar.
+        </p>
+        <ol>
+          <li>Find and open the <b>inventory model</b> file.</li>
+          <li>
+            Locate your <b>add new inventory</b> function, copy it, including the
+            comment.
+          </li>
+          <li>
+            Move to the bottom of the model file (below the existing functions).
+          </li>
+          <li>
+            Add a few empty lines between the last existing function and the
+            module.exports statement.
+          </li>
+          <li>
+            Paste the <b>add new inventory</b> function, leaving an empty line
+            between the existing function and the newly pasted function.
+          </li>
+          <li>Change the name of the function to <b>updateInventory()</b>.</li>
+          <li>
+            Edit the function to look similar to this
+            <b>Be sure that all indications of "add" are changed to "update"!</b
+            >:
+          </li>
+        </ol>
+        <pre
+          class="line-numbers"
+          title="Copy - Paste does NOT help you learn. Type it."
+        ><code class="language-javascript">/* ***************************
+ *  Update Inventory Data
+ * ************************** */
+async function updateInventory(
+  inv_id,
+  inv_make,
+  inv_model,
+  inv_description,
+  inv_image,
+  inv_thumbnail,
+  inv_price,
+  inv_year,
+  inv_miles,
+  inv_color,
+  classification_id
+) {
+  try {
+    const sql =
+      "UPDATE public.inventory SET inv_make = $1, inv_model = $2, inv_description = $3, inv_image = $4, inv_thumbnail = $5, inv_price = $6, inv_year = $7, inv_miles = $8, inv_color = $9, classification_id = $10 WHERE inv_id = $11 RETURNING *"
+    const data = await pool.query(sql, [
+      inv_make,
+      inv_model,
+      inv_description,
+      inv_image,
+      inv_thumbnail,
+      inv_price,
+      inv_year,
+      inv_miles,
+      inv_color,
+      classification_id,
+      inv_id
+    ])
+    return data.rows[0]
+  } catch (error) {
+    console.error("model error: " + error)
+  }
+}</code></pre>
+        <ol start="8">
+          <li>
+            The biggest change to the function will be the SQL statement. We
+            have to change it to an UPDATE from an INSERT.
+          </li>
+          <li>
+            It is <mark>absolutely critical</mark> that the order of the
+            variables containing the values in the array, match the order of the
+            placeholders in the SQL query.
+            <b
+              ><i
+                >Note that the "inv_id" is last in the array, because it is the
+                last placeholder, used in the WHERE clause.</i
+              ></b
+            >
+          </li>
+          <li>
+            Add the function to the module.exports list at the bottom of the
+            file.
+          </li>
+          <li>Ensure that no warnings or errors exist in the file.</li>
+          <li>Save the file.</li>
+        </ol>
+
+        <h2>Test One</h2>
+        <p>
+          Double check that all files worked with during this activity
+          (inventory route, inventory controller, inventory model, update
+          inventory view) have no errors.
+        </p>
+        <ol>
+          <li>Make sure the development servers are running.</li>
+          <li>Open the project application in a browser.</li>
+          <li>
+            Navigate to the login view and login as an employee or
+            administrator.
+          </li>
+          <li>Navigate to the inventory management view.</li>
+          <li>Select a classification from the select list.</li>
+          <li>Click the "Modify" link for one of the items.</li>
+          <li>
+            The item information should load into the form in the
+            <b>update</b> view.
+          </li>
+          <li>Right-click on the page and do a "View Page Source".</li>
+          <li>
+            Look at the code and find the "hidden" input where the inv_id value
+            of the inventory item should be stored. Make sure it is there.
+          </li>
+          <li>
+            Return to the form and change something, just one thing for right
+            now.
+          </li>
+          <li>Submit the form.</li>
+          <li>
+            If things worked you should be returned to the
+            <b>inventory management</b> view, and you should see the success
+            message.
+          </li>
+          <li>
+            To confirm the change, you can do one of two things:
+            <ul>
+              <li>
+                Bring up the same item in the management view and click the
+                "modify" link for the item that was just updated. Does the
+                change appear in the input?
+              </li>
+              <li>
+                Click the navigation bar item for the classification that included the
+                item that was just changed. Click the item to see the
+                details. Does the change appear in the detail view?
+              </li>
+            </ul>
+          </li>
+          <li>
+            If everything worked, do a fist pump over your head and feel proud
+            of yourself. If not, review your code and do some troubleshooting,
+            get help from a learning team member or someone else.
+          </li>
+        </ol>
+
+        <h2>Test Two</h2>
+        <ol>
+          <li>
+            Click the "modify" option for an inventory item. In the update view, submit
+            the form again, but without making a change.
+          </li>
+          <li>You should be returned to the <span class="fn">management</span> view with a success message.</li>
+          <li>
+            While this does no harm, it takes time and uses server resources that need not be used.
+          </li>
+          <li>Let's fix this.</li>
+          </ol>
+
+          <h2>A JavaScript Function</h2>
+          <p>We will write a small JavaScript function and attach it to the <span class="fn">edit-inventory</span> view. This function will not allow the "Update" button from executing unless some data has changed.</p>
+<ol>
+  <li>Find and click the <span class="fn">public &gt; js</span> folder to select it.</li>
+  <li>Click the "New File" icon and create a new JavaScript file, named <span class="fn">inv-update.js</span>.</li>
+  <li>Add this code to the file, then save.</li>
+  </ol>
+  <pre class="line-numbers"><code class="language-javascript">const form = document.querySelector("#updateForm")
+    form.addEventListener("change", function () {
+      const updateBtn = document.querySelector("button")
+      updateBtn.removeAttribute("disabled")
+    })</code></pre>
+    <ol start="4">
+  <li>Open the <span class="fn">edit-inventory</span> view.</li>
+  <li>Add an id to the opening form tag with the value of "updateForm".</li>
+  <li>Add the "disabled" attribute to the button.</li>
+  <li>Link the remote JavaScript file containing the function you just wrote to the view using a &lt;script&gt; element and remember to NOT include the <span class="fn">public</span> folder in the file path.</li>
+  <li>If you used an &lt;input type="submit"&gt; in the form, rather than a &lt;button&gt;, then adjust the JavaScript function to work with it.</li>
+  <li>Save the view.</li>
+</ol>
+
+<h2>Test Three</h2>
+          <li>
+            Ensure the server is running.
+          </li>
+          <li>
+            Go through the process to select an inventory item to edit.
+          </li>
+          <li>
+            When the <span class="fn">edit-inventory</span> view loads, the submit button should be disabled.
+          </li>
+          <li>
+            Change something in the form. Anything.
+          </li>
+          <li>
+            The Submit button should become enabled after the change.
+          </li>
+          <li>
+            If everything worked - Congratulations (<i
+              >Crowd cheering in the background</i
+            >)!
+          </li>
+          <li>If not, troubleshoot and get help until it is operational.</li>
+          <li>Stop the servers.</li>
+        </ol>
+        <p>While the client-side JavaScript can be turned off, this is an easy solution to prevent submitting the form if no data is changed in the form.</p>
+      </main>
+      <footer>
+        <a
+          rel="license"
+          href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"
+          target="_blank"
+          ><img
+            alt="Creative Commons License"
+            style="border-width: 0"
+            src="//i.creativecommons.org/l/by-sa/3.0/88x31.png"
+        /></a>
+        All materials (except as noted) are by Blaine Robertson and licensed
+        under a
+        <a
+          rel="license"
+          href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"
+          title="Read the license"
+          target="_blank"
+          >Creative Commons Attribution-ShareAlike 3.0 License</a
+        >.
+      </footer>
+    </div>
+  </body>
+</html>

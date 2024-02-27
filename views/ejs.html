@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <title>EJS View Engine | Web Backend Development</title>
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="/340-js/css/340course-min.css" type="text/css" media="screen">
+  <link rel="stylesheet" href="/340-js/css/prism-coy-dev.min.css" media="screen">
+  <script defer src="/340-js/js/prism-coy-dev.min.js"></script>
+</head>
+
+<body>
+  <div id="wrapper">
+    <header><img src="/340-js/images/small_banner.jpg" alt="Course Banner"></header>
+    <main>
+      <h1>EJS View Engine</h1>
+<p>The video provides a general overview of the activity, but does not contain the detail needed to complete each process. Watch the video to obtain a general idea, but follow the written steps to complete the activity. This is the <a target="_blank" href="../transcripts/ejs-view-engine.txt">Transcript</a> of the video.</p>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/KESjrocakuI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      <p class="notice">The index view shown in this video reflects that view when the assignment at the end of this unit is complete. Yours will NOT look like this during this activity.</p>
+
+      <h2>Introduction</h2>
+      <p><a href="https://ejs.co" target="_blank">EJS</a> (Embedded JavaScript) is a node package, known as a view
+        engine. It is used to create views in our application. Associated with it is another package named "<a
+          href="https://npmjs.com/package/express-ejs-layouts" target="_blank">express-ejs-layouts</a>". The layouts
+        package allows EJS to use partials and build layouts. Another way of describing this is modularization, which
+        you may already be familiar with. In this activity we will install and implement both packages.</p>
+        <h3>EJS Tags</h3>
+        <p>This image, from the EJS documentation shows the various EJS code blocks and what each annotation means. <span class="notice">I suggest you save the image and refer to it or print it as a reference as you work through the code in this and future activities for the course.</span>
+<div class="callout"><img src="/340-js/images/ejs-tags.png" alt="EJS tags reference image"></div>
+
+        </p>
+
+      <h2>Install the packages</h2>
+      <p>If you open the links for EJS and EJS Layouts, you'll find code for doing the installation. However, we are
+        using PnPM as our package manager, so we will alter the command slightly. We will also take advantage of the
+        ability to install more than one package at a time. Follow the steps listed below to accomplish the installation:
+      </p>
+      <ol>
+        <li>Open a new Terminal if one is not already open.</li>
+        <li>Type, <code class="language-javascript">pnpm add ejs express-ejs-layouts</code>, press "Enter".</li>
+        <li>Wait while the two packages and their dependencies are installed.</li>
+        <li>When done, open the package.json file and check that these packages have been added to the dependencies list.
+        </li>
+        <li>Close the terminal and the <span class="fn">package.json</span> file.</li>
+      </ol>
+
+      <h2>View Engine</h2>
+      <p>With the packages installed, we now need to import them into our application and use them. Part of this use
+        process is to declare EJS as being our "view engine".</p>
+      <ol>
+        <li>Open the <span class="fn">server.js</span> file and find the "Require Statements" section.</li>
+        <li>At the end of the line where express is required (line 8), click and hit enter, creating an empty line.</li>
+        <li>Add the following code to the empty line:
+          <code class="language-javascript">const expressLayouts = require("express-ejs-layouts")</code>.
+        </li>
+        <li>Save the file</li>
+        <li>Highlight and copy the "Routes" multi-line comment</li>
+        <li>Click the empty line above the Routes comment and hit "Enter" twice, creating two empty lines, then paste into the second empty line.</li>
+        <li>Alter the comment to be "View Engine and Templates"</li>
+        <li>Create three blank lines below the comment block</li>
+        <li>Add the following code to the three blank lines:
+          <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-javascript">app.set("view engine", "ejs")
+app.use(expressLayouts)
+app.set("layout", "./layouts/layout") // not at views root</code></pre>
+        </li>
+        <li>Save the file</li>
+      </ol>
+      <h3>An explanation</h3>
+      <ul>
+        <li>In step 3 above, we tell the application to require express-ejs-layouts, so it can be used. This follows a
+          simple rule, "You have to have something in order to use it".</li>
+        <li>In step 9, line one, we declare that ejs will be the view engine for our application. Built into EJS is the
+          understanding that all views will be stored in a <span class="fn">views</span> folder, and that is where EJS will look for all view files.
+        </li>
+        <li>Step 9, line 2, like step 3, tells the application to use the express-ejs-layouts package, which has been
+          stored into a "expressLayouts" variable.</li>
+        <li>Step 9, line 3, says that when the express ejs layout goes looking for the basic template for a view, it
+          will find it in a <span class="fn">layouts</span> folder, and the template will be named <span class="fn">layout</span>.</li>
+        <li>There are a couple of items to be understood with this code:
+          <ol>
+            <li>The <span class="fn">layout</span> template is expected to be found at the root of the <span class="fn">views</span> folder. However, if every view were
+              just dumped at the root, it could be difficult to organize and manage. So, a folder structure will be
+              implemented and views will be stored into folders to impose organization.</li>
+            <li>When creating a view file, like any file, it will have a name and extension. However, EJS will always
+              look for files with the extension "ejs", which means that when we declare a file in a path, the extension
+              can be left out. So, EJS will read the path <span class="fn">./layouts/layout</span> and look in the <span class="fn">views</span> folder (indicated by
+              the period), then for a subfolder named <span class="fn">layouts</span>, then for a file named <span class="fn">layout.ejs</span>.</li>
+            <li>From this point forward, all dynamic views will be stored in the <span class="fn">views</span> folder - typically in a
+              subfolder depending on what part of the application the view belongs or will be used.</li>
+          </ol>
+        </li>
+      </ul>
+
+      <h2>Layouts folder and layout.ejs view</h2>
+      <p>It's time to build the folder and view.</p>
+      <ol>
+        <li>Click the <span class="fn">views</span> folder so that it is highlighted</li>
+        <li>At the top of the panel will be icons to create new pages, folders, etc...</li>
+        <li>Click the new file icon.</li>
+        <li>A file icon with a text box will appear in the <span class="fn">views</span> folder.</li>
+        <li>Type the following
+          <pre><code class="language-javascript">layouts/layout.ejs</code></pre>, press "Enter".</li>
+        <li>A new folder will be created, and a new file will be created within the folder. This is a VSC shortcut for
+          creating files and folders at the same time. Nifty, huh?!</li>
+        <li>The new file should open in the editor. If it doesn't, open it.</li>
+      </ol>
+      <h3>Add the Layout Code</h3>
+      <p>Add the code as shown in the image below (do not include the line numbers on the left). As you do so, refer to
+        the <a href="https://ejs.co" target="_blank">EJS documentation</a> for the meanings of the various code blocks
+        as shown in red
+        (&lt;%&nbsp;%&gt;)</p>
+      <div><img src="/340-js/images/layout-template.png" alt="Code for EJS layout file"></div>
+
+      <h2>Partials</h2>
+      <p>A partial is what it sounds like, a part of a whole. In this case, each partial represents code for that
+        particular part of the entire finished view. As you look at the layout code you should identify four partials:
+        <span class="fn">head</span>, <span class="fn">header</span>, <span class="fn">navigation</span> and <span class="fn">footer</span>. Each of these is indicted as part of an include function. Let's build each
+        of these now.</p>
+      <h3>head Partial</h3>
+      <ol>
+        <li>Let's start by building the <span class="fn">head</span> partial along with the <span class="fn">partials</span> folder.</li>
+        <li>Just like you did previously, click the views folder then create the file and the folder at the same time.
+          Remember that each of these files will end with the "ejs" extension.</li>
+        <li>Once the <span class="fn">head</span> file is created, add the following code to it (do not include the line numbers on the left):
+          <div><img src="/340-js/images/head.png" alt="Code for the head partial"></div>
+        </li>
+        <li>Everything here should look familiar, except you'll notice that the title contains an EJS code block for a
+          dynamic value and the path for the CSS file does NOT contain the <span class="fn">public</span> folder name. <span class="notice">Remember that EJS
+          assumes that all static files are automatically inside the public folder</span>.</li>
+      </ol>
+
+      <h3>header Partial</h3>
+      <p>This time, you'll build the partial, but without creating a new folder, since the folder already exists.</p>
+      <ol>
+        <li>Click the <span class="fn">partials</span> folder, then click the new file icon.</li>
+        <li>Name the new file <span class="fn">header.ejs</span>.</li>
+        <li>Add the code shown below to the file:
+          <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-javascript">&lt;header id="top-header"&gt;
+  &lt;span class="siteName"&gt;
+    &lt;a href="/" title="Return to home page"&gt;CSE Motors&lt;/a&gt;
+  &lt;/span&gt;
+  &lt;div id="tools"&gt;
+    &lt;a title="Click to log in" href="/account/login"&gt;My Account&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/header></code></pre>
+        </li>
+        <li>The id's and classes used with the elements are for CSS styling and can be altered to fit your preferences.
+        </li>
+        <li>While you should understand the difference between the head and header, let me take just a moment and
+          refresh your memory.
+          <ul>
+            <li><b>head</b> - The head is a child of the HTML root element. It contains code intended primarily for the
+              browser, in order to render the view.</li>
+            <li><b>header</b> - The header is an HTML semantic element meant to describe the structure of the content.
+              Specifically, this is the header of the entire view, meant to identify the site as a whole and include, in
+              this case, a tool that will allow the user to access account tools.</li>
+          </ul>
+        </li>
+      </ol>
+<h3>navigation Partial</h3>
+<p>As before, you'll create a new file for the navigation partial in the <span class="fn">partials</span> folder.</p>
+<ol>
+  <li>Create the navigation partial in the <span class="fn">partials</span> folder.</li>
+  <li>Enter the code shown in the image:
+    <div><img src="/340-js/images/navigation-static.png" alt="Code for the navigation partial"></div>
+  </li>
+  <li>Impressive, isn't it?!</li>
+  <li>For now, this is temporary filler code. It will be replaced with dynamic code shortly.</li>
+</ol>
+<h3>footer Partial</h3>
+<p>Finally, let's build the last of our partials.</p>
+<ol>
+  <li>Create the new footer file in the <span class="fn">partials</span> folder.</li>
+  <li>Add the code shown below to the file:</li>
+  </ol>
+  <pre class="line-numbers" title="Copy - Paste does not help learning. Type it."><code class="language-javascript">&lt;% const d = new Date()
+let year = d.getFullYear() %&gt;
+&lt;footer&gt;
+  &lt;p class="copyright"&gt;&amp; copy &semi; &lt;%= year %&gt;, CSE 340 App&lt;/p&gt;
+&lt;/footer&gt;</code></pre>
+
+  <ol start="3">
+    <li>This allows JavaScript to determine the current year, and display it in the copyright statement. This eases maintenance for the site.</li>
+  <li>Remember from previous classes that "&amp;copy;" is an HTML entity that will render the copyright symbol in the browser.</li>
+  <li>As previously mentioned, the class is for CSS styling and can be altered to fit your needs.</li>
+</ol>
+
+<h2>Structure Check</h2>
+<p>Compare your folder and file structure against the illustration below. If anything is out of place, be sure to correct it.
+<div class="callout">
+  <img
+    src="/340-js/images/folder-file-structure-check.png"
+    alt="Project folder and file structure"
+  />
+</div>
+
+
+</p>
+<h2>What about body?</h2>
+<p>Yep, we skipped the body (line 11) in the layout code. That's because the body is the "content" of the page and will be created as needed to fill in the content when a view is to be generated and delivered. We'll create individual content for this section as we go along.</p>
+<h2>Conclusion</h2>
+<p>You may be asking, "Why did we build all of these files?" That is a good question. The answer is largely maintainability. Because each partial will be dynamically injected into a finished view, it means that if we need to make an update to the head, header, navigation or footer, we only have to do it in one place for it to be applied to all views. "One and done!" - pretty handy.</p>
+<p>With the layout and partials built, we can now progress to making them do their job.</p>
+    </main>
+    <footer>
+      <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License"
+          style="border-width:0" src="//i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a> All materials (except as
+      noted) are by Blaine Robertson and licensed under a <a rel="license"
+        href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US">Creative Commons Attribution-ShareAlike 3.0
+        License</a>. </footer>
+  </div>
+</body>
+
+</html>

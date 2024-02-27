@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Unit 5 Overview | Web Backend Development</title>
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="/340-js/css/normalize-min.css" type="text/css" media="screen">
+  <link rel="stylesheet" href="/340-js/css/340course.css" type="text/css" media="screen">
+  <script defer src="../js/units.js"></script>
+</head>
+
+<body>
+  <div id="wrapper">
+    <header><img src="/340-js/images/banner-1.jpg" alt="CSE 340 Course Banner"></header>
+    <main>
+
+      <div class="callout">
+        <p><strong>President Dieter F. Uchtdorf</strong> said, "Many of you brethren attend general conference by means of the Internet. New technologies such as this make it possible for the gospel message to be spread throughout the world. The Church Web sites are good examples of how you can use this technology as a wonderful resource of inspiration, help, and learning. They can be a blessing for you priesthood holders, your families, and the Church. (A Matter of Degrees, April 2008 General Conference)</p>
+        <p><em><strong>One day, one or more of you may be a developer on the websites mentioned or other sites. Make sure your best work is represented on those sites, to bless you and others!</strong></em></p>
+      </div>
+      <hr>
+      <h1>Unit 5 Overview</h1>
+      <h2>Authentication, Authorization &amp; Data Maintenance</h2>
+
+      <p>Authentication and authorization, using a variety of tools, including JSON Web Tokens and Cookies, specifically within a login system, are introduced. In addition, the final components of CRUD, namely Update and Delete, are implemented into the application.</p>
+
+      <h2>Checkboxes and Questions</h2>
+      <p>Click the checkbox when done to indicate that the item is complete. Below each section are areas to write any questions you have. This should help you remember questions that arise, and can be posted to the discussion board, asked in class or the team meeting.</p>
+
+      <form data-unit="unit5">
+      <h2>Assigned Readings</h2>
+      <ul>
+        <li><label for="r1">reading completed</label> <input type="checkbox" name="r1" id="r1"> <a href="https://blog.logrocket.com/jwt-authentication-best-practices/" target="_blank" rel="noopener">https://blog.logrocket.com/jwt-authentication-best-practices/</a></li>
+      </ul>
+      <div class="callout">
+        <h3>Questions from Readings</h3>
+        <label for="rq">Reading questions</label>
+        <textarea name="rq" id="rq"></textarea>
+      </div>
+
+      <h2>Activities</h2>
+      <ul>
+        <li><label for="a1">activity completed</label> <input type="checkbox" name="a1" id="a1"> Work with your learning team to complete the activities and assignment</li>
+        <li><label for="a2">activity completed</label> <input type="checkbox" name="a2" id="a2"> <a class="inline_disabled" href="https://blainerobertson.github.io/340-js/views/jwt-cookie.html" target="_blank" rel="noopener">JSON Web Tokens and Cookies</a> Introduced</li>
+        <li><label for="a3">activity completed</label> <input type="checkbox" name="a3" id="a3"> <a class="inline_disabled" href="https://blainerobertson.github.io/340-js/views/login.html" target="_blank" rel="noopener">Login Process</a></li>
+        <li><label for="a4">activity completed</label> <input type="checkbox" name="a4" id="a4"> <a class="inline_disabled" href="https://blainerobertson.github.io/340-js/views/jwt-authorize.html" target="_blank" rel="noopener">JWT Authorization</a></li>
+        <li><label for="a5">activity completed</label> <input type="checkbox" name="a5" id="a5"> <a class="inline_disabled" href="https://blainerobertson.github.io/340-js/views/select-products-ajax.html" target="_blank" rel="noopener">Select inventory items</a></li>
+        <li><label for="a6">activity completed</label> <input type="checkbox" name="a6" id="a6"> <a class="inline_disabled" href="https://blainerobertson.github.io/340-js/views/update-one.html" target="_blank" rel="noopener">Update an inventory item</a> (step 1)</li>
+        <li><label for="a7">activity completed</label> <input type="checkbox" name="a7" id="a7"> <a class="inline_disabled" href="https://blainerobertson.github.io/340-js/views/update-two.html" target="_blank" rel="noopener">Update an inventory item</a> (step 2)</li>
+        <li><label for="a8">activity completed</label> <input type="checkbox" name="a8" id="a8"> <a class="inline_disabled" href="https://blainerobertson.github.io/340-js/views/delete.html" target="_blank" rel="noopener">Delete an inventory item</a></li>
+      </ul>
+      <div class="callout">
+        <h3>Questions from Activities</h3>
+        <label for="aq">Activity questions</label>
+        <textarea name="aq" id="aq"></textarea>
+      </div>
+
+      <h2>Assignments Due</h2>
+      <ul>
+        <li><label for="h1">assignment completed</label><input type="checkbox" name="h1" id="h1"> Present your <a class="inline_disabled external" href="https://docs.google.com/spreadsheets/d/1OfXLuNwv_Xy0a1WjeIGkffwgrLsN1yBaAj0CqMB_URo/edit?usp=sharing" target="_blank" rel="noopener">teaching presentation</a> if scheduled during week 9</li>
+        <li><label for="h2">assignment completed</label><input type="checkbox" name="h2" id="h2"> <a href="https://byui.instructure.com/courses/257666/modules/items/32517340" target="_blank">Unit 5, Week 1 Team Activity</a> (due Saturday of week 9)</li>
+        <li><label for="h3">assignment completed</label><input type="checkbox" name="h3" id="h3"> <a href="https://byui.instructure.com/courses/257666/modules/items/32517342" target="_blank">Unit 5, Week 2 Team Activity</a> (due Saturday of week 10)</li>
+        <li><label for="h4">assignment completed</label><input type="checkbox" name="h4" id="h4"> Work with your learning team to complete <a class="inline_disabled" href="https://blainerobertson.github.io/340-js/assignments/assign5.html" target="_blank" rel="noopener">Assignment 5</a>.</li>
+        <li><label for="h5">assignment completed</label><input type="checkbox" name="h5" id="h5"> Submit the code zip file and production URL to the <a title="Assignment 5 Submission" href="https://byui.instructure.com/courses/257666/assignments/11797071" data-api-endpoint="https://byui.instructure.com/api/v1/courses/257666/assignments/11797071" data-api-returntype="Assignment" target="_blank">Assignment 5 Submission </a>(due Saturday of week 10)</li>
+        <li><label for="h6">assignment completed</label><input type="checkbox" name="h6" id="h6"> Use the <a title="Unit 05 Discussion" href="https://byui.instructure.com/courses/257666/discussion_topics/7462506" data-api-endpoint="https://byui.instructure.com/api/v1/courses/257666/discussion_topics/7462506" data-api-returntype="Discussion" target="_blank">Unit 5 Discussion Board</a>  to ask questions, answer questions and share tips and insights.</li>
+      </ul>
+     
+        <div class="callout">
+          <h3>Questions from Assignments</h3>
+          <label for="hq">Assignment questions</label>
+          <textarea name="hq" id="hq"></textarea>
+        </div>
+      </form>
+
+    </main>
+    <footer>
+      <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="//i.creativecommons.org/l/by-sa/3.0/88x31.png"></a> All materials (except as
+      noted) are by Blaine Robertson and licensed under a <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US">Creative Commons Attribution-ShareAlike 3.0
+        License</a>.
+    </footer>
+  </div>
+</body>
+
+</html>

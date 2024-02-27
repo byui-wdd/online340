@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Assignment 5 | Web Backend Development</title>
+  <meta name="description" content="CSE 340 Assignment 5 directions">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="/340-js/css/340course.css" media="screen">
+  <link rel="stylesheet" href="/340-js/css/prism-coy-dev.min.css" media="screen">
+</head>
+
+<body>
+  <div id="wrapper">
+    <header id="header"><img src="/340-js/images/small_banner.jpg" alt="CSE 340 Banner Image"></header>
+    <main>
+      <h1>Assignment 5</h1>
+      <h2>Introduction</h2>
+      <p>Having implemented both authentication and authorization, it is time to add additional functionality to both of these processes. In addition, with the ability to allow only authorized users into restricted areas, you will add the ability for employee or administrative users to edit and delete inventory items. <span class="notice">Remember to add error handling to all new routes.</span></p>
+
+      <h2>Video Demo</h2>
+      <p>The video provides a general overview of the assignment, but follow the written steps to complete the activity. This is the <a target="_blank" href="../transcripts/assignment5.txt">Transcript</a> of the video.</p>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/RfqjBzimWv0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+
+      <h2>Tasks</h2>
+      <p><strong>Hint: carefully consult these resources <a href="https://www.npmjs.com/package/jsonwebtoken" target="_blank">jsonwebtoken</a> , <a href="https://www.npmjs.com/package/cookie-parser" target="_blank">cookie-parser</a>, and <a href="https://www.geeksforgeeks.org/http-cookies-in-node-js/?ref=lbp" target="_blank">HTTP Cookies in Node</a> and don't forget about the <a href="https://expressjs.com/en/5x/api.html#res.locals" target="_blank">Express "locals" property</a> while working on these tasks.</strong> This enhancement consists of multiple tasks:</p>
+
+      <h3>Task 1</h3>
+      <p>Change the header partial file so that when a client is logged in, the "My Account" link is hidden and a "Logout" link is displayed. When the client logs out, the "My Account" link is restored and the "Logout" link is hidden. <i>Hidden, in this context, means it is not included in the view markup, not just hidden from view. If you were to look at the source code in the browser, the code would NOT be present.</i> In addition, add another link (e.g. Welcome Basic) to the header partial, to the left of the link mentioned above, that allows the client to click it in order to navigate to the account management view. This should only be visible when the client is logged in.</p>
+
+      <h3>Task 2</h3>
+      <p>Use middleware that makes use of the JWT token and checks the account type, and only allows access to any of the inventory administrative views or processes that add items (classifications or vehicles) if the account type is "Employee" or "Admin". On failure, the login view should be delivered with appropriate message. <strong>This must NOT be used when delivering the classification or detail views as they are meant for site visitors who may not be logged in.</strong> </p>
+
+      <h3>Task 3</h3>
+      <p>Add functionality to the <span class="fn">account management</span> view:
+      <ul>
+        <li>if the account type is "Client": greet the client by first name in an &lt;h2&gt; element (e.g. &lt;h2&gt;Welcome Basic&lt;/h2&gt;).</li>
+        <li>if the account type is "Employee" or "Admin": greet the client by first name in an &lt;h2&gt; element (e.g. &lt;h2&gt;Welcome Happy&lt;/h2&gt;) and add another &lt;h3&gt; heading below the greeting that indicates "Inventory Management" and below it, a &lt;p&gt; element containing a link to access the <span class="fn">Inventory Management</span> view, via the MVC process.</li>
+        <li>Make sure that if the account type is "Client", that the &lt;h3&gt; element and link to inventory management is not rendered at all in the view. This should be similar to the process used to display the "My Account" and "Logout" links in the header.</li>
+        <li>Add an "update account information" link to the view, so a client can update their information. <span class="notice">This link should be present for all clients.</span> The link must pass through the <span class="fn">accounts router</span> and be handled by the <span class="fn">accounts controller</span>. The id of the logged-in client should be passed through the link.</li>
+        <li>The update account link should appear above where the "Manage Inventory" heading is located.</li>
+      </ul>
+      There are a variety of possible solutions to this task. Come up with your own solution, and apply it.
+      </p>
+
+      <h3>Task 4</h3>
+      <p>You will create a new view where clients can update their account data - first name, last name, email address and password:</p>
+      <ol>
+        <li>Create a new <span class="fn">update view</span> in the <span class="fn">views &gt; account</span> folder.</li>
+        <li>The view should contain the typical components for a view: Errors, Message, H1 using the same value as the title.</li>
+        <li>The view will also contain <mark>two forms</mark>: 1) "Account Update", consisting of the first and last names and email and 2) "Change Password" to change the password.</li>
+        <li>Ensure that the view is valid HTML when done and the forms are styled to meet form best practices.
+        </li>
+      </ol>
+
+      <h4>Account Update Form</h4>
+      <ol>
+        <li>Add the first form and display the client's first name,
+          last name and email address in an appropriate input field for editing. Be sure that each input has an accompanying label element.</li>
+        <li>Each of the three inputs must also be "sticky" if errors are returned from the controller during server-side validation.</li>
+        <li>All three fields are required, and all three must be checked using both client-side and server-side validation.</li>
+        <li>Add the account_id to a hidden field with an appropriate name - value
+          pair.</li>
+        <li>Add an appropriate submit input for the account update.</li>
+      </ol>
+
+      <h4>Change Password Form</h4>
+      <ol>
+        <li>Add the second form, completely separate from the first.</li>
+        <li>Do NOT display the password in the input (it is a hash anyway and wouldn't make any sense) field.</li>
+        <li>Include a form input and accompanying label for entering a new password. Use the same validation for it as
+          you did for the password field in the original registration form.</li>
+        <li>Provide information to the client to know that by entering a password it will change the current password
+          and reminding them of the requirements for a password (length, characters, etc...).</li>
+        <li>Add the account_id in a hidden field with an appropriate name - value
+          pair to the form.</li>
+        <li>Add an appropriate submit input for the password change.</li>
+      </ol>
+
+      <h3>Task 5</h3>
+      <ol>
+        <li>Add "get" and "post" route handlers to the <span class="fn">account route</span> file, to handle delivery of the account update view and to process the update of the account information as well as the password update request.</li>
+        <li>Implement server-side validation middleware for the update post handlers, including that the email address does not already exist if it is being changed, and that the password meets the stated requirements.</li>
+        <li>In the <span class="fn">account controller</span>, add a function to deliver the account update view.</li>
+        <li>In the <span class="fn">account controller</span>, add a function to handle the "account update" process, including:
+          <ol>
+            <li>Return data to the <span class="fn">update view</span> for correction if errors are found.</li>
+            <li>Set a success or failure message to inform the client.</li>
+            <li>Query the account data from the database after the update is done.</li>
+            <li>Deliver the <span class="fn">management view</span> where the updated account information will be displayed along with the success or failure message.</li>
+          </ol>
+        </li>
+        <li>In the <span class="fn">account controller</span>, add a function to handle the "password change" process:
+          <ol>
+            <li>If there is an error with the new password, set an error message and return to the <span class="fn">update view</span> to be fixed.</li>
+            <li>If no error is found, the password must be hashed then sent to a function to be updated in the database.
+            </li>
+            <li>Determine the result of the update.</li>
+            <li>Set a success or failure message to inform the client.</li>
+            <li>Deliver the <span class="fn">management view</span> where the account information will be displayed along with the success or failure message.</li>
+          </ol>
+        </li>
+      </ol>
+
+      <p>The <span class="fn">account model</span> will need three new functions:</p>
+      <ol>
+        <li>A function, similar to the function that was previously built to get account information based on the email address. However, this function will get the account information based on the account_id.</li>
+
+        <li>A function to handle the update of the account information as submitted to the controller from the account update form. It will only need to update the firstname, lastname and email values based on the account_id.</li>
+
+        <li>A third function to update the password (as a hash), based on the account_id. Be sure that after submitting the new password to check the account table to make sure the password is a hash as part of your testing.</li>
+      </ol>
+
+      <h3>Task 6</h3>
+      <p>Add a logout process to the application that, when finished, deletes the token cookie and returns the client to the <span class="fn">home</span> view.</p>
+
+      <h2>Test</h2>
+      <p>Thoroughly test the functionality of each task to ensure it works as described in the development and production environments.</p>
+
+      <h2>Submission</h2>
+      <ul>
+        <li>Work with your learning team to accomplish the tasks and post to and read the collaboration tool to help one another.</li>
+        <li>Build, run and test in your development environment to make sure each task works.</li>
+        <li>When satisfied that the code is operational:
+          <ol>
+            <li>Upload the project to your GitHub repository.</li>
+            <li>Go to the render.com dashboard and manually deploy to your web service.</li>
+            <li>Thoroughly test the application in the browser on the production server following deployment.</li>
+            <li>Fix any and all errors prior to submission.</li>
+            <li>Submit the render.com production URL <b>AND</b> the GitHub repository URL as a comment in the assignment submission.</li>
+          </ol>
+          <!-- <ol>
+            <li>Commit your code to the remote repository and deploy it to your production server.</li>
+            <li>Test again in the production environment to ensure that all tasks remain fully operational.</li>
+            <li>Zip the project folder and name it assignment5 (save this zip file outside your project folder).
+            </li>
+            <li>Submit the zip file to the assignment 5 submission and add the production URL as a comment.</li>
+          </ol> -->
+        </li>
+      </ul>
+
+      <h2>Grading Matrix</h2>
+      <p>This enhancement has values in multiple objectives as shown below:</p>
+      
+      <h3>Objective 1</h3>
+      <ul>
+        <li>The <span class="fn">account-management</span> and <span class="fn">account update</span> views meets the standards found in the <a href="/340-js/views/dev-checklist.html" title="Open the frontend checklist in a new tab" target="_blank">Frontend Checklist</a>. </li>
+        <li>Obj. 1 value: Refer to grade book</li>
+      </ul>
+
+      <h3>Objective 2</h3>
+      <ul>
+        <li>The code in the header partial is fully operational to display the correct links based on the logged-in state of the client. This is true in all views, throughout the application.</li>
+        <li>The greeting in the <span class="fn">account-management</span> view is accurate for the type of account logged in. Additionally, the &lt;h2&gt; element is not present in the view for the "Client" account_type, including not being visible in the source code viewable in the browser.</li>
+        <li>Appropriate routes exist and work correctly to deliver the update view and process the updates.</li>
+        <li>A function exists in the <span class="fn">accounts controller</span> and works correctly to process the account update.</li>
+        <li>A function exists in the <span class="fn">accounts controller</span> and works correctly to process the password update.</li>
+        <li>Obj. 2 value: Refer to grade book</li>
+      </ul>
+
+      <h3>Objective 3</h3>
+      <ul>
+        <li>The middleware is applied correctly in the MVC model process of the application.</li>
+        <li>The flow of the application is governed correctly by the middleware.</li>
+        <li>All processes required in the assignment are done so using the MVC approach, and work correctly.</li>
+        <li>Obj. 3 value: Refer to grade book</li>
+      </ul>
+
+      <h3>Objective 4</h3>
+      <ul>
+        <li>A new function is present and operational in the <span class="fn">accounts model</span> to process the account update.</li>
+        <li>A new function is present and operational in the <span class="fn">accounts model</span> to process the password update.</li>
+        <li>A new function is present and operational in the <span class="fn">accounts model</span> to query account information based on a account_id.</li>
+        <li>All functions use a prepared statement approach to add protection to the database.</li>
+        <li>Obj. 4 value: Refer to grade book</li>
+      </ul>
+
+      <h3>Objective 5</h3>
+      <ul>
+        <li>Authentication works correctly.</li>
+        <li>The JWT token is created correctly and passed back and forth between browser and server correctly.</li>
+        <li>Middleware is used correctly to authorize the client to enter restricted areas.</li>
+        <li>The token payload is used correctly to greet clients in the <span class="fn">account-management</span> view.</li>
+        <li>Client data is checked using client-side and server-side validation and errors are returned to the view for correction.</li>
+        <li>Password data is checked using client-side and server-side validation and errors are returned to the view for correction.</li>
+        <li>The logout process works as required, including the cookie no longer being present after logout.</li>
+        <li>Obj. 5 value: Refer to grade book</li>
+      </ul>
+
+      <h3>Objective 6</h3>
+      <ul>
+        <li>The render.com production URL and the GitHub repository URL are both submitted on time and correctly. Both URL's must be present and operational for the assignment to be graded.</li>
+        <!-- <li>The project folder zip file is submitted on-time, correctly, and in a finished state.</li>
+<li>The production URL is submitted on-time, correctly and works.</li> -->
+        <li>Obj. 6 value: Refer to grade book</li>
+      </ul>
+    </main>
+  </div>
+  <script src="/340-js/js/prism-coy-dev.min.js"></script>
+</body>
+
+</html>

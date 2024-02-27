@@ -1,0 +1,26 @@
+In the previous video, the web service was created on Render.com and the GitHub repo was deployed.
+
+Once the deploy was finished, the operation of the production server was tested.
+
+With this done, this short video will demonstrate making an update to the application and the process involved to redeploy the update.
+
+This is going to be very simplistic.
+
+I will open the header.ejs partial and change the name of the application site.
+
+Once done and saved, I will commit the change to my GitHub repository.
+
+Once the change is finished I will login to Render.com and go to my web service in the dashboard.
+
+Locating the "Manual Deploy" button, click and select "Deploy Latest Commit". If you have made substantial changes, such as adding new packages to the application, then choosing the bottom option, "Clear build cache & deploy" may be the better option.
+
+Then, watch the logs as they go through the process of uploading the files from the repository, building the application and finally deploying it.
+
+When the "Live" icon appears, you are ready to test.
+
+Click the URL shown at the top of the view and a new tab should open with your application running.
+
+Be sure to thoroughly test the application in the production environment.
+
+Hopefully, everything will continue to work as designed and built. If not, consult the logs to determine if the problem can be identified, fixed and redeploy.
+

@@ -1,0 +1,22 @@
+Node JS is a JavaScript runtime for building and running JavaScript-based applications on a server.
+
+This short video demonstrates how to download, install and confirm the installation of Node on a local computer.
+
+Begin by going to nodejs.org in your favorite browser.
+
+Click "Downloads" in the navigation bar.
+
+Find and click the option for your operating system to download the long term support (LTS) version.
+
+Find the installer in your downloads folder and run it.
+
+Follow the prompts until the installation completes.
+
+Once done, open terminal (Mac) or Command Prompt (Windows).
+
+Type node --version, press "Enter".
+
+The version should match the installed node version.
+
+That's it. Node is now installed.
+

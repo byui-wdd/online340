@@ -1,0 +1,84 @@
+Data validation is a two-layered approach: 1) client-side - before the data leaves the browser, and 2) server-side - when the data arrives at the server.
+
+By checking data before it leaves the browser, the errors can be fixed immediately, and a round-trip to the server and back, should errors be found, is saved.
+
+However, client-side validation can be turned off or bypassed. Thus, server-side validation must also be in place.
+
+This video provides a short overview of implementing server-side validation in a node application using the express-validator package.  Additionally, this package also uses the validator.js package. It will be useful to review the official documentation for both packages.
+
+Using the built-in VS Code terminal, install the package as shown.
+
+This package is capable of both sanitizing and validating incoming data. 
+
+Sanitizing removes what should not be, while validation checks the data for compliance with expectations. Sanitizing should always occur first, then validate the data that remains.
+
+A quirk with this package is that data cannot be sanitized, without also be validated. It you attempt to use only sanitizing methods, errors will occur.
+
+The express-validator uses two processes to check data: 1) establish rules for the data to be checked, 2) a function to use the rules with the data and generate errors, if any occur.
+
+Because a MVC pattern is being used, the validation processes will be written in a utility file, then required and implemented as middleware in the route.
+
+Create a new file in the utilities folder and name it "account-validation.js". This file will contain the processes for use with account registration and account login, thus the name "account-validation".
+
+At the top of the new file, import the "utilities > index.js" file. Then require the express-validator package and extract the body and validationResult methods from it. Lastly, create a new "validate" object as shown.
+
+Next, create a method within the object which uses an anonymous arrow function. This function will contain an array of rules, for each of the registration inputs.
+
+Consulting the official documentation will show that .trim() is a sanitizing function. It removes empty white space that may exist before or after the incoming data.
+
+The isLength is a validation function to check for a minimum length. withMessage contains the actual error message to be returned to the browser should the data not meet the requirement.
+
+When you get to the password rule, you will see that it meets the same requirements as imposed with the pattern regular expression in the client-side validation.
+
+With the rules finished, the check function will be written. 
+
+In the same document as the rules, write the function as shown.
+
+Notice that the incoming data is collected from the request body and stored into variables. These variables use the same names as the form inputs.
+
+An empty errors array is declared, then the validationResult function, which contains the validation rules, is called and the request object is passed as a parameter. The data is checked against the rules, and if any errors are found, the error messages are returned and stored into the errors array.
+
+If the error array is not empty, meaning there are errors, then the navigation is built and the registration view is sent to EJS to be built and returned to the browser. The errors will be displayed. However, note that the data, minus the password, is also returned. This will show the client what was entered so they don't have to re-type it. This is referred to as making the form "sticky". This will be discussed in another video.
+
+If no errors are found, then the next() function is called and the data moves to the next step in the MVC process.
+
+Finally, the validate object is exported for use elsewhere in the application.
+
+To use the exported object, open the "account" router file.
+
+At the top, require the "account-validation.js" file.
+
+Because this is middleware, we place it before the controller-based request handler, with the route.
+
+Scroll down and find the post route for processing the incoming registration data.
+
+Between the route and the error handler function, add the call to the registrationRules() function, followed by the call to the checkRegData process, as shown.
+
+Finally, the view must be able to display errors, should they exist.
+
+Open the registration view and create some space below the main heading, but above the form.
+
+Add the code as shown. This code first checks for errors. If there are errors, then a dynamic unordered list is built using a foreach loop. The reason for the loop is that there could be a single error or up to four. The ability to display all errors is needed. The class "notice" is simply for styling the list using CSS. You could add a different class name, and write your own styles.
+
+To prevent the registration view from having a build error when originally called, prior to the client filling out the form, we will indicate in the controller that no errors exist.
+
+Open the account controller and find the request handler to deliver the registration view. Make sure that in the data object there is a "errors: null" name - value pair.
+
+Ensure that all work in all files has been saved.
+
+Start the development server and open a browser to your local server.
+
+Navigate to the registration view and submit the form without any data.
+
+The client-side validations should notify you of data errors.
+
+Click the noValidate bookmarklet to disable client-side validation.
+
+Click the submit button again. This time, server-side error messages, that match the messages placed in the rules object should be displayed.
+
+If it worked, that's great. Take some time to play with the form inputs testing different data to make sure the rules are working.
+
+If the checks are not working, double-check the code, examine error messages that may appear in the VS Code terminal and get some help.
+
+When everything is working, stop the development server.
+

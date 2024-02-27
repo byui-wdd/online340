@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <title>PostgreSQL Add Data | Web Backend Development</title>
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="/340-js/css/340course-min.css" type="text/css" media="screen">
+</head>
+
+<body>
+  <div id="wrapper">
+    <header><img src="/340-js/images/small_banner.jpg" alt="Course Banner"></header>
+    <main>
+      <h1>PostgreSQL Add Data</h1>
+      <h2>Introduction</h2>
+      <p>With the database tables created, it's now time to add some data. For now, you'll add data to the
+        "classification" and "inventory" tables, leaving the "account" table empty. This will be done using two different
+        methods, both should look somewhat familiar based on the processes used to create the database structures: type,
+        tables and relationship.</p>
+
+      <p><span class="notice">Remember: When including table and field names in SQL code, the names must be identical to the
+        table and field names that exist in the database. In addition, the data must be the correct type of data for the
+        field in which it will be stored.</span></p>
+
+      <h2>Video Demonstration</h2>
+<p>The video provides a general overview of the activity, but does not contain the detail needed to complete each process. Watch the video to obtain a general idea, but follow the written steps to complete the activity. This is the <a target="_blank" href="../transcripts/inserting-data-database.txt">Transcript</a> of the video.</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/4Z0m5-BU5J0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+      <h2>Connect to the Remote Server</h2>
+        <ol>
+        <li>Launch pgAdmin and enter the master password.</li>
+        <li>Expand the Servers list (if needed)</li>
+        <li>Right-click on the Render connection</li>
+        <li>Select "Connect to Server"</li>
+      </ol>
+
+      <h2>Classification Table Data</h2>
+      <p>The "classification" table contains only two fields: classification_name and classification_id. The
+        classification_id is set up to start with a value of "1" for the first record and add "1" to the value for each
+        additional record. This means, you should not have to include it when adding data. The only value you should
+        have to include is the value for "classification_name". As you did previously, use pgAdmin as the tool to
+        interact with the database on Render.com.</p>
+      <ol>
+
+        <li>Expand each of the "Databases" items as needed until the three table names are visible.</li>
+        <li>Right-click on the "classification" table, select "Query Tool".</li>
+        <li>A new work window will open.</li>
+        <li>Type the SQL code shown below into the query window.
+          <div class="callout"><img src="/340-js/images/pgadmin-add-classification-data.png"
+              alt="Add classification data SQL query"></div>
+        </li>
+        <li>Double check that the code is correct and no pgAdmin warnings or errors are shown.</li>
+        <li>Copy the code and paste it at the bottom of the <span title='Visual Studio Code'>VSC</span> SQL file, where
+          the table creation SQL code is stored. Save the file when done.</li>
+        <li>Return to the pgAdmin tool.</li>
+        <li>Click the "Execute / Refresh" button.</li>
+        <li>Close the query window and don't save any changes.</li>
+        <li>To check that the query worked correctly:
+          <ol>
+            <li>Right-click the "classification" table.</li>
+            <li>Select "View/Edit Data &gt; All Rows" from the options list.</li>
+            <li>A new query screen will open with a SELECT query in the top frame and the data from the insert code
+              appearing in the lower frame.
+              <div class="callout"><img src="/340-js/images/pgadmin-finished-classification-data.png"
+                  alt="pgAdmin finished classification data rows"></div>
+            </li>
+          </ol>
+        </li>
+        <li>Assuming that everything worked, you're done with inputing the data to the classification table. You can
+          close the query windows without saving.</li>
+        <li>If errors occurred or things didn't work as expected, review the steps and your code to find and fix errors.
+          Talk to your learning team, the TA or the professor. Get help until it works.</li>
+      </ol>
+
+      <h2>Inventory Table Data</h2>
+      <p>Finally, you'll add the inventory table data. Because that is a lot of data, you'll not type the SQL query.
+        Instead, you'll download a file containing the code, copy and paste the queries, then run them.</p>
+
+      <ol>
+
+        <li>Right-click the <a href="/340-js/downloads/inventory-data.txt"
+            title="Right-click and choose 'Save Link As' to save the text file">inventory-data</a>, and select "Save
+          Link As...", and save it into the <span class="fn">database</span> folder of the working project.</li>
+        <li>Open the file in <span title='Visual Studio Code'>VSC</span>.</li>
+        <li>Select all the code from the file and copy it.</li>
+        <li>Open pgAdmin (if it is not already open) and login (if needed).</li>
+        <li>It is assumed that the connection between pgAdmin and the remote database is active and that the server
+          items are
+          expanded.</li>
+        <li>Right-click on the "inventory" table, select "Query Tool".</li>
+        <li>A new work window will open where SQL code is expected to be entered.</li>
+        <li>Paste the inventory insert SQL code into the query window.
+        </li>
+        <li>Double check that there are no errors or warnings being indicated by pgAdmin.</li>
+        <li>Click the "Execute / Refresh" icon in pgAdmin.
+          <div class="callout"><img src="/340-js/images/pgadmin-execute-btn.png"
+              alt="Image of the pgAdmin Execute / Refresh button"></div>
+        </li>
+        <li>The code should run and data should be inserted into the "inventory" table.</li>
+        <li>Review the data by right-clicking the "inventory" table and select "View/Edit Data &gt; All Rows".</li>
+        <li>Copy the code from the text file again (if needed) and paste it into the <span
+            title='Visual Studio Code'>VSC</span> SQL file that holds the code from earlier. Ensure that the inventory inserts are at the very bottom of the page (again, order matters). Save and close the file when done.</li>
+      </ol>
+
+      <h2>Conclusion</h2>
+      <p>Okay, let's take a minute and review. The database is built and two of the three tables (classification and
+        inventory) have data. You should have noticed that in both insert processes, the primary key field populated itself,
+        and in sequential order.</p>
+      <p>Furthermore, you have saved all the code into a SQL file, so the entire structure and data of the type and tables can be easily rebuilt. By storing all the creation code in a <span
+          title='Visual Studio Code'>VSC</span>
+        SQL file, and in the right order, all you'll have to do is run the entire file's code at the same time and
+        everything will be done in a single step. Woohoo!</p>
+
+      <h2>Close the Connection</h2>
+      <p>As stated in previous activities, it is recommended that when you are done with your interaction between pgAdmin and the database server that the connection be closed. To do so:</p>
+      <ol>
+        <li>Right-click on the Render server object in the "Servers" panel of pgAdmin.</li>
+        <li>Select "Disconnect from Server".</li>
+        <li>You're done.</li>
+      </ol>
+    </main>
+    <footer>
+      <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License"
+          style="border-width:0" src="//i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a> All materials (except as
+      noted) are by Blaine Robertson and licensed under a <a rel="license"
+        href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US">Creative Commons Attribution-ShareAlike 3.0
+        License</a>. </footer>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,80 @@
+This video demonstrates using JavaScript to make the asynchronous call to the Node application, in order to build a dynamic list of inventory items to begin the Update and Delete processes.
+
+Begin by opening the inventory model and reviewing the function to request inventory items based on a classification_id.
+
+Open the inventory controller. Scroll down and locate the handler function which delivers the inventory management view. In it, create an empty line between where the navigation is built and the res.render function is called.
+
+In the space, call the same function to create the select list used to represent classifications in the add new vehicle form. The function itself already exists in the "utilities > index.js" file. See the revised inventory management handler, with the new code, in the video.
+
+Once written be sure to add the variable holding the list to the data object within the res.render() function. Save the file.
+
+Find and open the inventory management view.
+
+Below the existing links to add a new classification and new inventory item, add a new H2 heading. The text should reflect that this area is to "Manage Inventory".
+
+Below the heading, add a paragraph indicating that the client should use the select list to select inventory items based on their classification.
+
+Below the paragraph, add an EJS code block to display the select list. Refer to the add new vehicle view if needed to remind yourself of what the code block should look like.
+
+Below the code block, add an empty HTML table, such as the one shown. This is where the inventory items will be displayed. The id and its value will be used by client-side JavaScript, to know where to inject the data.
+
+Below the empty line, add an HTML noscript element, as shown in the video, indicating that JavaScript must be active for this to work.
+
+Scroll to the bottom of the management view and add a script element to access a JavaScript file. You'll write this file next.
+
+Check for errors and save the file.
+
+Locate the "public > js" folder. Create a new file named "inventory.js" within the js folder.
+
+Add the code, as shown, to the file.
+
+This code first identifies the select list in the view. Then, an event listener monitors the select list for a change (meaning an option from the list has been selected) and captures the id of the selected item.
+
+The route to request the JSON data is then declared and the data is fetched from the application.
+
+If the JSON data is returned, it is sent to a utility function to build the HTML around the data, before being sent back to the view.
+
+If no data is returned, or if the promise has an error, appropriate messages are created and thrown to the error handler.
+
+The function used to build the HTML table rows and cells is also in the "inventory.js" file. Add a few empty lines beneath the eventListener just written and add the function shown in the video.
+
+Carefully read the comments within the function to understand what each part does.
+
+When done, make sure there are no errors and save the file.
+
+Now it's time to add the route to handle the AJAX request just written.
+
+Open the inventory router file.
+
+Add the new route, as shown in the video. Notice that the error handler is present to deal with the errors as mentioned previously.
+
+Save the file when done.
+
+Finally, open the inventory controller.
+
+Scroll down and add a new function below the existing functions, but prior to module.exports statement.
+
+This is the function that is used in the router and is called from the client-side JavaScript. Note the line that returns the inventory data as a JSON object.
+
+Save all changes to all files, if needed.
+
+It's time to test.
+
+Start the development server and open the local server in the browser.
+
+Login as an employee or admin.
+
+In the URL, add "/inv/" to the end of the existing localhost:5500 route, and hit "enter".
+
+The inventory management view should be delivered.
+
+Find the heading, paragraph and select list.
+
+Select a classification from the select list. After a brief pause, the inventory items belonging to that classification should appear, if everything is working.
+
+Turn off JavaScript, and reload the view. The noscript message should appear. Turn JavaScript back on.
+
+If it works as described, you're ready to move to the next activity. If not, review your code, check the console in both the browser and the server to see what, if any, errors are reported. Talk to your classmates, the TA or professor. But, it must work before moving on.
+
+Stop the development server once everything is working.
+

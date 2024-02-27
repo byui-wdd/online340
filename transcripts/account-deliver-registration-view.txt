@@ -1,0 +1,32 @@
+In a previous activity you created the MVC process to deliver a login view. In this activity, you will repeat much of the same process, but to deliver a registration view.
+
+In the login view,  a link was added which will allow a client to request the registration view, should they not already have an account.
+
+This video provides an overview of the process to fulfill the request triggered when this link is clicked.
+
+To begin, a new GET route will be added to the account router.
+
+Within the route, the error handler middleware will be implemented and finally, the controller-based request handler will be added.
+
+Recall that the account router file has already been included into the server.js file, along with the "account" route indicator. This means that when a route is seen by the server.js file, if it contains "account", it will be forwarded to the account router file for handling.
+
+Now, in the account controller, the request handler function  to deliver the registration view will be built as shown.  When done, add it to the exports object, so that it is available for use in the router file built previously.
+
+The function accepts the request, response and next items as parameters. It then builds the navigation bar using the function from the utilities library, then calls the res.render function to deliver the registration view and passes a title and the navigation string to the EJS view engine to incorporate into the view.
+
+Finally, the view itself is built. The view will be stored into an "account" folder, within the view folder.
+
+It will use the title passed to the view as the main page heading, have the ability to display a flash message from the session, and contain a form.
+
+The form should require and accept a first name, last name,  email address and password, and contain a submit button.
+
+As good practice, the name for each of the form inputs should match the database field name. For example, if the database table field for storing the first name were "account_firstname", then the input name would match (e.g. &lt;input name="account_firstname"&gt;)
+
+The view should be valid HTML and use valid CSS to style things professionally.
+
+Once everything is built, it is time to start the development server using the built-in VS Code terminal.
+
+In the browser, open localhost:5500 and click the "My Account" link in the header. When the login view is delivered, find and click the link to deliver the registration view.  If everything works, the registration view, containing the form should be delivered to the browser.
+
+Assuming everything worked, congratulations. Be sure to stop the development server when done testing.
+

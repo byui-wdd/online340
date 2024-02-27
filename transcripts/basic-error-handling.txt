@@ -1,0 +1,32 @@
+An exception is an anticipated error. When building code, and adding a "catch" in a promise or a try-catch block, you are dealing with exceptions.
+
+However, there are also unexpected errors, that require alternative means of being handled. That is the intent of this activity, which this video also overviews.
+
+Express has built-in error handling, which we will implement.
+
+Two separate functions will be used. The first is the implementation of the built-in Express error handler.
+
+In the server.js file, just above the server information section, write the function as shown. Note that it uses four parameters, of which the first is an error. The functionality uses the error to determine how to deal with it.
+
+While developing, the more information that can be provided the better, that is not true in production. Too much information can provide hackers with information that can be used to attack the site. 
+
+The function produces a generic error view, that indicates there was an issue, but not many details. However, the error is also written to the console in such a way that the location of the error and error message are displayed. This can assist with tracking and fixing errors when they occur.
+
+Next, the error view is constructed. It continues to use EJS for most of the components, but the content is very simple, displaying the error type and message.
+
+The second function will also be written into the server.js file. However, here, it will be added as the last item in the routes section.
+
+The reason for the placement is that when the file receives a route it will redirect to the appropriate routing file. However, if a matching route cannot be found, then this function will execute, delivering a 404, "page not found" error, which the error handling function, written earlier, will pick up and display in the error view.
+
+With the functions written, and the error view built, it's time to test.
+
+Start the local development server and open a browser to the local server.
+
+Type a path into the URL that does not exist and submit.
+
+If things are working, the function at the end of the routes should fire the 404 error. That will be picked up by the error handler function and the error view will be returned to the browser.
+
+The Error type should be 404 and the message should reflect that the route was incorrect and the resource cannot be found.
+
+Basic error handling is now implemented. It leaves a lot to be done still, but the foundation is in place.
+

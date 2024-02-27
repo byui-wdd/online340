@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Remote Connection | Web Backend Development</title>
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="/340-js/css/340course-min.css" type="text/css" media="screen">
+</head>
+
+<body>
+  <div id="wrapper">
+    <header><img src="/340-js/images/small_banner.jpg" alt="Course Banner"></header>
+    <main>
+      <h1>Remote Connection to Render.com Database</h1>
+
+      <h2>Video Overview</h2>
+      <p>The video provides a general overview of the activity, but does not contain the detail needed to complete each process. Watch the video to obtain a general idea, but follow the written steps to complete the activity. This is the <a target="_blank" href="../transcripts/establish-remote-db-connection.txt">Transcript</a> of the video.</p>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/0Vym1mH-RwE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+      <h2>Introduction</h2>
+      <p>With the database created on render.com and pgAdmin4 installed, we can now establish a connection between the
+        two in order to build the structure and populate the database with content.</p>
+      <h2>Check the Access Control Source</h2>
+      <p>Render.com requires that any external access to a database service be allowed from only one location. That
+        location is determined by an IP address. This is a security process, so just go with it.</p>
+      <ol>
+        <li>Navigate to <a href="https://render.com/" target="_blank">Render.com</a>.</li>
+        <li>Login using the GitHub option, as done previously.</li>
+        <li>Click the name of your database service in the dashboard.</li>
+        <li>Scroll to the bottom of the information page until you see the "Access Control" area.</li>
+        <li>The address <code>0.0.0.0/0</code> should already be present in the Source text box. This address opens access to any external IP address as long as the connection has the correct credentials.</li>
+        <li>Stay on the page, but scroll up to the "Connections" box. You will need this information in a moment.
+          <div class="callout"><img src="/340-js/images/render-db-connection-info.png"
+              alt="Screenshot of the database Connection information on Render.com"></div>
+        </li>
+      </ol>
+
+      <h2>pgAdmin Remote Connection</h2>
+      <ol>
+        <li>Open the pgAdmin application.</li>
+        <li>Enter the master password when asked (you did save and remember it, right?!).</li>
+        <li>On the left side, should be a "Servers" panel. This is where we will build the connection.
+          <ol>
+            <li>Right-click on the <code class="language-markup">Servers</code> name.</li>
+            <li>Select <code class="language-markup">Register &gt; Server</code>. A dialog box should open:
+              <div class="callout"><img src="/340-js/images/register-server-1.png"
+                  alt="Screenshot of the pgAdmin Register-Server dialog box"></div>
+            </li>
+            <li>Provide a descriptive name (e.g. Render.com). Leave all other settings on this screen alone.</li>
+            <li>Click "Connection" in the top bar of the dialog box.</li>
+            <li>Return to the "Connections" box for the Render.com database.</li>
+            <li>Locate the "External Database URL" item and click the "Copy to clipboard" button.</li>
+            <li>Return to pgAdmin and paste the URL into the "Host name / address" dialog box.</li>
+            <li>Highlight all characters in the string from the first character all the way to and including the "@"
+              symbol. Delete these characters. The highlighted characters in the example string below illustrate what
+              should be removed:
+              <p>
+                <span
+                  style="background-color: pink;">postgres://cse340db:odSoeaIrmf1bAz0hvCl4kH@</span>dpg-cd4sj7hqpbpffhu0-a.oregon-postgres.render.com/cse340db
+              </p>
+            </li>
+            <li>Move to the end of the remaining string.</li>
+            <li>Highlight the forward slash "/" and all characters to the right. Delete these characters. The
+              highlighted characters in the example string below illustrate what should be removed:
+              <p>
+                dpg-cd4sj7hqpbpffhu0-a.oregon-postgres.render.com<span style="background-color: pink;">/cse340db</span>
+              </p>
+            </li>
+            <li>Why? The connection string contains many pieces of information needed to establish a connection.
+              Unfortunately, pgAdmin cannot accept the string as a whole, so we have to alter it.</li>
+            <li>The value of the Port should be "5432". That is correct, so don't change it.</li>
+            <li>Return to the "Connections" box for the Render.com database.</li>
+            <li>Visually confirm the Database name and Username. If they are identical, it makes it easy. Highlight and
+              copy the database name.</li>
+            <li>In the pgAdmin dialog box, paste the database name into the "Maintenance database" text box.</li>
+            <li>In the pgAdmin dialog box, paste the Username into the "Username" text box.</li>
+            <li>Leave the other settings on this screen alone.</li>
+            <li>Click "Parameters" in the top bar of the dialog box.</li>
+            <li>Change, if needed, the "SSL Mode" to "Require".</li>
+            <li>Click the "Save" button.</li>
+          </ol>
+        </li>
+        <li>pgAdmin may attempt to connect immediately. In order to successfully connection, you'll need your database
+          password. I'll describe this process in the next section.</li>
+      </ol>
+
+      <h2>Establish the Connection</h2>
+      <p>When beginning a session between pgAdmin and the remote database on Render.com, you will need the password from
+        the "Connections" information in the database dashboard.</p>
+      <ol>
+        <li>If not already logged in to Render.com, do so using the GitHub option.</li>
+        <li>Click the name of your database service in the Dashboard.</li>
+        <li>Scroll down to the "Connections" information.</li>
+        <li>Click the "Copy to clipboard" button in the Password line.</li>
+        <li>Go to pgAdmin.</li>
+        <li>Expand the "Servers" list, if needed.</li>
+        <li>Right-click on the Render server and select "Connect Server".</li>
+        <li>Provide the password if asked. Just paste the copied password.</li>
+        <li>If everything works, then the connection will be made, and you will be able to see the various options
+          associated with the database on Render.com.</li>
+      </ol>
+
+      <h2>Close the Connection</h2>
+      <p>On the Free tier that Render.com offers, it is important to not overuse time or resources. It is
+        recommended that when you are done with your interaction between pgAdmin and the database server that the
+        connection be closed. To do so:</p>
+      <ol>
+        <li>Right-click on the Render server object in the "Servers" panel of pgAdmin.</li>
+        <li>Select "Disconnect from Server".</li>
+        <li>You're done.</li>
+      </ol>
+
+      <h2>Conclusion</h2>
+      <p>As you can see, establishing this connection requires a fair amount of work. You should only have to repeat
+        this when your Render.com database expires and a new one is built.</p>
+    </main>
+    <footer>
+      <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License"
+          style="border-width:0" src="//i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a> All materials (except as
+      noted) are by Blaine Robertson and licensed under a <a rel="license"
+        href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US">Creative Commons Attribution-ShareAlike 3.0
+        License</a>. </footer>
+  </div>
+</body>
+
+</html>

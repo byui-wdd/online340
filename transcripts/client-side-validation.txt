@@ -1,0 +1,52 @@
+In a previous video, the registration form was used to submit data for storing into the database.
+
+However, it is very important that data being submitted to an application be validated, checked for correctness. There are two means of doing this: client-side, which occurs in the browser, before allowing the data to be sent to the server, and, server-side, which checks the data again once it has reached the server.
+
+The decision to validate data should not be client-side OR server-side. It should be both.
+
+The reason is that if errors can be found before sending the data to the server, it save time (the data does not have to be sent to the server, checked and then returned for correction) and resources (the server does not have to use cycles to find the errors).
+
+On the other hand, client-side checks can be disabled. Therefore, the server-side checks are a second line of defense to ensure that the data that is expected, is the data received.
+
+To begin, a reference of various HTML form inputs is shown. Each of these can be used to collect data, which can be stored into the database, depending on the needs of the website application.
+
+Secondly, a reference of various attributes is shown. Of these, two are of importance in this activity: required and pattern.
+
+The required attribute is known as a void attribute. This means that it does not accept a value. If present, in an input, it is TRUE, and the input must receive a value. If absent, it is FALSE and the input can be left empty.
+
+The pattern attribute accepts a JavaScript regular expression. This regEx can be used to check the data to meet certain qualifications. The reference is also shown in the video for learning more about regular expressions.
+
+In this video, the registraion form will be altered to add client-side validation.
+
+In the view, just above the form, a direction is provided indicating to the client that all four inputs are required.
+
+Accordingly, the required attribute is added to each of the four inputs.
+
+In addition, directions are provided concerning the password. It must be at least 12 characters and contain a capital and lowercase letter, a number and a special character.
+
+To enforce this requirement, a pattern attribute and value are added to the password input.
+
+With the changes in place, the view should be saved.
+
+Now it is time to test.
+
+Start the development server and open the application in a browser.
+
+Navigate to the registration form.
+
+Attempt to submit the form empty. The firstname input should have a textbox appear indicating that it cannot be empty. Provide a firstname and submit. The same behavior should appear for the lastname.
+
+The email input is unique in that the type is "email" and "required". The browser understands that the correct input should have the format of an email address.
+
+Enter text, but not in the form of an email. Submit the form. The error should indicate that an email is required.
+
+Finally, in the password input, enter a password that does not meet the requirements. When you submit the form, a message should tell you that the value does not meet the pattern.
+
+In the video, you will see some CSS styling at work. You can write CSS to add visual styling to help the client understand when things have been done correctly or incorrectly.
+
+Only when the form is completed correctly, will the data be allowed to leave the browser and be sent to the server for processing.
+
+Obviously, the form used here is very simple. But, the concepts shown are applicable even for more complex forms.
+
+When done testing, stop the development server.
+

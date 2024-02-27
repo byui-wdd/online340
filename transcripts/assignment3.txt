@@ -1,0 +1,22 @@
+This overviews the finished assignment 3, as it will look in the browser. This video does NOT review any of the code as required for the solution.
+
+It is recommended that you have the grading matrix available to you and that you base your own testing on the Test, Test, Test section of the assignment.
+
+The content should fully load in both classification and detail views. Both must pass Wave, HTML and CSS validations; as well as adapt appropriately to mobile and large screens in the browser. 
+
+Test the intentional error by clicking the link in the footer. This should produce a 500, server error, not a 404, page not found, error.
+
+Also test that the 404 error operates by entering a non-existent route in the browser URL.
+
+The error view should also meet the requirements of the frontend checklist. Be sure to check these.
+
+It is your responsibility to ensure that the working code is pushed to your GitHub repo and then deployed to the render.com web service.
+
+Once the deployment is complete, test all of your application functionality in your browser. If you test, identify issues and fix those issues prior to submission, you will sleep better at night.
+
+If the professor finds issues, that impacts the grade and leads to restless nights.
+
+The code base for the assignment should be submitted as directed in the assignment, along with the URL to your deployed website.
+
+Good luck as your complete this assignment.
+

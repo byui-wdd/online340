@@ -1,0 +1,36 @@
+I'm going to start this video with a differentiation. The word "route" is often mispronounced as "root". In Express applications, this can lead to confusion.
+
+In an application, the "root" is considered the project folder, where all files and folders are stored.
+
+A "route" is a path that describes how to get to a resource that is being sought.
+
+For example, consider "Route 66", which is more frequently pronounced "Root 66", which is a highway system stretching from Chicago, Illinois to San Bernandino, California in the United States.
+
+However, if you were to use a mapping application to describe how to get from Boise, Idaho to Yellowstone National Park, depending on your mode of transportation, different routes or options would be presented.
+
+So, let's make sure we use correct pronunciation to avoid confusion. When describing how to find a particular resource , we use a "route".
+
+Let's look at a few simple examples.
+
+In our wep application, specifically the server.js file, we describe where all of the static files (e.g. images, CSS and client-side JavaScript) will be stored.
+
+To keep the server.js file from bloating we use a basic route statement that points to a dedicated router file. The details for the three static file types are provided in this router file.
+
+By using the app.use and router.use functions, these routes are available to the entire application and all views that will use any of these static files.
+
+A second example, also found in the server.js file is the route to deliver the home view. Notice that all the code for this route is located in the server.js file.
+
+That's because the route only has to deliver the home view, and nothing else.
+
+This route consists of several parts: 1) the get listener, 2) the actual route (a foward slash), and 3) the result handler.
+
+In this instance, when a browser sends a get request to the server, consisting of the server name and nothing else, this route picks it up and calls the result.render function.
+
+The function is told to deliver the "index" view, which is stored in the view folder, and a title of "Home".
+
+The EJS view engine, then directs the layout.ejs file to collect all of the partials and the index file to build a complete, finished view and return it to the browser.
+
+The key thing to note is that if you look at the source code in the browser, there is no sign of EJS, it is only the finished code that EJS caused to be built.
+
+In review, a "route" is used to describe for the server the resource being sought. When we build a link into a view, we must be sure to also build a route starting from the server.js page, possibly including a specialized router file, that leads to the means of delivering the content back to the browser.
+

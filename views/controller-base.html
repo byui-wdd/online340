@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <title>baseController | Web Backend Development</title>
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="/340-js/css/340course-min.css" type="text/css" media="screen">
+</head>
+
+<body>
+  <div id="wrapper">
+    <header><img src="/340-js/images/small_banner.jpg" alt="Course Banner"></header>
+    <main>
+      <h1>baseController</h1>
+      <h2>Introduction</h2>
+      <p>As you now know, the MVC pattern uses controllers to contain the logic of what should happen when a particular route is detected. In this instance, the base controller will be used as the means of delivering the index view for the "basic" route - <code><mark>"/"</mark></code>. In this activity you will alter the basic route in the server.js file, then build the controller and make it available to the server.js file. Then, you'll add your first model to the mix. Finally, you'll test to make sure everything works. Time to get started.</p>
+      
+      <h2>server.js File</h2>
+
+      <h3>The "index" Route</h3>
+      <p>Let's start by altering the existing index route.</p>
+      <ol>
+        <li>Find the existing code for the index route. Alter it to look like the image below:</li>
+        <li><div class="callout"><img src="/340-js/images/index-route.png"
+              alt="Altered server.js code for the index route"></div>
+        </li>
+        <li>The second line does a number of things:
+<ol>
+  <li><strong>app.get -</strong> The express application will watch the "get" object for a particular route.</li>
+  <li><strong>"/" -</strong> This is route being watched. It indicates the base route of the application or the route which has no specific resource requested.</li>
+  <li><strong>baseController.buildHome -</strong> You should recall that our application will use a Model - View - Controller (MVC) design pattern. <code>baseController</code> represents a specific controller, while <code>buildHome</code> represents a function to be called that will be found in the controller. We'll build these next.</li>
+  <li>The entire line indicates that when the server receives a URL route of "/", it should execute the "buildHome" function, which is in the "baseController" file.</li>
+  </ol>
+  <h3>Require the Controller</h3>
+  <ol>
+  <li>Even though the controller file doesn't yet exist, let's bring it into the server.js file's scope, as if it did.</li>
+  <li>Scroll up to the top of the server.js file and find the "Require Statements" comment.</li>
+  <li>Create a new empty line beneath the last line that has a "require" function in it.</li>
+  <li>Add the line of code shown in the image below. This line will bring the controller file into the scope of the page, and store it in a local variable. The variable used here, must match the variable used in the route (e.g. baseController).
+    <div class="callout"><img src="/340-js/images/base-controller-import.png"
+        alt="Code to import the base controller to server.js"></div>
+  </li>
+</ol></li>
+      </ol>
+
+      <h2>Build the Base Controller</h2>
+      <p>As previously mentioned, this controller will contain the logic, in the form of a function, that will ultimately deliver the index view of the application along with needed content.</p>
+      <ol>
+        <li>Click the "controllers" folder, to highlight it.</li>
+        <li>Click the new file icon, name the new file "<mark>baseController.js</mark>.</li>
+        <li>Add the code shown in the image to the file:
+          <div class="callout"><img src="/340-js/images/base-controller-start.png"
+              alt="Code for the base controller"></div>
+        </li>
+        <li>Save the file.</li>
+      </ol>
+      <h3>An Explanation</h3>
+      <ul>
+        <li><strong>Line 1 -</strong> declares a variable and assigns to it the functionality found in the default file of the utilities folder. You have already built this file and its functions. They will be used to build the navigation bar to be used in the navigation partial.</li>
+        <li><strong>Line 2 -</strong> declares a variable which is an empty object. Remember that in JavaScript, { } indicates an object, except when used with a function.</li>
+        <li><strong>Line 4 -</strong> declares that "buildHome" is a method of the "baseController" object. The method is an asyncronous function that accepts the request (rec) and response (res) objects as parameters.</li>
+        <li><strong>Line 5 -</strong> declares a "nav" variable which waits for the navigation bar, in the form of HTML, to be returned from the getNav() function, which is stored in the default utilities file.</li>
+        <li><strong>Line 6 -</strong> The response object (the way the server returns content to the browser) is to render a file named "index" (the file extension "ejs" is implied) and send an object with data to the page.</li>
+        <li>The sent object contains a "name - value" pair, where the name is "title" and the value is "Home". [Note: if you open the "head" partial, you'll find a code block that is waiting to display the title. That is what this object does.] A second name-value pair is included, nav: nav. However, in modern JavaScript (ES6 and newer) if the name and value match, they can be collapsed. This "nav" variable will be used by the modified navigation partial to display the navigation bar in views.</li>
+        <li><strong>Line 7 -</strong> this is the closing curly brace for the function that began on line 4.</li>
+        <li><strong>Line 9 -</strong> exports the "baseController" object. This is what is imported into the server.js file.</li>
+      </ul>
+       
+      <h2>Alter the Navigation Partial File</h2>
+      <p>Previously, when building the navigation partial file, you added HTML code for an unordered list. It's time to replace it with a dynamic code block.</p>
+      <ol>
+        <li>Find and open the navigation.ejs file in the partials folder.</li>
+        <li>Highlight and delete the unordered list.</li>
+        <li>Add a code block and variable name for the dynamic navigation code as shown in the image:
+          <div class="callout"><img src="/340-js/images/navigation-dynamic.png" alt="Code for the dynamic navigation variable"></div>
+        </li>
+        <li>Save the file.</li>
+        <li>With this alteration, it is critical to understand that whenever a view is rendered, the "nav" variable MUST be included or else the view will not render and an error will be thrown.</li>
+      </ol>
+
+      <h2>Alter the Index Route in the server.js File</h2>
+      <ol>
+        <li>Find and open the server.js file.</li>
+        <li>Locate the existing route to render the index view.</li>
+        <li>Alter the code to remove the response.render methods and replace it with the call to the controller function, as shown in this image:
+          <div class="callout"><img src="/340-js/images/index-route.png"
+              alt="Code for the modified index route in server.js"></div>
+        </li>
+        <li>Save the file.</li>
+      </ol>
+      <h2>Time to Test</h2>
+      <p>It's time to make sure everything works. Before doing so, remember that a number of alterations have occurred: 1) a model was added that contains the code for retrieving the classification data from the database, 2) a new utility file was created that contains two functions for building the navigation bar, 3) a controller was added that contains a function for bringing all of the functionality from the model and utility files together to build and return the home view, 4) the route in the server.js file was updated to use the controller functionality.</p>
+      <ol>
+        <li>Make sure all of the files are saved (look for any black dots in the VSC tabs of open files).</li>
+        <li>Open a new terminal window, if one is not already open.</li>
+        <li>If the server is not running, type <code><mark>pnpm run dev</mark></code>, press "Enter".</li>
+        <li>Watch for the message telling you that the server is running on localhost:5500.</li>
+        <li>In a browser, open a new tab and type, <code><mark>localhost:5500/</mark></code>, press "Enter".</li>
+        <li>If everything worked, you should now be looking at a web page that contains a header, navigation bar, an h1 with your name and a footer.</li>
+        <li>If everything worked, high five anyone close by. If it didn't go back and check your code, talk to your learning team or get help from the TA or professor.</li>
+        <li>When done testing, type <code><mark>Control + C</mark></code> to stop the server.</li>
+      </ol>
+      <h2>Conclusion</h2>
+      <p>This process of using routes, models, controllers, views and utility files is fundamental to modern web development. As you practice and repeat this process you'll become more comfortable with it. Practice makes perfect!</p>
+    </main>
+    <footer>
+      <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License"
+          style="border-width:0" src="//i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a> All materials (except as
+      noted) are by Blaine Robertson and licensed under a <a rel="license"
+        href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US">Creative Commons Attribution-ShareAlike 3.0
+        License</a>. </footer>
+  </div>
+</body>
+
+</html>

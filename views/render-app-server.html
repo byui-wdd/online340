@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Render App Server | Web Backend Development</title>
+    <meta name="viewport" content="width=device-width">
+    <link
+      rel="stylesheet"
+      href="/340-js/css/340course-min.css"
+      type="text/css"
+      media="screen">
+    <link
+      rel="stylesheet"
+      href="/340-js/css/prism-coy-dev.min.css"
+      media="screen">
+  </head>
+
+  <body>
+    <div id="wrapper">
+      <header>
+        <img src="/340-js/images/small_banner.jpg" alt="Course Banner">
+      </header>
+      <main>
+        <h1>Render App Server</h1>
+        <h2>Introduction</h2>
+        <p>When building a web application, there are typically two or three servers involved: development, testing and production. The development server is the one on your computer (localhost), where you write and test your code. The testing server is where you deploy your code to test it in a production-like environment. The production server is where your application is deployed for the world to use.</p>
+        <p>In our situation, we will only have two: development and production. We will trust ourselves to thoroughly test in both environments. You have already set up the local development environment. Now, it is time to set up the production server.</p>
+        <p>We will use <a href="https://render.com/" target="_blank">Render.com</a> to host our application. Render.com is a cloud service that provides a free-tier for students. The free-tier is limited, but it is enough to host our application for the class. The free-tier is limited, so it will be important to monitor your dashboard metrics closely to ensure that your application and interactions stay within the available limits.
+        </p>
+        <!-- <p>
+          Previously, you created a database service on
+          <a href="https://render.com/" target="_blank">Render.com</a> in order
+          to host the data storage for the application. Now, it is time to
+          create the application server to host the application itself. Just as
+          mentioned before, the free-tier is limited, so it will be important to
+          monitor your dashboard metrics closely to ensure that your application
+          and interactions stay within the available limits.
+        </p> -->
+
+        <h2>Video Demonstration</h2>
+        <p>The video provides a general overview of the activity, but does not contain the detail needed to complete each process. Watch the video to obtain a general idea, but follow the written steps to complete the activity. This is the <a target="_blank" href="../transcripts/render-web-service.txt">Transcript</a> of the video.</p>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/SH8xdxryV1k" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        
+        <h2>Create the Server</h2>
+        <ol>
+          <li>
+            In a browser go to
+            <a href="https://render.com/" target="_blank">Render.com</a> and
+            sign-in using your GitHub credentials.
+          </li>
+          <li>
+            In the dashboard, click the "New" button in the top-right corner.
+          </li>
+          <li>From the option list, select "Web Service".</li>
+          <li>
+            On the next screen, select your GitHub repository for the class, by
+            clicking the "Connect" button on the same line as the repository
+            name.
+          </li>
+          <li>
+            In the next screen add a unique name for the service - this is a
+            label that will help you to distinguish this service from others.
+            Keep it short and simple, but descriptive.
+          </li>
+          <li>
+            Select the region closest to you. This is where the service will be
+            created.
+          </li>
+          <li>The branch should be "main". Leave it.</li>
+          <li>Leave the "Root Directory" text box empty.</li>
+          <li>Change the "Environment" to "Node".</li>
+          <li>Change the "Build Command" to "pnpm install".</li>
+          <li>Change the "Start Command" as "pnpm start".</li>
+          <li>Leave the "Instance Type" as "Free".</li>
+          <li>Click the "Advanced" button to display additional settings.</li>
+          <li>
+            Change the "Auto-Deploy" setting to "No". If left at "Yes",
+            everytime you sync your local code to GitHub, the application will
+            rebuild, which we don't want to do.
+          </li>
+          <li>
+            Scroll to the bottom of the page and click the "Create Web Service"
+            button.
+          </li>
+          <li>
+            Here is an illustration of the settings discussed:
+            <div class="callout">
+              <img
+                src="/340-js/images/new-app-server.png"
+                alt="Screenshot of the render.com creating a new app server settings">
+            </div>
+          </li>
+          <li>
+            The screen will change and will show that the service is being
+            built. This can take a few minutes - watch for the "active" message.
+          </li>
+          <li>Click the "Events" item on the left. 
+            <ul>
+              <li>You should see a list of processes. The first one should read "First deploy started..." and have the date and time listed.</li>
+              <li>When the service is active you will see a new event listed at the top of the event list (the newest events are listed first), which should say "Deploy live for ..." and the date and time. If it says "Live", it means that the creation worked and your repository code is deployed to render.com.</li>
+            </ul>
+            </li>
+        </ol>
+
+        <h2>Connect the Database Service</h2>
+        <p>
+          With the application created, the database server needs to be
+          connected to it. Let's get this done next, <mark>if it is not already done.</mark>
+        </p>
+        <ol>
+          <li>
+            Right-click the render "Dashboard" item at the top of the screen.
+            Select "Open in New Tab".
+          </li>
+          <li>In the new tab, click to open the Database server.</li>
+          <li>Scroll down to the "Connections" information.</li>
+          <li>Click the Internal Database URL "Copy to clipboard" button.</li>
+          <li>Switch back to the application server tab.</li>
+          <li>Click the "Environment" item on the left side of the screen.</li>
+          <li>
+            Click the "Add Environment Variable" button.
+            <div class="callout">
+              <img
+                src="/340-js/images/set-env-db-variable.png"
+                alt="Screenshot of creating a new environment variable setting">
+            </div>
+          </li>
+          <li>Click in the "Value" text box and paste the copied URL.</li>
+          <li>
+            Click in the "Key" text box and type "<code
+              ><mark>DATABASE_URL</mark></code
+            >". This name should be the same as exists in the .env file within
+            <span title="Visual Studio Code">VSC</span>. But, the URL will be
+            different, as the application server will use the internal address, not an external address.
+          </li>
+          <li>Click the "Save Changes" button.</li>
+        </ol>
+
+        <h2>Add an Environment Variable</h2>
+        <p>As long as you're here, let's add an environment variable that will help our application to distinguish between our computer, where we develop, and the server, which is our production environment.</p>
+        <ol>
+          <li>Click the "Add Environment Variable" button.</li>
+          <li>In the "Key" input, type <mark>NODE_ENV</mark>.</li>
+          <li>In the "Value" input, type <mark>production</mark>.</li>
+          <li>Click the "Save Changes" button.</li>
+        </ol>
+
+        <h2>Add a Second Environment Variable</h2>
+        <!-- <p>As long as you're here, let's add a second environment variable that will help our application to distinguish between our computer, where we develop, and the server, which is our production environment.</p>
+        <ol>
+          <li>Click the "Add Environment Variable" button.</li>
+          <li>In the "Key" input, type <mark>NODE_ENV</mark>.</li>
+          <li>In the "Value" input, type <mark>production</mark>.</li>
+          <li>Click the "Save Changes" button.</li>
+        </ol>
+
+        <h2>Add a Third Environment Variable</h2> -->
+        <p>The render.com web service developed a glitch in the Fall of 2023, which defaulted to an old version of Node for some reason. To fix the glitch we can indicate what version we want our service to run, by adding it as an environment variable. That is what you will do now.</p>
+        <h3>Check your version of Node</h3>
+        <ul>
+          <li>Launch VS Code on your computer</li>
+          <li>Open the built-in terminal</li>
+          <li>Type "node --version", press Enter</li>
+          <li>A line will appear showing your version number (e.g. v18.18.0)</li>
+          <li>Copy just the numeric portion (e.g. 18.18.0)</li>
+        </ul>
+        <h3>Add an Environment Variable</h3>
+        <ul>
+          <li>Login to your render.com dashboard.</li>
+          <li>Open your web service (Not the database service).</li>
+          <li>Click on the "Environment" option link on the left.</li>
+          <li>Click the "Add Environment Variable" button.</li>
+          <li>In the "Key" input, type <mark>NODE_VERSION</mark>.</li>
+          <li>In the "Value" input, type or paste the version number you copied as illustrated below:
+            <div>
+              <img
+                src="/340-js/images/env_var-1.jpg"
+                alt="Screenshot of creating a new environment variable setting">
+            </div>
+          </li>
+          <li>Click the "Save Changes" button.</li>
+          </ul>
+        <h2>Check it out</h2>
+        <p>With the service created, your code deployed, and the database connected, it is time to see if everything is working.</p>
+        <ul>
+          <li>In the Render.com Dashboard, at the top of the "Events" window, you should see the name you gave to your service. Beneath the name is a link to your application.
+<div class="callout">
+  <img
+    src="/340-js/images/render-web-service-link.png"
+    alt="Screenshot of link to the deployed application in the render dashboard."
+  />
+</div></li>
+<li>Click the link. A new tab should open. If everything is working, you should see the application home page.</li>
+        </ul>
+
+        <p>If everything worked, fist bump the nearest person you can find! Well done.</p>
+        <p>If things did not work, then consult your learning team, the TA or the professor. But get help to make sure things work!</p>
+
+        <h2>Tracking Use</h2>
+        <p>
+          As is, the application server is "active" and connected to the
+          database server. The actual usage is very small. However, it is very
+          important to keep track of your use. To do this is pretty easy and is
+          the same for both services.
+        </p>
+        <ol>
+          <li>If you are at the Dashboard, click one of the services.</li>
+          <li>
+            Once within one of the services, click the "Metrics" option, on the left.
+          </li>
+          <li>
+            Review the use totals. Make sure they are within the stated limits.
+          </li>
+          <li>
+            If, for whatever reason, you exceed the limits the service will stop, and you will be notified that you have exceeded the limit. The option is to take steps to remove materials if you have exceeded a storage limit, reduce use if an access or bandwidth limit, or move to a paid plan.
+          </li>
+        </ol>
+
+        <h2>Conclusion</h2>
+        <p>
+          With the service in place and our application deployed, we need to understand how to add to what we've got - deploy updates. We will look at that in the next activity.
+        </p>
+      </main>
+      <footer>
+        <a
+          rel="license"
+          href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"
+          ><img
+            alt="Creative Commons License"
+            style="border-width: 0"
+            src="//i.creativecommons.org/l/by-sa/3.0/88x31.png"></a>
+        All materials (except as noted) are by Blaine Robertson and licensed
+        under a
+        <a
+          rel="license"
+          href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"
+          >Creative Commons Attribution-ShareAlike 3.0 License</a
+        >.
+      </footer>
+    </div>
+    <script src="/340-js/js/prism-coy-dev.min.js"></script>
+  </body>
+</html>

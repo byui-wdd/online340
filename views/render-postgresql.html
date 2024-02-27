@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <title>PostgreSQL at Render | Web Backend Development</title>
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="/340-js/css/340course-min.css" type="text/css" media="screen">
+</head>
+
+<body>
+  <div id="wrapper">
+    <header><img src="/340-js/images/small_banner.jpg" alt="Course Banner"></header>
+    <main>
+      <h1>PostgreSQL Project</h1>
+      <h2>Introduction</h2>
+      <p>By creating our database at Render.com, it will make the interactions between the web application and database faster and easier to work with. A simple rule to remember is "Put your database as close to the application server as possible." By both existing in the same server space, it should prove fast and reliable.</p>
+
+      <h2>Video Overview</h2>
+      <p>The video provides a general overview of the activity, but does not contain the detail needed to complete each process. Watch the video to obtain a general idea, but follow the written steps to complete the activity. This is the <a target="_blank" href="../transcripts/create-render-db-service.txt">Transcript</a> of the video.</p>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/jMTjkAjtuBg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+          <h2>Create the Service</h2>
+          <ol>
+            <li>Navigate in a browser tab to <a href="https://render.com/" target="_blank">Render.com</a> if you're not already there.</li>
+            <li>Login (if needed) by clicking the "Login" button in the top-right corner.</li>
+            <li>Click the "GitHub" option and provide your GitHub credentials as needed.</li>
+            <li>You should arrive at the Dashboard.</li>
+            <li>Click the "New" button in the top-right corner.
+            </li>
+            <li>Highlight and click the "PostgreSQL" option.
+              <div class="callout"><img src="/340-js/images/new-pg-option.png"
+                  alt="Screenshot of PostgreSQL option"></div>
+            </li>
+            <li>The "New PostgreSQL" dialog will open.
+              <div class="callout"><img src="/340-js/images/new-pg-settings.png"
+                  alt="Screenshot of PostgreSQL creating settings"></div>
+            </li>
+            <li>Do the following:
+              <ul>
+                <li>Provide a name for the project (e.g. cse340 Database)</li>
+                <li>Provide a name for the database (e.g. cse340). If the generic name is not allowed, add your initials to the end (e.g. cse340br)</li>
+                <li>Provide a user (this is the username). Make the username and the database name identical (easier to remember that way).</li>
+                <li>Click the Region dropdown. Select the option closest to you geographically.</li>
+                <li>Accept the default the PostgreSQL Version.</li>
+                <li>Leave the Datadog API Key input empty.</li>
+                <li>The "Free" instance type should be selected. Don't change this! <span class="notice">Note: The free database will be deleted in 90 days. You will have to rebuild your database once expired, so make sure you save your scripts from this week to make that easier!</span></mark></li>
+                <li>Click the "Create Database" button.</li>
+                <li>You will return to the Dashboard and the project will be shown, but will take a few minutes before it is completed.</li>
+              </ul>
+            </li>
+          </ol>
+          <h2>The Dashboard</h2>
+          <p>When the PostgreSQL service is complete, the status in the dashboard will change to "Available":
+            <div class="callout"><img src="/340-js/images/pg-in-dashboard.png" alt="Screenshot of the PostgreSQL service in the render dashboard"></div>
+          </p>
+          <p>The last column "Last Deployed" will indicate how long the service has been active. Remember, the free version only lasts 90 days. It will be deleted at that time and will have to be rebuilt.</p>
+          <h2>Conclusion</h2>
+          <p>With the database service created, let's get some tools to use to work with it. We'll start that in the next activity.</p>
+    </main>
+    <footer>
+      <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License"
+          style="border-width:0" src="//i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a> All materials (except as
+      noted) are by Blaine Robertson and licensed under a <a rel="license"
+        href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US">Creative Commons Attribution-ShareAlike 3.0
+        License</a>. </footer>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Sessions &amp; Messages | Web Backend Development</title>
+  <meta name="viewport" content="width=device-width" />
+  <link rel="stylesheet" href="/340-js/css/340course-min.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="/340-js/css/prism-coy-dev.min.css" media="screen" />
+  <script defer src="/340br/js/prism-coy-dev.min.js"></script>
+</head>
+
+<body>
+  <div id="wrapper">
+    <header>
+      <img src="/340-js/images/small_banner.jpg" alt="Course Banner" />
+    </header>
+    <main>
+      <h1>Sessions &amp; Messages</h1>
+      <h2>What is a Session?</h2>
+      <p>
+        The interaction between a browser and a web server is "stateless". This means that after a browser sends a request to the server, and the server responds, the interaction is "forgotten". A session is a means of changing from a "stateless" situation to a "stateful" interaction. More often than not, sessions are used by the server to remember a client who has "authenticated" (logged in) so the client does not have to log in again, every time they send another request. In our instance, we will not use a session for authentication, rather we will use the session to pass messages from one interaction to another within the server, or, in other words, it is providing a means for persistence from one part of the application to another.
+      </p>
+
+      <h2>What's a Message?</h2>
+      <p>In this case, it is exactly what you think. It is text that conveys some meaning, typically to indicate the outcome of a process. For example, if a log in process is successful, the message could be, "You're logged in." On the other hand, if the log in process failed, the message could be, "Sorry, check your credentials and try again." In this activity, you will implement a "flash" message. This is a unique implementation of messages that are stored in the session, displayed in a view, then removed from the session automatically. Like a "flash" on a camera, it fires then disappears. That is how our flash messages will work.</p>
+
+      <h2>Video Overview</h2>
+      <p>The video provides a general overview of the activity, but does not contain the detail needed to complete each process. Watch the video to obtain a general idea, but follow the written steps to complete the activity. This is the <a target="_blank" href="../transcripts/session-messages.txt">Transcript</a> of the video.</p>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/bJG6d7rRusU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      
+      <h2>Four New Packages</h2>
+      <p>
+        As with other functionality, we will benefit from the work of others by using packages to implement sessions and messages. The packages we will install are:
+      <ol>
+        <li><a href="https://www.npmjs.com/package/connect-pg-simple" target="_blank">connect-pg-simple</a></li>
+        <li><a href="https://www.npmjs.com/package/express-session/v/1.15.6" target="_blank">Express-session</a></li>
+        <li><a href="https://www.npmjs.com/package/express-messages" target="_b
+              ">Express-messages</a></li>
+        <li><a href="https://www.npmjs.com/package/connect-flash" target="_blank">Connect-flash</a></li>
+      </ol>
+      Do the following:
+      </p>
+
+      <ol>
+        <li>Open the <span title='Visual Studio Code'>VSC</span> terminal panel.
+        </li>
+        <li>Type the following:
+          <pre><code class="language-JavaScript">pnpm add express-session connect-pg-simple express-messages connect-flash</code></pre>
+          press "Enter"
+        </li>
+        <li>Wait for the installation to complete.</li>
+        <li>Close the terminal panel.</li>
+      </ol>
+
+      <h2>Apply the Packages</h2>
+      <p>With the packages installed, let's get them added to the application. We'll go through each package individually.</p>
+
+      <h3>Require the Session package and DB connection</h3>
+      <ol>
+        <li>Find and open the <span class="fn">server.js</span> file.</li>
+        <li>At the top, in the "Require Statements" area, add the session, and access to the database connection, like so:
+          <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it."><code class="language-JavaScript">const session = require("express-session")
+const pool = require('./database/')
+</code></pre>
+          <span class="notice">You may be asking, "What about the other packages?" We'll add them later, in different locations.</span>
+        </li>
+        <li>Ensure there are no errors. Save the file.</li>
+      </ol>
+
+      <h3>connect-pg-simple</h3>
+      <p>Express sessions should not be stored in memory. The preferred method is to place the session information into a database. Since we already have a PostgreSQL database present, we'll use it. To make it easy for the session to interact with the database, the "connect-pg-simple" package handles everything for us. It is a package built specifically to do this. It does not have a setup just for itself, rather it is part of the session configuration.</p>
+
+      <h3>express-session</h3>
+      <p>Of the packages, the express-session is the most involved to set up, so we'll take it step-by-step.</p>
+      <ol>
+        <li>Still working in the <span class="fn">server.js</span> file.</li>
+        <li>Scroll down to the "View Engine and Templates" area. Add several empty lines <b>above</b> it. Now, add the following code:</li>
+      </ol>
+      <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it."><code class="language-JavaScript">/* ***********************
+ * Middleware
+ * ************************/
+ app.use(session({
+  store: new (require('connect-pg-simple')(session))({
+    createTableIfMissing: true,
+    pool,
+  }),
+  secret: process.env.SESSION_SECRET,
+  resave: true,
+  saveUninitialized: true,
+  name: 'sessionId',
+}))</code></pre>
+      <ol start="3">
+        <li>Ensure there are no errors. Save the file.</li>
+        <li>
+          <h3>An Explanation</h3>
+          <ul>
+            <li><strong>Lines 1-3 -</strong> a section comment.</li>
+            <li><strong>Line 4 -</strong> invokes the app.use() function and indicates the session is to be applied. <span class="notice">Recall that app.use() applies whatever is being invoked throughout the entire application.</span></li>
+            <li><strong>Line 5 -</strong> store is referring to where the session data will be stored. In this code, we are creating a new session table in our PostgreSQL database using the "connect-pg-simple" package, which is being required at this point. <span class="notice">Notice the "&#123;" at the end of the line, indicated a new object being sent in to the connection with configuration information.</span></li>
+            <li><strong>Line 6 -</strong> tells the session to create a "session" table in the database if it does not already exist.</li>
+            <li><strong>Line 7 -</strong> uses our database connection pool to interact with the database server.</li>
+            <li><strong>Line 8 -</strong> closes the configuration data object and the "new" session store creation function started on line 5.</li>
+            <li><strong>Line 9 -</strong> indicates a "secret" name - value pair that will be used to protect the session. We will create the value of the secret in the <span class="fn">.env</span> file later in this activity.</li>
+            <li><strong>Line 10 -</strong> This session for the session in the database is typically "false". But, because we are using "flash" messages we need to resave the session table after each message, so it must be set to "true".</li>
+            <li><strong>Line 11 -</strong> this setting is important to the creation process when the session is first created.</li>
+            <li><strong>Line 12 -</strong> this is the "name" we are assigning to the unique "id" that will be created for each session. <span class="notice">In order to maintain "state", the session id will be stored into a cookie and passed back and forth from the server to the browser. We will not create the cookie, the session package will do so. The only item it will contain is the name "sessionId" and the actual value of the ID.</span></li>
+            <li><strong>Line 13 -</strong> ends the session creation and app.use function.</li>
+          </ul>
+        </li>
+      </ol>
+
+      <h2>Session Secret</h2>
+      <p>In the session middleware function, line 9, a secret value was indicated. We need to create that value.</p>
+      <ol>
+        <li>Open the <span class="fn">.env</span> file from the root of the project.</li>
+        <li>Beneath the existing name - value pairs add the following:
+          <pre><code class="language-javascript">SESSION_SECRET=
+</code></pre>
+        </li>
+        <li>With the name in place, let's create the actual value for the SESSION_SECRET. It is critical that the secret value be random, so that it cannot be guessed. We will use a built-in Express function to do this for us:
+          <ol>
+            <li>Open a new <span title='Visual Studio Code'>VSC</span> terminal.</li>
+            <li>Type "<mark>node</mark>", press "Enter".</li>
+            <li>Type "<mark><code>require('crypto').randomBytes(64).toString('hex')</code></mark>", press "Enter".</li>
+            <li>Copy the generated string, including the single quotes on either end, and paste it as the value for the SESSION_SECRET.</li>
+            <li>Type "Control + C" in the terminal window to exit Node. Reduce or close the terminal.</li>
+          </ol>
+        </li>
+        <li>Ensure that no warnings or errors are indicated in the <span class="fn">.env</span> file.</li>
+        <li>Save the file.</li>
+      </ol>
+      <p>Recall that the <span class="fn">.env</span> file is ONLY for testing locally. Because it is our intent to deploy this to a live server, the values that were just created need to also be present in our production environment. Let's do that now.</p>
+
+      <h2>Render.com Environment Variables</h2>
+      <ol>
+        <li>In a browser, login to <span class="fn">render.com</span> using your GitHub sign-in.</li>
+        <li>In the dashboard, click on the web server.</li>
+        <li>In the dashboard, click on <span class="fn">Environment</span> on the left-side of the screen.
+        </li>
+        <li>Click the <span class="fn">Add Environment Variable</span> button.</li>
+        <li>In the first empty Key text box, copy and paste the name from your own <span class="fn">.env</span> file: SESSION_SECRET</li>
+        <li>Copy the actual value from the <span class="fn">.env</span> file for the SESSION_SECRET, and paste it into the "value" textarea. Do NOT include the equal sign or surrounding quotes, just the string between the quotes.</li>
+        <li>Visually compare everything from the two locations for identical values.</li>
+        <li>Click the "Save Changes" button in the render.com window.</li>
+        <li>When the save is complete, ensure that the new item has a small checkmark in the bottom right-corner of the "value" textarea.</li>
+        <li>The value will be replaced by bullets to hide the value from anyone who may look over your shoulder. To view the value, hover over or click in the textarea.</li>
+      </ol>
+
+      <h2>Test</h2>
+      <p>Time to test that the session starts and everything works. Do the following:</p>
+      <ol>
+        <li>Check that the <span class="fn">server.js</span> file has been saved.</li>
+        <li>Start the development server: <code class="language-javascript">pnpm run dev</code>, press "Enter".</li>
+        <li>In a browser tab, go to your site: <code class="language-markup">http://localhost:5500</code>.</li>
+        <li>Using the web developer toolbar select <span class="fn">Cookies > View Cookie Information</span>.</li>
+        <li>There should be a cookie named "sessionId" and it should indicate that it expires at the end of the session.</li>
+        <li>If the cookie is present, things worked. If not, reach out and get some help after reviewing your code and comparing it against the code shown in the activity.</li>
+      </ol>
+
+      <h2>Message Middleware</h2>
+      <p>With the session operational, we can now implement the messaging middleware.</p>
+
+      <ol>
+        <li>Still in the <span class="fn">server.js</span> file, create a few empty lines beneath the session code you just wrote.</li>
+        <li>In this empty space add the following code:
+          <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it."><code class="language-javascript">// Express Messages Middleware
+app.use(require('connect-flash')())
+app.use(function(req, res, next){
+  res.locals.messages = require('express-messages')(req, res)
+  next()
+})</code></pre>
+        </li>
+        <li>
+          <h3>An Explanation</h3>
+          <ul>
+            <li><strong>Line 1 -</strong> a comment.</li>
+            <li><strong>Line 2 -</strong> requires the <span class="fn">connect-flash</span> package, within an <code class="language-javascript">app.use</code> function, making it accessible throughout the application.</li>
+            <li><strong>Line 3 -</strong> <code class="language-javascript">app.use</code> is applied and a function is passed in as a parameter. The funtion accepts the request, response and next objects as parameters.</li>
+            <li><strong>Line 4 -</strong> The <span class="fn">express-messages</span> package is required as a function. The function accepts the request and response objects as parameters. The functionality of the this function is assigned to the response object, using the "locals" option and a name of "messages". This allows any message to be stored into the response, making it available in a view.</li>
+            <li><strong>Line 5 -</strong> calls the "next()" function, passing control to the next piece of middleware in the application. <span class="notice">Ultimately, this allows messages to be set, then pass on to the next process. Eventually, when a view is built, the message can be displayed in it.</span></li>
+            <li><strong>Line 6 -</strong> ends the function and app.use structure.</li>
+          </ul>
+        </li>
+        <li>Visually check your code against the provided example.</li>
+        <li>Ensure there are no warnings or errors.</li>
+        <li>Save the file.</li>
+      </ol>
+
+      <h2>Set up the message code in a view</h2>
+      <p>In order to see a message, we must set up the EJS code block in the view. For now, we do so in the "home" view. Keep in mind, this will need to be done in additional views eventually.</p>
+      <ol>
+        <li>Find and open the <span class="fn">index.ejs</span> view in the <span class="fn">views</span> folder.</li>
+        <li>In the view should be an &lt;h1&gt; element for the view.</li>
+        <li>Create an empty line beneath the heading and add this code block:
+          <pre><code class="language-javascript">&lt;&percnt;- messages() &percnt;&gt;</code></pre>
+        </li>
+        <li>If you were to go to the Express-Messages documentation, and look specifically at the <a href="https://www.npmjs.com/package/express-messages#rendering-messages" target="_blank">Rendering Messages</a> section, you will find that the code block will actually set up an unordered list, to display a list of messages. In other words, in the package is a loop to build the structure to display one or many messages, depending on how many have been set.</li>
+        <li>Check for errors and fix them if found.</li>
+        <li>Save the view.</li>
+      </ol>
+
+      <h2>Create a Message and Test</h2>
+      <p>With the package configured and a means to display a message in place, let's create a message and make sure it works.</p>
+      <ol>
+        <li>Find and open the <span class="fn">baseController.js</span> file.</li>
+        <li>In the <span class="fn">buildHome</span> function, create an empty line just above the <code class="language-javascript">res.render(....)</code> line.</li>
+        <li>Add this message to the empty line:
+          <pre><code class="language-javascript">req.flash("notice", "This is a flash message.")</code></pre>
+        </li>
+        <li>You'll notice that <code class="language-javascript">req.flash()</code> uses the "flash" package to assign the message to the request object.</li>
+        <li>There are two parameters. The first parameter indicates the "type" of message. This can be anything you want it to be. However, when you run the rest, if you right-click on the message in the view, you will find that this value is added as a class to the unordered list. You can write CSS rules using these classes to style the messages. <span class="notice">You should do this! You should also pre-determine some simple names to use consistently, for example, "notice" can just be for information, while "error" would indicate something needs to be fixed, etc...</span>.</li>
+        <li>The second parameter is the actual message to be displayed. It is a string, and must be in quotes.</li>
+        <li>Save the file.</li>
+        <li>Start the server in the terminal: <code class="language-javascript">pnpm run dev</code></li>
+        <li>In a browser tab, go to the home view. The message should be visible beneath the main heading.
+          <div class="callout"><img src="../images/flash-message-home.png" alt="Image of flash message displayed in home view"></div>
+        </li>
+        <li>Right-click and inspect it to see the unordered list and the attached class name.</li>
+        <li>If everything worked, "Well Done!"</li>
+        <li class="notice">Once you're sure things worked, return to the <span class="fn">baseController</span> and remove the flash message creation line. It was only for testing.</li>
+        <li>If things didn't work, review the code or get help from a member of your learning team or the TA, or the professor.</li>
+        <li>Stop the server.</li>
+      </ol>
+
+      <h2>Conclusion</h2>
+      <p>
+        While this may seem like a lot of setup, it is a one-time event. From now on, if you need to send a message from a controller to a view, when using <code class="language-javascript">res.render()</code>, or <code class="language-javascript">res.redirect()</code>, you can. It makes moving messages around very easy. <span class="notice">An important part of the UX (user experience) is always being informed. This will help that to happen.</span> In addition, remember that once the message has been displayed, it is cleaned up automatically.
+      </p>
+    </main>
+    <footer>
+      <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width: 0" src="//i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+      All materials (except as noted) are by Blaine Robertson and licensed
+      under a
+      <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US">Creative Commons Attribution-ShareAlike 3.0 License</a>.
+    </footer>
+  </div>
+</body>
+
+</html>

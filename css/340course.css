@@ -1,0 +1,232 @@
+/* @import url('normalize-min.css'); */
+:root {
+  --callout-background-color: #D4EAF2;
+  --link-color: #27338B;
+  --link-visited: darkslateblue;
+  --heading-color: #1d5e77;
+}
+
+html * {
+  box-sizing: border-box;
+}
+
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+/* Overview docs */
+form h2+ul {
+      list-style: none outside;
+      padding-left: 20px;
+    }
+form input[type=checkbox]{
+      transform: scale(1.5);
+      margin-right: .5rem;
+    }
+form textarea{
+      height: 5rem;
+      width: 75%;
+    }
+form[data-unit] label{
+      display: none;
+    }
+
+#wrapper {
+  margin: 0 auto;
+  padding: 0 1rem;
+  max-width: 80ch;
+}
+
+main li {
+  margin-bottom: 1rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--heading-color)
+}
+
+a {
+  color: var(--link-color);
+}
+
+a:hover {
+  color: var(--link-visited);
+ }
+
+a:visited {
+  color: var(--link-visited);
+}
+
+#footer {
+  color: #e2e2e2;
+  background-color: #0b384a;
+}
+
+
+/********************************************
+    FEATURES STYLING
+*********************************************/
+
+
+/* Callout box */
+.callout {
+  color: #000;
+  background: var(--callout-background-color);
+  display: block;
+  margin: 15px auto;
+  width: 90%;
+  padding: 10px;
+  border: 1px solid #000;
+}
+
+/* Content Notices */
+.notice{
+  background-color: lightgoldenrodyellow;
+  font-weight: 500;
+  display: inline-block;
+  border-radius: .2rem;
+}
+.notice::before{
+  content: '[ ';
+}
+
+.notice::after{
+  content: ' ]';
+}
+
+/* Warnings */
+.warning{
+  font-style: italic;
+  background-color: lightpink;
+  font-weight: 500;
+  display: inline-block;
+  border-radius: .2rem;
+}
+
+/* Filenames */
+.fn{
+  font-family: monospace;
+  background-color: #e2e2e2;
+  font-weight: 500;
+  display: inline-block;
+  border-radius: .2rem;
+}
+
+/* VSC span */
+span[title^="Visual"]{
+  text-decoration: underline red wavy;
+}
+
+
+.no-left {
+  margin-left: 0;
+}
+
+
+/* Drop downs */
+
+.drop-down {
+  background: #225c72;
+}
+
+.drop-down:hover {
+  background: #1f4a5a;
+}
+
+
+/* Rubric table */
+
+
+/* Column headings */
+
+.rubric tr:first-child th {
+  background-color: #225c72;
+}
+
+
+/* Row headings */
+
+.rubric th {
+  background-color: #16985e;
+}
+
+
+/* Mouseover popups */
+
+#main .popup {
+  border-bottom: dotted 2px #225c72;
+}
+
+#main .popup span {
+  background: #225c72;
+  box-shadow: 5px 5px 5px #0F0F0F;
+}
+
+#main .popup:after {
+  border-color: #225c72 transparent transparent transparent;
+}
+
+
+/*Specific Styles to CSE 340*/
+
+#gradetable {
+  width: 50%;
+  min-width: 320px;
+}
+
+#gradetable th {
+  font-weight: bold;
+  text-align: center;
+}
+
+main dl dd {
+  padding-left: 1em;
+}
+
+footer {
+  background-color: #f0f0f0;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+mark {
+  background-color: yellow;
+}
+
+/***********************************
+* YouTube Videos
+***********************************/
+iframe {
+  width: 100%;
+  height: auto;
+}
+
+/***********************************
+* Non-mobile Screens
+***********************************/
+
+@media screen and (min-width: 680px) {
+
+  #wrapper {
+    max-width: 1300px;
+    padding: 0 1rem;
+    border: 1px solid lightgray;
+    box-shadow: 5px 0 3px lightgray, -5px 0 3px lightgray;
+  }
+
+  iframe {
+    width: 50vw;
+    height: 29vw;
+  }
+}

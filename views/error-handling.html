@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Robust Error Handling  | Web Backend Development</title>
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="/340-js/css/340course-min.css" type="text/css" media="screen">
+  <link rel="stylesheet" href="/340-js/css/prism-coy-dev.min.css" media="screen">
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <header><img src="/340-js/images/small_banner.jpg" alt="Course Banner"></header>
+    <main>
+      <h1>Robust Error Handling</h1>
+      <h2>Introduction</h2>
+      <p>In the previous activity, you applied basic Express error handing and applied it to handling the "File not found" error that is so common. In this activity, you'll write and implement a "Higher-Order" function which will be applied to all other processes in the application where an error can occur (which is pretty much everywhere). As given in the previous activity, this same link is repeated to help you better understand Higher-Order functions. I encourage you to read <a href="https://www.freecodecamp.org/news/higher-order-functions-in-javascript/" target="_blank">Higher Order Functions in JavaScript - Beginner's Guide</a> to learn more about these special functions.</p>
+
+      <h2>Video Overview</h2>
+      <p>The video provides a general overview of the activity, but does not contain the detail needed to complete each process. Watch the video to obtain a general idea, but follow the written steps to complete the activity. This is the <a target="_blank" href="../transcripts/robust-error-handling.txt">Transcript</a> of the video.</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/J6jD_IDRi_4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+      <h2>Write the Function</h2>
+      <ol>
+        <li>Find and open the <span class="fn">utilities > index.js</span> file.</li>
+        <li>Scroll to the bottom of the last function, but before the module.exports command and add some blank lines.</li>
+
+        <li>Add the following function in this blank space:
+<pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">/* ****************************************
+ * Middleware For Handling Errors
+ * Wrap other function in this for 
+ * General Error Handling
+ **************************************** */
+Util.handleErrors = fn =&gt; (req, res, next) =&gt; Promise.resolve(fn(req, res, next)).catch(next)</code></pre>
+        </li>
+        <li>Ensure there are no warnings or errors.</li>
+        <li>Save the file.</li>
+        <li><h3>An Explanation</h3>
+        <ul>
+          <li><strong>Lines 1-5 -</strong> a multi-line comment explaining the function.</li>
+          <li><strong>Line 6 -</strong> the entire function, with the individual parts explained below:</li>
+          <li><strong>Util.handleErrors = -</strong> declares the property which is appended to the "Util" object.</li>
+          <li><strong>fn =&gt; (req, res, next) =&gt;</strong> an arrow function named "fn" which accepts request, response, and next as parameters along with another arrow function.</li>
+          <li><strong>Promise.resolve(fn(req, res, next))</strong> a "wrapper" that accepts a function as a parameter of the "Promise.resolve" function. In other words, the wrapped function is called and attempts to fulfill its normal process, but now does so within a JavaScript promise. If it succeeds, then the promise is resolved and everything continues normally.</li>
+          <li><strong>.catch(next)</strong> - if there is an error, then the Promise "fails", the error that caused the failure is "caught" and forwarded to the next process in the application chain.</li>
+          <li>Because it is an "error" that is being passed via the "next" function, the Express Error Handler will catch the error and then build and deliver the error view to the client.</li>
+        </ul>
+        </li>
+      </ol>
+
+      <h2>Middleware</h2>
+      <p>The function you just wrote is middleware. Middleware is applied between the request arriving at the server, and the response sending something back to the client. This is almost always done in a route. The concept is relatively straight forward - middleware is a way to handle a sequence of interactions and move from one to the next as needed. It is "middleware" because it occurs between receiving the request and before sending the response. Here is a link to an 11-minute video that I think does a pretty good job of explaining and illustrating middleware - <a href="https://youtu.be/MIr1oxQ3pao" target="_blank" title="Open video in new tab">https://youtu.be/MIr1oxQ3pao</a>. We will begin using middleware, a lot, in the rest of the course.</p>
+
+      <h2>Time to Test</h2>
+<p>The most basic route in the application is the one that delivers the application home view. That's were we will test our code.</p>
+
+      <ol>
+        <li>Open the <span class="fn">server.js</span> file.</li>
+        <li>Check the require statements at the top of the file and ensure that the <span class="fn">utilities > index.js</span> file is required. The path may not include "index.js" because it is a default name. Instead, the statement may look like this: "<code><mark>const utilities = require("./utilities/")</mark></code>".</li>
+        <li>If the require statement is missing, be sure to add it.</li>
+        <li>Scroll down to the "Routes" section and find the route to deliver the <span class="fn">home or index</span> view.</li>
+        <li>Wrap the call to the baseController in the "handleErrors" function, like this:
+          <pre><code class="language-JavaScript">utilities.handleErrors(baseController.buildHome)</code></pre>
+        </li>
+        <li>The call to the "buildHome" function in the "baseController" is being sent into the higher order function you just wrote in the utilities file. Once again, it attempts to run its normal process. If successful, the "Promise" is successful and everything carries on normally. If an error happens, it is caught and sent on via the "next" function where the Express Error Handler will pick it up and display it in the error view.         
+        </li>
+        <li>When done, the entire route should look similar to this:
+<pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">// Index route
+app.get("/", utilities.handleErrors(baseController.buildHome))</code></pre>
+</li>
+        <li>Ensure there are no warnings or errors.</li>
+        <li>Save the file.</li>
+        <li><h4>An Explanation</h4>
+        <ul>
+          <li><strong>Line 1 -</strong> a route comment which should already exist.</li>
+          <li><strong>Line 2 -</strong> app.get is an Express route handler, watching for the base route "/", with no other URL elements.</li>
+          <li><strong>Line 2, utilities.handleErrors(baseController.buildHome) -</strong> the middleware function that catches any errors generated and sends them to the Express Error Handler.</li>
+          <li><strong>Line 2, ) -</strong> closes the app.get function.</li>
+        </ul>
+        </li>
+      </ol>
+
+      <h2>Break the Controller</h2>
+      <p>In order to test the middleware, we need to cause an error to occur. Let's go break something (only temporarily).</p>
+      <ol>
+        <li>Open the <span class="fn">baseController</span> file.</li>
+        <li>Comment out the line which calls the "getNav()" function inside the "buildHome" function.</li>
+        <li>Save the file and make sure all other files are saved.</li>
+        <li>Just as you have done many times, open the <span title='Visual Studio Code'>VSC</span> terminal and start the server if it's not already running.</li>
+        <li>Open the application in a browser tab - "localhost:5500/", press "Enter".</li>
+        <li>You should be looking at the error view, not the home view. The reason, I hope is clear, is because the nav is required by the view, but could not be created due to being commented out.</li>
+        <li>If, you do receive the home view, and it has a navigation bar, it may be a "cached" page. Hold down the "Shift" key and click the "Reload" button in the browser to bypass the cached page and request a new version from the server.</li>
+        <li>If it worked, then you're on your way.</li>
+        <li>Return to the <span class="fn">baseController</span>, remove the comment, and save the page.</li>
+        <li>Go back to the browser window and attempt to go the home view again. This time it should work.</li>
+      </ol>
+
+      <h2>Revise the Express Error Handler</h2>
+      <p>As it is right now, the error view displays the error message, such as "nav is undefined". While that may seem innocent enough, it tells a potential hacker that a variable exists and that could be used in an attack. As a result, we want our error messages to be generic and not give away any information that could be used against us. For our purposes, we have already added an error log to our handler, so we know what the error message is, but we want nothing like this for the browser.</p>
+      <ol>
+        <li>Find and open the <span class="fn">server.js</span> file, if not already open.</li>
+        <li>Scroll down and locate the "Express Error Handler", near the bottom of the file.</li>
+        <li>Alter the function to look like this:
+<pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">/* ***********************
+* Express Error Handler
+* Place after all other middleware
+*************************/
+app.use(async (err, req, res, next) => {
+  let nav = await utilities.getNav()
+  console.error(`Error at: "${req.originalUrl}": ${err.message}`)
+  if(err.status == 404){ message = err.message} else {message = 'Oh no! There was a crash. Maybe try a different route?'}
+  res.render("errors/error", {
+    title: err.status || 'Server Error',
+    message,
+    nav
+  })
+})</code></pre>
+        </li>
+        <li>The majority of the code remains unchanged. Let's look at the two lines that did change.</li>
+        <li><strong>Line 8 -</strong> this line checks to see if the status code is 404. If so, the default error message - "File Not Found" - is assigned to the "message" property. If it is anything else, a generic message is used. Feel free to alter the generic message if desired.</li>
+        <li><strong>Line 11 -</strong> only the generic message (set in line 8) is sent, rather than the error.message as existed before.</li>
+        <li>Ensure that no warnings or errors exist.</li>
+        <li>Save the file.</li>
+      </ol>
+
+      <h2>Time to Test</h2>
+      <ol>
+        <li>Go back to the <span class="fn">baseController</span>, and break the "buildHome" function, just as you did previously.</li>
+        <li>In the browser, navigate to the home view. Again, you should be looking at the error view, but with a different, generic, error message as set in the Express Error Handler function.</li>
+        <li>Try navigating to a route that doesn't exist (e.g. localhost:5500/darthvader). You should be returned to the error view, but this time with the 404, File not found code and message displayed.</li>
+        <li>I hope everything works!</li>
+        <li>If so, go back to the <span class="fn">baseController</span> and fix the error. Then save the file.</li>
+        <li>If things didn't work, get help and keep at it until it does.</li>
+      </ol>
+
+
+      <h2>Conclusion</h2>
+      <p>With the higer order function and Express error handler in place and tested, you are ready to implment them throughout the application. You'll do that later in this lesson.</p>
+    </main>
+    <footer>
+      <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="//i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a> All materials (except as
+      noted) are by Blaine Robertson and licensed under a <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US">Creative Commons Attribution-ShareAlike 3.0
+        License</a>.
+    </footer>
+  </div>
+  <script src="/340br/js/prism-coy-dev.min.js"></script>
+
+</body>
+
+</html>

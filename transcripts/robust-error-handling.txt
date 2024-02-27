@@ -1,0 +1,28 @@
+Having implemented the Express Error Handling function, it's now time to write the Higher Order JavaScript function that will catch errors and pass them on to the built-in error handler.
+
+To better understand higher order functions, consult the article referenced on the screen.
+
+This function is reusable and so will be built in the utilities library. 
+
+Opening the utilities library, write the function as it appears. The "promise.resolve()" function, accepts a function as a parameter (which is why it is considered a higher order function). If the promise resolves correctly, then the overall process continues without interruption.
+
+However, if there is an error and the promise fails, then the .catch() method picks up the error and passes it to the next step in the process. That next step will be the Express Error Handler.
+
+To implement this process, the utility library is imported to the various router files (server.js, the account and inventory routers) and then, each route handler is wrapped inside the handleErrors() function.
+
+In so doing, whenever a route handler is called and attempts to fulfill the request, if an error occurs, the error is "handled" and passed to the Express error handler, which, in turn, returns the error view, with the error message.
+
+This can be tested by intentionally introducing an error to one of the handlers. In the video you will see that a function call to build the dynamic navigation is commented out. Because the expected navigation component is not present, when the view is being built by EJS, an error occurs.
+
+The error is detected, and passed back to the Express Error Handler and the error view is displayed.
+
+However, the message still is too specific. Therefore, the Express Error Handler function needs some revision.
+
+The revised code is shown. In it, if the error type is 404, then the "page not found" error is shown. Otherwise, the actual error message is replaced with a generic message.
+
+Now, with the revision made and saved, when the same error is triggered, the generic message is displayed.
+
+To implement this more robust approach, wrap all routes, in the error handler.
+
+It is also important to fix the intentional error and save, so it does not persist.
+

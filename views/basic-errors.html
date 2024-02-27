@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Handling Errors | Web Backend Development</title>
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="/340-js/css/340course-min.css" type="text/css" media="screen">
+  <link rel="stylesheet" href="/340-js/css/prism-coy-dev.min.css" media="screen">
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <header><img src="/340-js/images/small_banner.jpg" alt="Course Banner"></header>
+    <main>
+      <h1>Handling Errors</h1>
+      <h2>Introduction</h2>
+      <p>As you write code, you will find that there are errors and exceptions. An <i>exception</i> is an anticipated error, while an error is unanticipated. In our code we have anticipated that a client may enter the wrong data during the registration process and have already added code to deal with this. However, in most of our code, we have not done anything really, to deal with the technical or run-time errors that are unanticipated. That's what this lesson deals with.</p>
+
+      <p>Express has built-in error handling, which we are going to take advantage of, but it needs to be informed of errors differently when the error occurs in the normal flow of the application versus when it occurs in a "promise-based" function. The normal flow is "Synchronous", while the promise-based is "Asynchronous". Typically, we would have to handle these errors differently, but by taking advantage of a "Higher-Order" function, we can make everything in the application behave "asynchronously", and use a common means of dealing with errors. What is a Higher-Order function? I encourage you to read <a href="https://www.freecodecamp.org/news/higher-order-functions-in-javascript/" target="_blank">Higher Order Functions in JavaScript - Beginner's Guide</a> to learn more about these special functions.</p>
+
+      <h2>Video Overview</h2>
+      <p>The video provides a general overview of the activity, but does not contain the detail needed to complete each process. Watch the video to obtain a general idea, but follow the written steps to complete the activity. This is the <a target="_blank" href="../transcripts/basic-error-handling.txt">Transcript</a> of the video.</p>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/f4VSVm8OCBk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+      <h2>Implementation</h2>
+      <p>To put this approach to error handling into effect, we will need to write two functions:</p>
+
+      <h3>Express Error Handler</h3>
+      <p>The built-in Express error handler is unique in that it is a regular arrow function, but uses four parameters, instead of the normal two or three. The code below shows a generic version of this function:
+      <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">app.use((error, req, res, next) =&gt; {
+... code to process the error
+  })</code></pre>
+      <span class="notice">Notice the "error" parameter. This should be an error object being passed into the function. The object contains information about the error</span>. We will use this extensively. Let's now build the first version of the function for our application:</p>
+
+      <ol>
+        <li>Open the <span class="fn">server.js</span> file.</li>
+        <li>Scroll down to near the bottom of the file.</li>
+        <li>Just above the "Local Server Information" comment, create some empty lines.</li>
+        <li>This placement is <i><b>CRITICAL!</b></i> This function must, as the comment says, "Place after all other middleware". If it appears above other middleware functions, they will never be reached to run and the application will break.</li>
+        <li>Add the following in the empty lines:
+<pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">/* ***********************
+* Express Error Handler
+* Place after all other middleware
+*************************/
+app.use(async (err, req, res, next) => {
+  let nav = await utilities.getNav()
+  console.error(`Error at: "${req.originalUrl}": ${err.message}`)
+  res.render("errors/error", {
+    title: err.status || 'Server Error',
+    message: err.message,
+    nav
+  })
+})</code></pre>          
+        </li>
+        <li>Ensure there are no warnings or errors.</li>
+        <li>Save the file.</li>
+        <li><h4>An Explanation</h4>
+        <ul>
+          <li><strong>Lines 1-4 -</strong> a multi-line comment for the function.</li>
+          <li><strong>Line 5 -</strong> app.use is an Express function, which accepts the default Express arrow function to be used with errors.</li>
+          <li><strong>Line 6 -</strong> builds the navigation bar for the error view.</li>
+          <li><strong>Line 7 -</strong> a console statement to show the route and error that occurred. This is helpful to you to know what the client was doing when the error occurred.</li>
+          <li><strong>Line 8 -</strong> calls the "error.ejs" view (you will build that next) in an "errors" folder.</li>
+          <li><strong>Line 9 -</strong> sets the value of the "title" for the view. It will use the status code or "Server Error" as the title if no status code is set.</li>
+          <li><strong>Line 10 -</strong> sets the message to be displayed in the error view to the message sent in the error object. We will alter this later.</li>
+          <li><strong>Line 11 -</strong> sets the navigation bar for use in the error view.</li>
+          <li><strong>Line 12 -</strong> ends the render function.</li>
+          <li><strong>Line 13 -</strong> ends the arrow and app.use functions.</li>
+        </ul>
+        </li>
+      </ol>
+      <p class="notice">If you look closely at line 6, you'll notice that we're calling a function from the <span class="fn">utilities &gt; index</span> file. This file is not in the scope of the <span class="fn">server.js</span> file. If you test without it being in scope, the application will crash. <b>Add the file to the scope of the page before moving on!</b>  Talk with your learning team if you need help.</p>
+
+      <h2>Build the Error View</h2>
+      <ol>
+        <li>Click the "views" folder.</li>
+        <li>Click the "New file" icon, type <span class="fn">errors/error.ejs</span>, press "Enter".</li>
+        <li>A new <span class="fn">errors</span> folder will be created and a new <span class="fn">error.ejs</span> file inside it.</li>
+        <li>As with other views, the "title" being passed in via the render function should be used for the main page &lt;h1&gt; heading. Add this code to the view. Consult previous views to see the code that you need to add.</li>
+        <li>Make sure the file clearly displays the message being passed in through the render function. Add a EJS unescaped code block and add the "message" variable to it to be displayed. </li>
+        <li>Nobody likes to receive an error message. But, it can be offset if we add humor to the message. This is often done with 404 - File Not Found errors, but don't have to be limited to them. If you're interested, here are some <a href="https://inzonedesign.com/blog/28-cleverly-funny-creative-404-error-pages/" target="_blank">funny 404 pages</a>. Feel free to make your error view fun too!</li>
+        <li>Make sure there are no warnings or errors.</li>
+        <li>Save the file.</li>
+      </ol>
+
+      <h2>Time to Test</h2>
+
+      <h3>404 - File Not Found</h3>
+      <p>The "404 - File Not Found" error is the most common error on the Internet. It can be caused by any number of factors, such as: the website being shutdown, the page being renamed, or the path to the file being changed, to name only a few. We will deal with this error using a custom route, the Express Error Handler and the error view.</p>
+
+      <ol>
+        <li>Find and open the <span class="fn">server.js</span> file.</li>
+        <li>Scroll down and find the <b>"routes"</b> section.</li>
+        <li>Add the following as the <b>last</b> route. <span class="notice">Note: order is very important in this instance. The routes to the other router documents must be above this route, or they will never be reachable!</span>
+          <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">// File Not Found Route - must be last route in list
+app.use(async (req, res, next) =&gt; {
+  next({status: 404, message: 'Sorry, we appear to have lost that page.'})
+})</code></pre>
+        </li>
+        <li>Ensure there are no warnings or errors.</li>
+        <li>Save the file.</li>
+        <li><h4>An Explanation</h4>
+        <ul>
+          <li><strong>Line 1 -</strong> a comment pertaining to the route</li>
+          <li><strong>Line 2 -</strong> the Express use function containing an asynchronous arrow function.</li>
+          <li><strong>Line 3 -</strong> the next function to pass control to the next function in the processing chain. An object (in our case, an error object) with a status and message is sent. Remember that the Error Handler watches for an error object. We are sending an error object as identified by the error status and message.</li>
+          <li><strong>Line 4 -</strong> ends the arrow and use functions.</li>
+        </ul>
+        </li>
+        <li>Open or expand the <span title='Visual Studio Code'>VSC</span> terminal.</li>
+        <li>Start the server with "<code><mark>pnpm run dev</mark></code>", press "Enter".</li>
+        <li>Open a browser tab and go to localhost:5500.</li>
+        <li>Now, add a "/" to the end of the URL and type a string that does NOT match any existing path in the application (e.g. localhost:5500/chewbacca).</li>
+        <li>If things are working, you should be viewing your error view with "404" as both the title and h1 heading, and the message, "Sorry, we appear to have lost that page." displayed.</li>
+        <li>If it worked, play the song "Celebrate" by Earth, Wind and Fire and dance along. If it failed, review your code and the Node console, talk to a learning team member, the TA or the professor. But, get it working before moving forward.</li>
+      </ol>
+
+      <h2>Conclusion</h2>
+      <p>With the Express error handler in place, the error view built and a route for catching routes that don't exist functioning, we are ready to write and implement the Higher Order function for dealing with errors in all the other locations of our application. We'll do that in the next activity.</p>
+    </main>
+    <footer>
+      <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="//i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a> All materials (except as
+      noted) are by Blaine Robertson and licensed under a <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US">Creative Commons Attribution-ShareAlike 3.0
+        License</a>.
+    </footer>
+  </div>
+  <script src="/340br/js/prism-coy-dev.min.js"></script>
+
+</body>
+
+</html>

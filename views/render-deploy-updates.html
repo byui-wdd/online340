@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Render App Server | Web Backend Development</title>
+    <meta name="viewport" content="width=device-width" />
+    <link
+      rel="stylesheet"
+      href="/340-js/css/340course-min.css"
+      type="text/css"
+      media="screen"
+    />
+    <link
+      rel="stylesheet"
+      href="/340-js/css/prism-coy-dev.min.css"
+      media="screen"
+    />
+  </head>
+
+  <body>
+    <div id="wrapper">
+      <header>
+        <img src="/340-js/images/small_banner.jpg" alt="Course Banner" />
+      </header>
+      <main>
+        <h1>Deploy Updates</h1>
+        <h2>Introduction</h2>
+        <p>
+          In the previous activity, you created a web service on
+          <a href="https://render.com/" target="_blank">Render.com</a>,
+          and deployed your application, from GitHub. Hopefully, everything worked without any issues. But, what do you do when you make changes to your code? That's what we'll discuss in this activity.
+        </p>
+        <!-- <p>
+          In the previous activity, you created a web service on
+          <a href="https://render.com/" target="_blank">Render.com</a>,
+          connected the web service to the database service and deployed your
+          application, from GitHub. Hopefully, everything worked without any
+          issues. But, what do you do when you make changes to your code? That's
+          what we'll discuss in this activity.
+        </p> -->
+
+        <h2>Video Demonstration</h2>
+        <p>The video provides a general overview of the activity, but does not contain the detail needed to complete each process. Watch the video to obtain a general idea, but follow the written steps to complete the activity. This is the <a target="_blank" href="../transcripts/deploy-updates.txt">Transcript</a> of the video.</p>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/_WlL9vBLzK4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        
+        <h2>Manual Deployment</h2>
+        <p>
+          When you created the web service you changed the setting for
+          "Auto-Deploy" to "No". This means that when you create new features
+          and sync them to your GitHub repository you are in charge of when
+          these changes are deployed - "added to" - your render.com server. This
+          put you firmly in charge of what code is placed into production. But,
+          it also makes you responsible for making such changes. Let's go
+          through the generic process:
+        </p>
+        <ol>
+          <li>
+            Add whatever changes you will make to the code in
+            <span title="Visual Studio Code">VSC</span>.
+          </li>
+          <li>
+            When ready, sync the changes from your local computer to your remote
+            GitHub repository.
+          </li>
+          <li>
+            To deploy (make your code live on the Internet), open
+            <a href="https://render.com/" target="_blank">Render.com</a> in your browser and sign-in using your GitHub credentials.
+          </li>
+          <li>
+            In the dashboard, click your web service.
+            <div class="callout">
+              <img
+                src="/340-js/images/web-service-list.png"
+                alt="Screenshot of the web service in the render.com dashboard"/>
+            </div>
+          </li>
+          <li>In the "Web Service" view, there is a "Manual Deploy" button in the top-right corner.</li>
+          <li>
+            Click the button and select "Clear build cache & deploy".
+            <div class="callout">
+  <img
+    src="/340-js/images/deploy-latest-commit-copy.png"
+    alt="Screenshot of the Manual Deploy > Manual Deploy button with options in the render.com dashboard"/>
+</div>
+          </li>
+          <!-- <li>In the "Web Service" view, there is a "Manual Deploy" button in the top-right corner.</li>
+          <li>
+            Click the button and select "Deploy Latest Commit".
+            <div class="callout">
+  <img
+    src="/340-js/images/deploy-latest-commit.png"
+    alt="Screenshot of the Manual Deploy > Deploy Latest Commit button in the render.com dashboard"/>
+</div>
+
+          </li> -->
+          <li>
+            The Logs window will appear and show you what steps are occurring. In the middle of the screen you will see the date and time. To the right will be an indicator which will read "In progress". When done, this will change to "Failed" or "Live".
+          </li>
+          <li>
+            The "Live" option should have a green background, meaning "Success".
+          </li>
+          <li>As you have done previously, click the link below the service name to open to your application in a new tab.</li>
+         
+        </ol>
+
+     <h2>Test, Test, Test</h2>
+     <p>Thoroughly test the application to make sure everything works as it should. If any errors are found, go back to the code and troubleshoot. Make sure things are fixed and fully operational. Don't wait! Do it immediately.</p>
+
+        <h2>Conclusion</h2>
+        <p>
+          The manual deployment is pretty easy. Just follow this simple process as described. But be sure to test everything, following the deployment. Nothing will ruin your reputation faster than not testing and having clients find the errors!
+        </p>
+      </main>
+      <footer>
+        <a
+          rel="license"
+          href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"
+          ><img
+            alt="Creative Commons License"
+            style="border-width: 0"
+            src="//i.creativecommons.org/l/by-sa/3.0/88x31.png"
+        /></a>
+        All materials (except as noted) are by Blaine Robertson and licensed
+        under a
+        <a
+          rel="license"
+          href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"
+          >Creative Commons Attribution-ShareAlike 3.0 License</a
+        >.
+      </footer>
+    </div>
+    <script src="/340-js/js/prism-coy-dev.min.js"></script>
+  </body>
+</html>

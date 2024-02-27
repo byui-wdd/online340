@@ -1,0 +1,64 @@
+A session is a means of storing information temporarilly on a server and passing a means of identifying the session to and from a client. The information that is stored is related to a client.
+
+Think of entering a race. You are issued a race bib with a number on it. You will put the bib on prior to the start of the race, and wear it throughout, only removing it when the race is over.
+
+As you pass checkpoints in the race, the officials make a note of your bib number to ensure that you passed the checkpoint at a certain time. The data they record belongs to you, as long as the race is happening.
+
+The race is the session. Your bib number is your identifier. The checkpoints are points of interaction that you have with the session. The data recorded is attributed to you as you interact within the session.
+
+In our case, we will use four packages to enable this functionality:  express-session, connect-pg-simple, express-messages and connect-flash.
+
+Each of these packages enable either the session or the messages that we will pass through the session.
+
+The packages will be installed using pnpm, then implemented into the server.js file as middleware.
+
+Middleware is a process that takes place between receiving the HTTPRequest and sending the HTTPResponse. It is "in the middle". Our error handling functionality, is also middleware.
+
+In the server.js file, prior to the View Engine and Templates section, a new Middleware section will be added. In it, the session will be created.
+
+This code creates a "store" for holding the data in the Postgres database. If the session table does not exist it will create it, and will use the connection pool to talk with the database server.
+
+It will use a "SESSION_SECRET"  that will be stored in an environment variable to protect the integrity of the session, and will name the identifier that will be sent back and forth between the client and server "sessionId".
+
+The "SESSION_SECRET" will have to be created locally and stored in the .env file, then recreated in our production server as an environment variable.
+
+To do this, open the .env file and create the name of "SESSION_SECRET". Then, using the terminal write the code shown to generate a random string. Everytime the code is run a new string will be created. Copy the string and paste it into the .env file as the value for the name.
+
+When done, log into the render.com web service and click the "Environment" item. Create a new environment variable. Enter "SESSION_SECRET" as the name (key) and copy the string from the .env file and paste it as the value. Save the changes.
+
+With the setup complete, it will be time to test the message system that will use the session to move messages around the application.
+
+Open the index.ejs file in the views folder.
+
+Beneath the h1 element on the page create an EJS code block with the message() function as shown in the video.
+
+Save the view. Remember, this is only for testing and this message will be removed when done.
+
+To set the test message, open the base-controller.js file from the controllers folder.
+
+In the request handler function to deliver the index view, create an empty line just above the res.render() function.
+
+In the empty line add the message shown in the video. The req.flash() function uses the "flash" message package installed earlier to attach the message to the request object.
+
+The function has two parameters. The first represents a message type and should match a CSS class that will style the message when it appears in the view. This value can be anything.
+
+The second parameter is the message itself. This will be temporarily stored in the session, then extracted when the view is built and displayed.
+
+Save everything and start the development server.
+
+Open a browser window and go to localhost:5500.
+
+When the request of the index view is passed to the base-controller after having passed through the server.js file and the route, the session is built, the message is created and stored, and the view is built, extracting the message from the session and adding it to the view.
+
+When the view is delivered to the browser two things have happened: 1) the message should display in the view, and 2) using the web developer tool, click the "Cookies" tab and select "View Cookie Information".
+
+There should now be a "sessionId" cookie, and it should have a long string value. The value is a hashed string representing the session id issued to us as the client. This is the race bib number and will be passed back and forth between the client and server in order to track our session, which was created for us.
+
+If everything is working, go ahead and remove the message from the base-controller.js file and the message EJS block from the index.ejs file.
+
+This setup is a one time event. From now on, you simply create the message as part of the controller-based handler function and create the EJS message block in the view, as needed.
+
+If you take a minute, you can also look at the VS Code terminal and see the queries that are occuring between the application and the session store in the Postgres database.
+
+When done, don't forget to stop the development server.
+

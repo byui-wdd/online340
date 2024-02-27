@@ -1,0 +1,40 @@
+With the Render.com PostgreSQL database created and the account_type created, we will build three tables.
+
+The first table will be for classification of vehicles (e.g. sedan, suv, truck, etc...).
+
+The second table will be an inventory table to hold vehicles. This table will be representative only, it will not hold all vehicle information one might find on an actual dealer site, for example, this table will use an auto incrementing primary key, not an actual VIN.
+
+The last table will hold account information for all registered users. The account_type will be used to differentiate the accounts.
+
+Finally, the relationship between the classification and inventory tables will be created.
+
+The Entity Relationship Diagram shows the tables, fields and relationship.
+
+To begin, the PostgreSQL database service and the local pgAdmin4 application must be connected and have an active connection.
+
+Expand the database and schema options until the "Tables" item is visible in the schema list.
+
+Right-click the tables item and select "Query Tool".
+
+A new query tab will open, type the query into the work area as shown. Pause the video, as needed.
+
+When done, click the "Execute / Refresh" icon to run the query. The new table should appear. 
+
+If not, right-click the Tables item and select "Refresh".
+
+Create the inventory table in the same manner: 1) Right-click the "Tables" item, 2) select "Query Tool", 3) Type the SQL code, 4) click the "Execute / Refresh" icon.
+
+With these table created, we'll establish the relationship between them. This will be a one-to-many relationship. Meaning one classification can have many vehicles.
+
+Again, 1) right-click the "Tables" item, 2) select "Query Tool", 3) type the code shown,  4) click the "Execute / Refresh" icon.
+
+To confirm the creation of the relationship, right-click either the classification or inventory tables. Select "ERD for Table" for the option menu. You can visually confirm that the relationship exists and compare it against the ERD shown in this video.
+
+Finally, it's time to create the account table. Repeat the previous process and use the code shown.
+
+When done, you should see three tables in the expanded "Tables" item of the public schema.
+
+If you are student in the course, make sure to copy and paste all of the creation code you just wrote as directed in the course materials.
+
+Finally, when finished be sure to right-click on the server object and select "Disconnect from Server".
+

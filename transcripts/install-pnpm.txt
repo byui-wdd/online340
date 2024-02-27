@@ -1,0 +1,39 @@
+pnpm is a package manager for NodeJS.
+
+What is a package? Node is a bare-bones runtime framework. Think of it as a car that has an engine, a transmission, 4 wheels and a body. Nothing else. Packages are add-ons that provide additional functions, like a radio or horn.
+
+A package manager is software that allows the downloading, installing and managing of these additons which allow Node to do more.
+
+While there are many package managers, PnPM has an advantage in that it stores all packages in a central repository and shares them across multiple Node projects. This allows for less storage space on the host computer. See pnpm.io for more information.
+
+If you just installed NodeJS, then you can just proceed with installing pnpm. However, if you have had Node for a while, make sure it is updated.
+
+Do the following:
+1- go to nodejs.org and check what is the version number to the current LTS (long term support).
+2- open a Terminal (Mac) or Command Prompt (Windows).
+
+3- Type "node -v", press Enter.
+4- If the numbers match, proceed to install or active pnpm. If not, update Node by:
+
+a- Type "npm i -g n", press Enter.
+If an error appears:
+i-  On Mac, add "sudo" to the front of the command. Press Enter and type your password when requested.
+ii- On Windows, close Command Prompt and re-open it as an Administrator. Then type the command again.
+
+With the new "n" package installed, type "n [current LTS version number]", for example "n 18.15". For Mac, add "sudo" to the front of the command, (e.g. sudo n 18.15).
+
+This will update Node to the latest version.
+
+Now, install pnpm in one of two ways:
+
+1- NodeJS comes with a tool called "corepack". We can enable it.
+
+Type "corepack enable", press Enter. This should install pnpm. Then, update it with "corepack prepare pnpm@latest --activate". When done, type "pnpm --version", press Enter. If you see version 6.x or higher, things are good.
+
+2- If corepack does not work, then try installing using npm.
+In the terminal type, "npm install -g pnpm", press Enter. When done, type "pnpm --version". If you see version 6.x or higher, things are good.
+
+3- If neither way works, go to https://pnpm.io/installation and look at other options.
+
+With pnpm installed, we are ready and able to install packages to NodeJS in order to build applications.
+

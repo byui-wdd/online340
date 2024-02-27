@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <title>PostgreSQL To VSC Connection | Web Backend Development</title>
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="/340-js/css/340course-min.css" type="text/css" media="screen">
+</head>
+
+<body>
+  <div id="wrapper">
+    <header><img src="/340-js/images/small_banner.jpg" alt="Course Banner"></header>
+    <main>
+      <h1>PostgreSQL To VSC Connection</h1>
+      <h2>Introduction</h2>
+      <p>While the pgAdmin tool works when interacting with the remote database server, it can speed up development and testing if SQL can be tested within <span title='Visual Studio Code'>VSC</span>. This document explains the setup process.</p>
+<h2>SQLTools Extension</h2>
+<p>In order to begin, you will need to install the SQLTools extension and the SQLTools PostgreSQL Driver.</p>
+<ol>
+  <li>Click the <span title='Visual Studio Code'>VSC</span> extensions tool in the side bar.</li>
+  <li>Type "<code class="language-markup">SQLTools</code>" into the search bar at the top of the extensions panel.</li>
+  <li>The correct extension is by Matheus Teixeira. Click "Install".</li>
+  <li>If required, reload <span title='Visual Studio Code'>VSC</span> to activate the extension.</li>
+  <li>A new icon will appear in the tools side bar:
+    <div class="callout"><img src="/340-js/images/sqltools-icon.png"
+        alt="Screenshot of the SQLTools icon"></div></li>
+</ol>
+     
+<h2>The Connection String</h2>
+<p>Hopefully you will recall that when you were connecting pgAdmin to the remote database, you had to copy and then manipulate the connection string provided to you in the Render.com database connections information. You are going to need that connection string again.</p>
+<ol>
+  <li>Login to <a href="https://render.com" target="_blank">Render.com</a> using your GitHub credentials.
+  </li>
+  <li>Click the PostgreSQL service in the Dashboard.</li>
+  <li>Scroll down to the "Connections" area of the Info screen.</li>
+  <li>Click the "Copy to clipboard" icon for the "External Database URL".</li>
+  <li>Leave this browser window open as you'll need it again shortly.</li>
+</ol>
+
+<h2>Add New Connection</h2>
+<ol>
+  <li>Return to <span title='Visual Studio Code'>VSC</span>.</li>
+  <li>Click the SQLTools icon.</li>
+  <li>In the new panel, click the "Add New Connection" button.</li>
+  <li>A new settings tab will appear and should list connection drivers to different databases.</li>
+  <li>If the PostgreSQL driver icon is present, click it:
+    <div class="callout"><img src="/340-js/images/postgresql-driver-icon.png"
+        alt="Screenshot of the PostgreSQL driver icon"></div>
+  </li>
+  <li>If the icon is NOT present, click the "<code>Get more drivers</code>" link.
+  <ul>
+    <li>The extension's panel will open.</li>
+    <li>Locate the "SQLTools PostgreSQL/Cockroach Driver" extension and click it.</li>
+    <li>Install this driver.</li>
+    <li>Once the driver is installed, click the PostgreSQL driver icon.</li>
+  </ul>
+  </li>
+  <li>The second "connection assistant" setting window will load:
+    <div class="callout"><img src="/340-js/images/vsc-connection-asst.png"
+        alt="Screenshot of second connection assistant settings window"></div>
+  </li>
+  <li>Give the connection a meaningful name (e.g. render.com).</li>
+  <li>Change the "Connect Using:" option to "Connection String".</li>
+  <li>Paste the copied External Database URL connection string into the "Connection String" text box.</li>
+  <li>Change the "SSL" setting to "Enabled".</li>
+  <li>In the SSL option list, turn on the checkbox to the right of the "rejectUnauthorized" option.</li>
+  <li>Scroll to the bottom of the page and click the "Test Connection" button (on the right side).</li>
+  <li>Hopefully, a green "Successfully connected" message will appear on the left, above the "Save Connection" button.</li>
+  <li>If the connection was successful, click the "Save Connection" button.</li>
+  <li>A confirmation screen will appear showing the data that you entered that is being used for the connection.</li>
+  <li>Click "Connect Now".</li>
+  <li>The command palette will open, and you will have to enter the password again, then press "Enter".</li>
+  <li>You are now connected to the database server and a new SQL tab should open where you can write SQL queries to interact with the database.</li>
+</ol>
+
+<h2>Using the Connection</h2>
+<ol>
+  <li>Click the SQLTools extension icon.</li>
+  <li>The active connection should appear at the top of the panel.</li>
+  <li>Click the icons to expand the items until the three tables are visible.</li>
+  <li>Right-click either the "classification" or "inventory" table and select "Show Table Records".</li>
+  <li>A new tab should open showing you the field names and all records of data from the table.</li>
+  <li>Click the "+" sign next to one of the tables.</li>
+  <li>A new INSERT query will appear in the SQL tab. This is a generic query, where you will need to provide the actual data, but the field names and SQL structure are present.</li>
+  <li>Feel free to play around, but be careful to not change the database or table structure.</li>
+  <li>When done, hover over the render.com connection and click the "Disconnect" icon on the right.</li>
+  <li>Close the sql tabs that you had open.</li>
+  
+</ol>
+
+    </main>
+    <footer>
+      <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License"
+          style="border-width:0" src="//i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a> All materials (except as
+      noted) are by Blaine Robertson and licensed under a <a rel="license"
+        href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US">Creative Commons Attribution-ShareAlike 3.0
+        License</a>. </footer>
+  </div>
+</body>
+
+</html>

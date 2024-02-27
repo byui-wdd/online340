@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <title>PostgreSQL Tables | Web Backend Development</title>
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="/340-js/css/340course-min.css" type="text/css" media="screen">
+</head>
+
+<body>
+  <div id="wrapper">
+    <header><img src="/340-js/images/small_banner.jpg" alt="Course Banner"></header>
+    <main>
+      <h1>PostgreSQL Tables</h1>
+      <h2>Introduction</h2>
+      <p>We're now ready to create the tables for the database. You'll create three: classification, account, and inventory. The tables, their fields and types, and the relationship between the classification and inventory tables are shown in the Entity Relationship Diagram (ERD). 
+        <div class="callout"><img src="/340-js/images/postgresql-erd.png"
+            alt="Entity relationship diagram for the PostgreSQL tables"></div>
+        Specific details for each table is found below.</p>
+
+        <p><span class="notice">Important: When creating tables and fields, make all names LOWERCASE, SINGULAR, and use NO SPACES. This is best practice and will make writing SQL code much easier for you.</span></p>
+
+        <h2>Video Demonstration</h2>
+        <p>The video provides a general overview of the activity, but does not contain the detail needed to complete each process. Watch the video to obtain a general idea, but follow the written steps to complete the activity. This is the <a target="_blank" href="../transcripts/build-db-tables-pgadmin.txt">Transcript</a> of the video.</p>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/Q7Jd0g9iGXk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+        <h3>Data Type</h3>
+        <p>In your reading, you may remember that when creating a field to store string data, the data type is typically
+          "<code class="language-sql">VARCHAR</code>". However, as you create the tables below, you'll see
+          "<code class="language-sql">character varying</code>" instead. The latter is a PostgreSQL convention. You'll also
+          notice that a size is not declared with "<code class="language-sql">character varying</code>"; whereas it normally is
+          included when using VARCHAR (e.g. VARCHAR(55)). It
+          is worth noting that the PostgreSQL server understands and will work with both.</p>
+      
+      <h2>Classification Table</h2>
+      <p>Inventory items (vehicles) fall into classifications: sedans, sports, SUV, utility, truck, etc... The <span class="fn">classification</span> table will contain fields to store vehicle classifications by name and unique id. As you did previously, use pgAdmin as the tool to interact with the database on Render.com.</p>
+      <ol>
+            <li>Launch pgAdmin and enter the master password.</li>
+            <li>Expand the Servers list (if needed)</li>
+            <li>Right-click on the Render connection</li>
+            <li>Select "Connect to Server"</li>
+        <li>Expand the "Databases" item.</li>
+        <li>Expand the 340 database item (you named this item).</li>
+        <li>Expand the "Schemas" item.</li>
+        <li>Expand the "public" schema item.</li>
+        <li>Right-click on the "Tables" item, select "Query Tool".</li>
+        <li>A new work window will open where SQL code is expected to be entered.</li>
+        <li>Type the code shown below into the window:
+        <div class="callout"><img src="/340-js/images/postgresql-create-classification-sql.png"
+            alt="SQL code to create classification table"></div>
+        </li>
+        <li>Double check that the code is typed correctly and that there are no errors or warnings being indicated by pgAdmin.</li>
+        <li>Copy the code and paste it into the <span title='Visual Studio Code'>VSC</span> SQL file that holds the code to create the PostgreSQL Type from the last activity. Save and close the file when done.</li>
+        <li>Click the "Execute / Refresh" icon in pgAdmin. 
+          <div class="callout"><img src="/340-js/images/pgadmin-execute-btn.png"
+              alt="Image of the pgAdmin Execute / Refresh button"></div>
+        </li>
+        <li>The code should run and a new "classification" table should appear in the "Tables" item of the database. <mark>If the table does not appear, right-click on the Tables item, and select "Refresh". Do this after each table is created if the table does not appear in the list.</mark></li>
+        <li>Close the pgAdmin query window and don't save the changes.</li>
+      </ol>
+
+<h2>Inventory Table</h2>
+<p>Next, you'll create the inventory table. Referring back to the ERD provided earlier, you can see that it has many more fields, but also it has a field (classification_id) that has a relationship back to the "classification" table. This means, that when adding a new vehicle to the inventory table, it must contain a value that already exists in the "classification" table.</p>
+<ol>
+  <li>It is assumed that the connection between pgAdmin and the remote database is active and that the server items are expanded.</li>
+  <li>Right-click on the "Tables" item, select "Query Tool".</li>
+  <li>A new work window will open where SQL code is expected to be entered.</li>
+  <li>Type the code shown below into the window:
+    <div class="callout"><img src="/340-js/images/postgresql-create-inventory-sql.png"
+        alt="SQL code to create inventory table"></div>
+  </li>
+  <li>Double check that the code is typed correctly and that there are no errors or warnings being indicated by pgAdmin.
+  </li>
+  <li>Copy the code and paste it into the <span title='Visual Studio Code'>VSC</span> SQL file that holds the code to create the PostgreSQL Type and classification table from earlier. Save and close the file when done.</li>
+  <li>Click the "Execute / Refresh" icon in pgAdmin.
+    <div class="callout"><img src="/340-js/images/pgadmin-execute-btn.png"
+        alt="Image of the pgAdmin Execute / Refresh button"></div>
+  </li>
+  <li>The code should run and a new "inventory" table should appear in the "Tables" item of the database.</li>
+  <li>Close the pgAdmin query window and don't save the changes.</li>
+</ol>
+
+<h2>Create the Classification and Inventory Relationship</h2>
+<p>With the "classification" and "inventory" tables created, and the fields needed for the relationship existing (classification_id) in both tables, the relationship can be created. <span class="notice">Note: While the field names do not have to match (although it is clearer when they do) in both tables, their data types and other defining characteristics must. You'll notice that in our tables, the names are the same, they are both "integer" data types and both are "NOT NULL", meaning that they must have a value. This is required in order to create relationships between tables!</span> </p>
+
+<ol>
+  <li>It is assumed that the connection between pgAdmin and the remote database is active and that the server items are expanded.</li>
+  <li>Right-click on the "Tables" item, select "Query Tool".</li>
+  <li>A new work window will open where SQL code is expected to be entered.</li>
+  <li>Type the code shown below into the window:
+    <div class="callout"><img src="/340-js/images/postgresql-create-relationship-sql.png"
+        alt="SQL code to create relationsip between classification and inventory tables"></div>
+  </li>
+  <li>Double check that the code is typed correctly and that there are no errors or warnings being indicated by pgAdmin.
+  </li>
+  <li>Copy the code and paste it into the <span title='Visual Studio Code'>VSC</span> SQL file that holds the code to create the PostgreSQL Type and tables from earlier. <mark>Order matters! Make sure the order of the code is: 1) create the type at the top, 2) create the classification table next, 3) create the inventory table third, and 4) create the relationship at the bottom.</mark> Close the file when done.</li>
+  <li>Click the "Execute / Refresh" icon in pgAdmin.
+    <div class="callout"><img src="/340-js/images/pgadmin-execute-btn.png"
+        alt="Image of the pgAdmin Execute / Refresh button"></div>
+  </li>
+  <li>The code should run. No new table will appear, but the relationship should have been created.</li>
+  <li>To confirm this:
+    <ol>
+      <li>Right-click either the "classification" or "inventory" table.</li>
+      <li>Select "ERD for Table" from the options shown.</li>
+      <li>pgAdmin should create an ERD that shows both tables and the relationship between them. Refer back to the ERD shown above to see what the relationship looks like.</li>
+      <li>Close the ERD window. Don't save the changes.</li>
+    </ol>
+  </li>
+</ol>
+
+<h2>Create the Account Table</h2>
+<p>The final table is the "account" table. As the name suggests, it will hold information about the people who register with the application. Note that an account in this table represents a "client", who is any person - random visitor or an employee of any level. We will have to create a means of differentiating them later.</p>
+
+<ol>
+  <li>It is assumed that the connection between pgAdmin and the remote database is still active, and the server items are expanded.</li>
+  <li>Right-click on the "Tables" item, select "Query Tool".</li>
+  <li>A new work window will open where SQL code is expected to be entered.</li>
+  <li>Type the code shown below into the window:
+    <!-- <div class="callout"><img src="/340-js/images/postgresql-create-client-sql.png"
+        alt="SQL code to create client table"></div> -->
+  </li>
+  </ol>
+<pre class="line-numbers"><code class="language-sql">-- Table structure for table `account`
+CREATE TABLE IF NOT EXISTS public.account
+(
+    account_id integer NOT NULL GENERATED BY DEFAULT AS IDENTITY,
+    account_firstname character varying NOT NULL,
+    account_lastname character varying NOT NULL,
+    account_email character varying NOT NULL,
+    account_password character varying NOT NULL,
+    account_type account_type NOT NULL DEFAULT 'Client'::account_type,
+    CONSTRAINT account_pkey PRIMARY KEY (account_id)
+);</code></pre>
+  <ol start="5">
+  <li>Double check that the code is typed correctly and that there are no errors or warnings being indicated by pgAdmin.
+  </li>
+  <li>Copy the code and paste it into the <span title='Visual Studio Code'>VSC</span> SQL file that holds the code to create the PostgreSQL Type and tables from
+    earlier. <mark>Order matters! Make sure the order of the code is: 1) create the type at the top, 2) create the
+      classification table next, 3) create the inventory table third, and 4) create the relationship next, and 5) create the account table at the bottom.</mark> Close the file when done.</li>
+  <li>Click the "Execute / Refresh" icon in pgAdmin.
+    <div class="callout"><img src="/340-js/images/pgadmin-execute-btn.png"
+        alt="Image of the pgAdmin Execute / Refresh button"></div>
+  </li>
+  <li>The code should run and a new "account" table should appear in the "Tables" item of the database.</li>
+  <li>An explanation about line 9 of the code. This line creates a "account_type" field, with the name of "account_type". This is why the type had to be created before the table could be created. It also has a default value of "Client", which is one of the three pre-defined values that the type was given. This means that every record that is stored into this table will have the value of "Client" for this field.</li>
+  <li>Close the pgAdmin query window and don't save the changes.</li>
+</ol>
+
+
+
+      <h2>Conclusion</h2>
+      <p>Whew! That was a bit of work. But, let's recap. You have now created the database that the application will use to store data. In addition, you have saved all the code so that when the database is removed in 90 days, it can easily be rebuilt. By storing all the creation code in a <span title='Visual Studio Code'>VSC</span> SQL file, and in the right order, all you'll have to do is run the entire file's code at the same time and everything will be done in a single step. You should be proud of yourself.</p>
+
+      <h2>Close the Connection</h2>
+      <p>As stated in previous activities, it is recommended that when you are done with your interaction between pgAdmin and the database server that the connection be closed. To do so:</p>
+      <ol>
+        <li>Right-click on the Render server object in the "Servers" panel of pgAdmin.</li>
+        <li>Select "Disconnect from Server".</li>
+        <li>You're done.</li>
+      </ol>
+    </main>
+    <footer>
+      <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License"
+          style="border-width:0" src="//i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a> All materials (except as
+      noted) are by Blaine Robertson and licensed under a <a rel="license"
+        href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US">Creative Commons Attribution-ShareAlike 3.0
+        License</a>. </footer>
+  </div>
+</body>
+
+</html>

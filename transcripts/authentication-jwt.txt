@@ -1,0 +1,106 @@
+Previously a client registered an account, but now, wants to login or authenticate to the web site. This video overviews this process.
+
+In the previous activity, the cookie-parser package was installed using the built-in VS Code terminal. It needs to be required.
+
+Open the server.js file and add the require statement at the top, with the other require statements.
+
+Then, moving down to the Middleware section add the cookie-parser as middleware using an app.use() statement.
+
+Save the file.
+
+Opening the login view, look at the opening form tag to refresh your memory of the action route and the method, as shown in the video.
+
+Open the account route router file.
+
+Locate the login process route and alter it as shown. The account request handler does not exist, but will be built shortly.
+
+Remember that the route in the view was "account/login". The "account" part is used in the server.js file, and the "/login" portion is here in the router file, attached to the post verb.
+
+The login rules and check functions should already exist as a result of previous activities. As always, the error handler function is used to handle any errors that may occur.
+
+Now, let's open the account controller and build the request handler function.
+
+At the top of the file request the jsonwebtoken package, which was installed previously, and the dotenv package, also installed previously.
+
+Scroll down and add the function shown in the video to the file. This should be the last function in the controller, but prior to the module.exports statement at the very bottom of the file.
+
+This function collects the incoming values from the login request.
+
+It then uses a model-based function to see if a matching account exists based on the email.
+
+If no account is found, an error message is set and the registration view is returned to the  browser.
+
+However, if a matching account is found, the bcrypt.compare function is used to hash the incoming password and compare it to the hashed password stored in the database. If they match, the user is accepted as being known.
+
+The hashed password is deleted from the data returned from the database.
+
+A JWT, JSON Web Token, is then created and signed using a signature which is stored in an environment variable. The token will expire in one hour.
+
+The token is then stored into an httponly cookie, with the name of "jwt", because it will carry the token, and it too is set to expire in one hour.
+
+The response object is called to redirect to the default account route, which should deliver the account management view.
+
+If an error occurs, the error handler should  deliver the server error view.
+
+It is time to create the signature in the .env file.
+
+Open the .env file and create a name of ACCESS_TOKEN_SECRET".
+
+Then using the same process used previously, create a random string to use as the signature.
+
+Open the VS Code terminal. Type "node", press Enter.
+
+In node mode, type the string shown on the screen and press Enter.
+
+Copy the string, including the single quotes, and paste it into the .env file as the signature to accompany the name. Save the file.
+
+As our application will be deployed to the production environment, the name and string need to be present there as well.
+
+Login to render.com and navigate to your web service. Click the Environment item and add a new environment variable.
+
+Copy and paste the name and string from the .env file to the environment variable. Save the changes.
+
+Now it's time to create the model function that will query the data for the account, based on the incoming email address.
+
+Open the account model file.
+
+Scroll to the bottom of the existing functions and add the function shown on the screen.
+
+Add the function to the module.exports statement at the bottom of the model file. Save the model.
+
+You'll now create the route, view and controller request handler for the account management view. Recall that this will use the default route "/account/" to deliver the view.
+
+You are encouraged to build this process while working with your learning team. You will see the working implementation at the end of this video.
+
+It is now time to write the middleware to check the cookie and the JWT. Every request that comes into the application from this point forward will check for the cookie and token.
+
+Open the utilities > index.js file. Add two require statements at the top if they don't already exist to allow the file access to the jsonwebtoken and dotenv packages.
+
+Move to the bottom of the existing functions, but before the module.exports statement and add the function shown.
+
+This function checks for the existence of the cookie and token. If they are present it validates the token. If the token is invalid, meaning it has been tampered with or expired, the cookie is destroyed and the request is redirected to the login view.
+
+If the token is valid, the data stored in it is saved to the response object, along with a login flag and the request moves on to the next process in the application. The incoming request is considered "authorized".
+
+If there is no cookie, then the request simply moves on to the next process in the application. The incoming request is not authorized, but allowed to access general areas of the application.
+
+Now, the function must be implemented for all incoming requests.
+
+Open the server.js file. At the top of the file, ensure that the utilities>index.js file has been required. If not, add it.
+
+Scroll down to the middleware section and add the line of code to use the checkJWTToken function as shown. Save the file.
+
+Now it's time to test.
+
+Start the development server and navigate to the application in your browser.
+
+Register a new account so that you know the email and password for the account.
+
+Login using the new account. You should be looking at the account management view in the browser.
+
+Using the web developer extension, check the cookies and ensure that you have a jwt cookie and that it has a token. The cookie should indicate that it is httponly and will expire in an hour.
+
+If all of this is true, then things are just right. If not, carefully review your code, talk with others, get help. But it must be working before moving forward.
+
+Remember to close down the development server when done testing.
+

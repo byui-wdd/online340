@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Build the Application | Web Backend Development</title>
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="/340-js/css/340course-min.css" type="text/css" media="screen">
+</head>
+
+<body>
+  <div id="wrapper">
+    <header><img src="/340-js/images/small_banner.jpg" alt="Course Banner"></header>
+    <main>
+      <h1>Build the Application</h1>
+      <h2>Introduction</h2>
+      <p>With a <span class="fn">package.json</span> file present and PnPM installed it is time to build the application. A "build" can occur both locally and remotely. In this case, we will do so locally, so that we can develop and test our application to make sure it does what we want. Keep in mind that a build is not the same as running our application. These are different steps.</p>
+<h2>Video Overview</h2>
+<p>The video provides a general overview of the activity, but does not contain the detail needed to complete each process. Watch the video to obtain a general idea, but follow the written steps to complete the activity. This is the <a target="_blank" href="../transcripts/build-node-project.txt">Transcript</a> of the video.</p>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/XPged6NYMsc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      
+<h2>Run PnPM to Build the Application</h2>
+      <ol>
+        <li>Make sure your application is open in <span title="VS Code">VSC</span>.</li>
+        <li>Open a terminal window, (<span class="fn">Terminal &gt; New Terminal</span>) or (<code class="language-markup">Control + Shift + `</code>).</li>
+        <li>Type <code class="language-javascript">pnpm install</code>, press "Enter"</li>
+        <li>PnPM will now read the <span class="fn">package.json</span> file and download and install each of the dependencies listed in the file.</li>
+        <li>Be patient while this process occurs, but it should not take too long.</li>
+        <li>When done, you will now have a new <span class="fn">node_modules</span> folder and <span class="fn">pnpm-lock.yaml</span> file.</li>
+        <li>You should <strong>never</strong> alter anything inside the <span class="fn">node_modules</span> folder or the <span class="fn">pnpm-lock.yaml</span> file!</li>
+      </ol>
+
+      <h2>Review the .gitignore file</h2>
+      <p>As described in a previous document, the <span class="fn">.gitignore</span> file tells GIT to ignore any file or folder listed and that includes not adding them to a remote repository. We'll review that file now.</p>
+      <ol>
+        <li>Open the <span class="fn">.gitignore</span> file.</li>
+        <li>Notice that the <span class="fn">node_modules</span> folder is already listed (see line 8). This folder can become very large and there is no reason to add it to the remote repository.</li>
+        <li>While here, look at how to add a comment to the file.</li>
+        <li>Close the file.</li>
+      </ol>
+    </main>
+    <footer>
+      <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License"
+          style="border-width:0" src="//i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a> All materials (except as
+      noted) are by Blaine Robertson and licensed under a <a rel="license"
+        href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US">Creative Commons Attribution-ShareAlike 3.0
+        License</a>. </footer>
+  </div>
+</body>
+
+</html>

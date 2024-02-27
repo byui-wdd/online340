@@ -1,0 +1,18 @@
+Assignment 1 is largely a review of frontend basics, including HTML, CSS, Accessibility and Responsiveness.
+
+The assignment will be developed following the concepts and materials presented in unit 1, and will implement a route handler, and use EJS with the layout template and partials.
+
+With the local Node / Express server started, the site must be called using the localhost:5500 URL.
+
+The index.ejs "Home" view will be delivered.
+
+The view must meet the standards found in the Frontend Checklist: 1) all content of the page must load correctly, 2) be valid HTML, 3) be valid CSS, 4) meet WAVE accessibility standards with no errors or contrast errors, and 5) be responsive to various device sizes with no horizontal scrolling or zooming required.
+
+All content of the page must load correctly and meet the provided illustrations for large and mobile screen sizes.
+
+Double check the assignment directions to ensure that your work meets these requirements.
+
+You are strongly encouraged to check your own work against the provided grading matrix and to trade with a member of your learning team to check one another's work prior to submission.
+
+Good luck as you apply new skills with old to complete this assignment.
+

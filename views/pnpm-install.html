@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <title>PnPM Installation | Web Backend Development</title>
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="/340-js/css/340course-min.css" type="text/css" media="screen">
+</head>
+
+<body>
+  <div id="wrapper">
+    <header><img src="/340-js/images/small_banner.jpg" alt="Course Banner"></header>
+    <main>
+      <h1>PnPM Installation</h1>
+      <h2>Introduction</h2>
+      <p>As explained in the readings for this week, PnPM is a package manager used with Node. This software allows you to add, remove, update packages that are needed for your application and to enhance the functionality of Node.</p>
+
+      <h2>Video Demonstration</h2>
+      <p>Watch the video to obtain a general idea, but follow the written steps to complete the activity. This is the <a target="_blank" href="../transcripts/install-pnpm.txt">Transcript</a> of the video.</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/zLLnDGt29_g" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+      <h2>Check Node Version</h2>
+      <p>Prior to installing Pnpm, ensure that NodeJS is up-to-date. If you just installed NodeJS, then skip this step. If you have had NodeJS installed for a while, please do this:</p>
+      <ol>
+        <li>Open Terminal (Mac) or Command Prompt (Windows).</li>
+        <li>For Windows users, open Command Prompt as an Administrator.</li>
+        <li>Type "node -v", press Enter.</li>
+        <li>Open nodejs.org in a browser window.</li>
+        <li>Compare the version number on your computer against the LTS version number on the website. If they are the same, no need to update. If they are not the same, click and download the LTS version. Once downloaded, install.</li>
+      </ol>
+
+      <p>Now, you're ready to install pnpm.</p>
+
+      <h2>Pnpm Installation Directions</h2>
+      <p>Because you just installed Node, it comes with a program named "Corepack", which is software for managing package managers. Let's use it to activate PnPM, rather than downloading a second version.</p>
+      <ol>
+        <li>Open the Terminal or Command Prompt</li>
+        <li>Type <code class="language-javascript">corepack enable</code>, press "Enter".</li>
+        <li>This will automatically install pnpm on your system. However, it probably won't be the <a href="https://github.com/pnpm/pnpm/releases/latest" target="_blank">latest version</a> of pnpm. To upgrade it, type the following, then press "Enter":</li>
+        <li><span class="language-javascript">corepack prepare pnpm@latest --activate</span></li>
+        <li>If you receive an error after typing the code in number 2, go ahead and type the code found in number 4.</li>
+        <li>When done, type <code class="language-javascript">pnpm --version</code>, hit "Enter".</li>
+        <li>You should see a line that indicates version 6.x or higher</li>
+      </ol>
+      <h2>Alternate Installation Process</h2>
+      <p>A few students report errors when trying to enable using corepack. If you run into this error, then:</p>
+      <ul>
+        <li>In a browser, go to <a href="https://pnpm.io/installation
+">pnpm installation instructions</a></li>
+        <li>Find and use the npm script in your <span title='Visual Studio Code'>VSC</span> terminal to install pnpm.</li>
+        <li>The script could also be run in Windows "Command Prompt" or Mac "Terminal.</li>
+      </ul>
+
+      <h2>Conclusion</h2>
+      <p>Whew, I'm glad that's done, and I bet you are too! Congratulations on getting PnPM activated. You're now ready to move on. If, the installation failed, get help to get it installed.</p>
+    </main>
+    <footer>
+      <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="//i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a> All materials (except as
+      noted) are by Blaine Robertson and licensed under a <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US">Creative Commons Attribution-ShareAlike 3.0
+        License</a>.
+    </footer>
+  </div>
+</body>
+
+</html>

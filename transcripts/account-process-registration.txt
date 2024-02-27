@@ -1,0 +1,76 @@
+Having successfully built and delivered a registration view in the Express application, it is now time to add the process to collect data from the form and add the data to the database.
+
+This process uses a PostgreSQL database and a MVC design pattern in the application construction.
+
+Begin by examining the form opening tag in the registration view. Two attributes must be present: action and method.
+
+The action will contain a route (which if you are sharp eyed, is exactly the same route used to request the registration view), but the method will be POST.
+
+Ensuring that these attributes and values exist, it is now time to build the route in the account router file.
+
+In this case a post verb is used in the route, but the error handler middleware is applied as is the controller request handler. This controller method will be built later in this process. Save the router file.
+
+Because the data that is collected during the registration process will be stored into the database, a model must be built.
+
+Create a new "account-model.js" file in the models folder.
+
+At the top of the file require the database index file which contains the connection pool functionality as shown.
+
+When done, write the function as shown. Notice that an async - await structure is used so that the result of the insert can be gathered and returned, or, if an error occurs, it can be returned in the catch block.
+
+Save the model file.
+
+Open the existing account controller. In it, below the existing methods, and before the exports statement add the new function as shown.
+
+This function accepts the request and response objects as parameters.
+
+It requests the navigation, for the view, from the utilities function.
+
+It then extracts the incoming data from the HTTP request object and stores it into variables. These variables MUST have the same names as the incoming input names as found in the registration form.
+
+The data is then passed to the model for inserting to the database, and the result, from the insert, is returned and stored in the "regResult" variable.
+
+If the result is TRUE, the a message is created and stored into the request object, and in the session.
+
+The login view is then called via the res.render function.
+
+If the result is FALSE, a failure mesage is set and the registration view is called. This allows the client to attempt the registration again.
+
+While everything may appear complete it is not. There is a package to be installed and implemented prior to testing.
+
+In the VS Code terminal, use pnpm to add the "body-parser" package.
+
+When done, open the server.js file and require the package in the "Require Statements" section.
+
+Lastly, in the middleware section of the same file, add the body-parser functionality as shown.
+
+The first line allows the application to work with JSON data.
+
+The second line allows the body parser to extract incoming data from the request body object. That is how our controller will be able to extract the data from req.body as seen in the third line of the controller function.
+
+Save all files if not done already.
+
+Start the development server using the built-in VS Code terminal.
+
+If there are no errors, the application server should start and indicate that it is listening.
+
+Open a browser and navigate to the registration view by clicking the "My Account" link in the header, then the link below the login form.
+
+Fill in the registration form and submit.
+
+We hope that the success message will appear in the login view.
+
+Otherwise, a failure message should appear in the registration view.
+
+If the error view appears, then the process failed and will have to be looked into.
+
+If either the login or registration views are returned and the message is seen it is important to check the database.
+
+Open the pgAdmin tool and connect to the database server. Check the data in the client table. If the client data is present, things worked. Note that the password is plain text. This is bad and will be dealt with soon.
+
+If the data is present, but a failure message was displayed in the registration view, the error occurred after the model was called to write the data. You'll need to look into determining why the insert worked, but the message indicates otherwise.
+
+If everything worked, then you are ready for the next process. Congratulations!
+
+Be sure to stop the development server, when done testing.
+

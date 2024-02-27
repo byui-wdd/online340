@@ -1,0 +1,24 @@
+If you have visited a car dealership site, chances are good that you have searched based on criteria (e.g. make, model, type,...).
+
+In this activity we will not develop a specific search or filter system, rather we will use the navigation items as the filter mechanism.
+
+With the exception of the Home item, each of the navigation options is directly extracted from a table in the database, which represents a classification of vehicle.
+
+When clicked, that indicator of classification is sent via an HTTP GET Request to the application.
+
+Using the MVC process, already discussed and used in previous work, a route is built to send the request to a controller.
+
+The controller will then be built and the handler function constructed. In the controller, the model for working with inventory and a utilities library will be brought into scope using require functions.
+
+Finally, the completed functionality will be exported, so that it can be used elsewhere. Specifically, called from the router file.
+
+The inventory model will then be added to. It was built previously, when the initial function to query the classification data was constructed. This new function will implement an SQL INNER JOIN to retrieve data from both the classifications and inventory tables.
+
+The resultset will represent all of the vehicles, and their information, associated with the classification.
+
+As explained in the high level MVC overview video, a utility function will then be called to take the data and build an HTML structure around it. This structure will need to be styled to appear in a professional, responsive layout in the view.
+
+A key concept in this activity is the appropriate use of function names. A function name should clearly describe what the function does. In addition, functions should be clearly described with comments. These practices will help with code maintenance and inheritability. Remember, you many not always be the code manager!
+
+At the conclusion of this activity, everything will be ready to be passed to EJS for the constructing of the finished view.
+

@@ -1,0 +1,32 @@
+Rather than dealing with a local and remote database, we will create just one and use it locally for development, as well as in our production environment.
+
+This will be done at render.com. You can register at render.com using your GitHub account.
+
+When returning to render.com, click the GitHub option to sign in.
+
+Once registered or logged in, you will be directed to your dashboard.
+
+We are assuming that you are creating the DB service. Be aware that on the free plan there are use limitations and you will want to stay within those bounds.
+
+On the dashboard you can choose the "New" button or find and click on the PostgreSQL card's "New PostgreSQL" button.
+
+In either case you will be taken to the screen to define the database.
+
+I suggest using the same name for the Name, Database and User fields. Keep names short. Since these are shared servers, random values my be added, so watch carefully for what the actual names are when done.
+
+From the region dropdown, pick the region closest to your location.
+
+You can leave the version number as is.
+
+Leave the Datadog key empty.
+
+Leave the Instance Type as "Free" and note the limits shown.
+
+Scroll down and click the "Create Database" button.
+
+A new screen will appear that contains the connection information which will be covered in the next video.
+
+Be aware that you cannot use the service until it becomes active. Look for the "Status" indicator to say "Available". When that appears, the service is ready.
+
+Before ending, on the left are four items: Info (which is what is currently displayed), Metrics - this is where you can track your use compared to the limits of the free account, Recovery - which is not available for the free account, and Logs - which shows a running stream of actions occurring with the service.
+

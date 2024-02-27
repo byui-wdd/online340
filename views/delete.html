@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Delete Inventory| Web Backend Development I</title>
+  <meta name="description" content="An activity describing the process to delete an inventory item for the CSE 340 learning project.">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="/340-js/css/340course-min.css" type="text/css" media="screen">
+  <link rel="stylesheet" href="/340-js/css/prism-coy-dev.min.css" media="screen">
+  <script defer src="/340-js/js/prism-coy-dev.min.js"></script>
+</head>
+
+<body>
+  <div id="wrapper">
+    <header id="header"><img src="/340-js/images/small_banner.jpg" alt="CSE 340 Banner Image"></header>
+    <main>
+      <h1>Delete an Inventory Item</h1>
+      <p>The process to delete an inventory item from a database is nearly identical to updating an inventory item. For that
+        reason, much of what was done in the update activities will be repeated in this activity.</p>
+
+      <h2>Very Important</h2>
+      <p>Unlike <i>delete</i> in a word processor, there is no "Undo" in a database delete. Once deleted, the data is
+        gone. The only way to restore deleted data is from a database backup, if one exists.</p>
+
+      <h2>Video Overview</h2>
+      <p>The video provides a general overview of the activity, but does not contain the detail needed to complete each process. Watch the video to obtain a general idea, but follow the written steps to complete the activity. This is the <a target="_blank" href="../transcripts/delete-inventory-item.txt">Transcript</a> of the video.</p>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/06OUsLXJ9Yc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+
+      <h2>The Basic Process</h2>
+      <p>As mentioned earlier, the deletion process is similar to an update process:</p>
+      <ol>
+        <li>A trigger to start the delete process.</li>
+        <li>Information about the item being deleted is queried from the database and displayed in a view.
+          <ul>
+            <li>This is a confirmation step.</li>
+            <li>Because there is no "Undo" we want the client to confirm that this is the correct item to be deleted.
+            </li>
+          </ul>
+        </li>
+        <li>The actual delete is submitted.</li>
+        <li>The controller uses a model-based function to carry out the deletion.</li>
+        <li>The controller determines if the delete was successful or not, and reports back the result to the browser.
+        </li>
+      </ol>
+
+      <h2>The Route</h2>
+      <ol>
+        <li>Open the inventoryRoute file.</li>
+        <li>Add a "get" route to match the path that already exists in the inventory management view for the "Delete" link. Be sure to include a parameter to represent the incoming inv_id as part of the URL.</li>
+        <li>Assign a controller function (that does not yet exist) to handle the delivery of the delete confirmation view.</li>
+        <li>Add a "post" route handler that will call a controller function to carry out the delete process. You will build the function later in this activity.</li>
+        <li>Be sure to add error handling to all new routes.</li>
+      </ol>
+
+      <h2>Delete Confirmation View</h2>
+      <p>As mentioned above, we want a view to display the inventory vehicle information, so the item can be confirmed prior
+        to being deleted. Because it is so similar to an update we will use the <b>edit-inventory</b> view to get us started.</p>
+      <ol>
+        <li>Find and open the <b>edit</b> view in the <b>views > inventory</b> folder.</li>
+        <li>Do a "Save As..." and save the new view into the <b>views > inventory</b> folder with a name of
+          <b>delete-confirm.ejs</b>.
+        </li>
+        <li>Because this is only a confirmation view, much of what is here can be removed.</li>
+        <li>Begin by removing the JavaScript that keeps the button from becoming active if nothing has changed. In addition, you can remove the disabled attribute in the submit button.</li>
+        <li>Alter all references to "Update" or "Edit" to "Delete".</li>
+        <li>Remove the labels and inputs, leaving only the "make", "model", "year", and "price" content labels and inputs in the form.</li>
+        <li>Add the "readonly" attribute to each of the input fields.</li>
+        <li>Ensure that the submit input or button remains, but is changed to "Delete".</li>
+        <li>Ensure that the "inv_id" hidden input remains in the form.</li>
+        <li>Change any text directions regarding the update to instead tell the client that they are to confirm this is
+          the correct inventory item to be deleted because the delete cannot be undone. For example:
+          <code class="language-markup">&lt;p&gt;Confirm Deletion - The delete is permanent.&lt;/p&gt;</code>
+        </li>
+        <li>Finally, ensure the value of the "action" attribute in the opening form tag contains a route to pass through the "inv" router and indicates that the item is to be deleted. <b>This route should match the "post" route you added to the inventory route file at the beginning of this activity.</b></li>
+        <li>Ask a member of your learning team to review your changes and look for errors.</li>
+        <li>Review the view code that no errors are reported and save the file.</li>
+      </ol>
+
+      <h2>Inventory Controller</h2>
+      <p>With the view ready, the controller can now be set up to 1) deliver the view and 2) process the delete. Remember that a delete is nearly identical to an update. So, it again is a two-step process:</p>
+
+      <h3>Step One</h3>
+      <p>Step one is to deliver the delete confirmation view, along with the data.</p>
+      <ol>
+        <li>In the inventory route file, you built a route handler that calls a controller function to deliver the delete confirmation view. Go back and review the function name if needed.</li>
+        <li>Open the inventory controller and find the code that was used to build the update view.</li>
+        <li>Copy the preceeding comment and the entire function.</li>
+        <li>Scroll to the bottom of the existing functions, and add a few empty lines between the last function and the module.exports statement.</li>
+        <li>Paste the copied comment and function and edit them.</li>The modified function should do the following:
+        <ul>
+          <li>The comment should indicate the delete confirmation view is being built and delivered.</li>
+          <li>The function name should match the name in the route file.</li>
+          <li>Collect the inv_id from the incoming request.</li>
+          <li>Build the navigation for the new view.</li>
+          <li>Get the data for the inventory item from the database, using the existing model-based function and sending the inv_id to the function as a parameter.</li>
+          <li>Build a name variable to hold the inventory item's make and model.</li>
+          <li>Call the res.render function to deliver the delete confirmation view.</li>
+          <li>Add the appropriate data to the data object to populate the title, nav, errors and inputs that exist in the form.</li>
+        </ul>
+        </li>
+        <li>Review your own code for accuracy and lack of warnings or errors. Save the file.</li>
+        <li>Ask a member of your learning team to review your code for accuracy.</li>
+
+        <h3>Step Two</h3>
+        <p>Step two is to carry out the delete of the inventory item. In case you have forgotten ;-), the delete is similar to the update.</p>
+
+        <ol>
+          <li>Find and copy the comment and function in the inventory controller, for carrying out the update process.</li>
+          <li>Scroll to the bottom of the controller, and insert some empty space below the function to deliver the delete confirmation view.</li>
+          <li>Paste the copied comment and function in the empty space.</li>
+          <li>Edit the comment and function to reflect that the delete is being carried out.</li>
+          <li>The function should:
+            <ul>
+              <li>Have a name that matches the name used in the "post" route that you built at the start of this activity.</li>
+              <li>Collect the inv_id value from the request.body object. Use the parseInt function for the inv_id value during the collection and storage.</li>
+              <li>Pass the inv_id value to a model-based function to delete the inventory item. You will build the function in the next step of this activity.</li>
+              <li>Collect the value that should be returned from the model-based function into a local variable.</li>
+              <li>If the delete was successful, return a flash message to the inventory management view.</li>
+              <li>If the delete failed, return a flash failure message to the delete confirmation view, and redirect to the route to rebuild the delete view for the same inventory item. Hint: use the same route in the redirect that was used to build the delete confirmation view originally.</li>
+              <li>Carefully review your code for correctness.</li>
+              <li>Save the file.</li>
+              <li>Have another member of your learning team review your code.</li>
+            </ul>
+          </li>
+        </ol>
+
+        <h2>Inventory Model</h2>
+        <p>We need a function to handle the delete call in the database, so let's get it done.</p>
+        <ol>
+          <li>Find and open the <b>inventory-model.js</b> file in the <b>models</b> folder.</li>
+          <li>Find and copy the update function (I said the delete was nearly identical to an update).</li>
+          <li>Move to the bottom of the functions in the model and add a comment indicating the function will carry out a deletion of the inventory item.</li>
+          <li>Paste the copied function beneath the comment.</li>
+          <li>To make sure we get this right, go back to the inventory controller and find the line in which you make the call to the delete function. Copy the function name and parameter list.</li>
+          <li>Returning to the model, highlight the newly pasted function name and parameter list and paste.</li>
+          <li>Alter the SQL code to perform a deletion of the inventory item based on its inv_id, for example:
+            <pre><code class="language-sql">$sql = 'DELETE FROM inventory WHERE inv_id = $1';</code></pre>
+          </li>
+          <li>Alter the data array in the "pool.query" to only include the inv_id variable.</li>
+          <li>Alter the "return" statement, following the query to be:
+            <pre><code class="language-javascript">return data</code></pre>
+          </li>
+          <li>A successful delete will store "1" into the "data" variable, while a failure will store "0".</li>
+          <li>That's it. When you're done the function should look similar to this (remember your names may be different from what you see here):
+            <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-javascript">/* ***************************
+ *  Delete Inventory Item
+ * ************************** */
+ async function deleteInventoryItem(inv_id) {
+  try {
+    const sql = 'DELETE FROM inventory WHERE inv_id = $1'
+    const data = await pool.query(sql, [inv_id])
+  return data
+  } catch (error) {
+    new Error("Delete Inventory Error")
+  }
+}</code></pre>
+          </li>
+          <li>Add the function name to the module.exports object.</li>
+          <li>Check for warnings and errors and save the file.</li>
+        </ol>
+
+        <h2>Time to Test</h2>
+        <p>Now is a great time to do some housekeeping with your inventory table as you practiced inserting items to the
+          database and more than likely have a few records that really don't need to be there.</p>
+        <ol>
+          <li>Start the local server.</li>
+          <li>Open the project site in a browser tab.</li>
+          <li>Navigate to the "Inventory Managment" view.</li>
+          <li>Select a list of inventory items by classification. Preferably a classification that you know contains items added during insert testing.</li>
+          <li>Find an item in the list that you can safely delete (one that you added during testing).
+          </li>
+          <li>Click the "Delete" link.</li>
+          <li>If step one worked, you should now be looking at the "Delete" confirmation page and should not be able to
+            edit any data seen in the view.</li>
+          <li>Click the "Delete" button.</li>
+          <li>You should be returned to the <b>Inventory Management</b> view and the success or failure message should be displayed.</li>
+          <li>If the delete succeeded, the item should also be gone from the list after you request the items by the same classification previously used.</li>
+          <li>When done testing, be sure to shut down the server.</li>
+        </ol>
+
+        <h2>Did it Work?</h2>
+        <p>If things worked, congratulations and back slapping all around!</p>
+        <p>If not, carefully review your code. Ask a learning team peer, post a question to the discussion tool, contact a TA, talk to your professor. But get it working!</p>
+    </main>
+    <footer>
+      <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US" target="_blank"><img alt="Creative Commons License" style="border-width:0" src="//i.creativecommons.org/l/by-sa/3.0/88x31.png"></a>
+      All materials (except as noted) are by Blaine Robertson and licensed under a <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US" title="Read the license" target="_blank">Creative
+        Commons Attribution-ShareAlike 3.0 License</a>.
+    </footer>
+  </div>
+</body>
+
+</html>

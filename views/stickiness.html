@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Stickiness and Email Check | Web Backend Development</title>
+  <meta name="description" content="This activity introduces stickiness to forms and adds a duplicate email check to the server-side validation for the CSE 340 project.">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="/340-js/css/340course-min.css" type="text/css" media="screen">
+  <link rel="stylesheet" href="/340-js/css/prism-coy-dev.min.css" media="screen">
+</head>
+
+<body>
+  <div id="wrapper">
+    <header id="header"><img src="/340-js/images/small_banner.jpg" alt="CSE 340 Banner Image"></header>
+    <main>
+      <h1>Finish Server-Side Validation</h1>
+
+      <h2>Introduction</h2>
+      <p>Arriving at this activity assumes the successful completion of the previous server-side validation activity. This activity will add two final components to the process: adding a check to prevent email addresses from being duplicated in the database, and making the registration form inputs "sticky".</p>
+
+      <h2>Video Overview</h2>
+      <p>The video provides a general overview of the activity, but does not contain the detail needed to complete each process. Watch the video to obtain a general idea, but follow the written steps to complete the activity. This is the <a target="_blank" href="../transcripts/server-validation-2.txt">Transcript</a> of the video.</p>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/UsSAtdn_P9Y" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+      <h2>Create a Custom Function</h2>
+      <p>We will create a check function just for the email address. It will check the value of the account_email variable, after having been checked using the previous method, to see if it already exists in the database. If so, it will produce an error, stop the registration process, and the client will be informed.</p>
+
+      <ol>
+        <li>Find and open the <span class="fn">account-model.js</span> file in the <span class="fn">models</span> folder.</li>
+        <li>At the bottom of the existing functions, but before the module.exports statement, create some empty space.</li>
+        <li>Create a new asynchronous function named "<b>checkExistingEmail(account_email)</b>".</li>
+        <li>The function should look something like this:
+          <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">/* **********************
+ *   Check for existing email
+ * ********************* */
+async function checkExistingEmail(account_email){
+  try {
+    const sql = "SELECT * FROM account WHERE account_email = $1"
+    const email = await pool.query(sql, [account_email])
+    return email.rowCount
+  } catch (error) {
+    return error.message
+  }
+}</code></pre>
+        </li>
+        <li>Hopefully, this function looks familiar. It queries the database to see if a record exists with the same email that is being submitted. It returns the count of rows found. Anything greater than zero means the email already exists in the database.</li>
+        <li>Add the function to the exports object at the bottom of the model.</li>
+        <li>Check that no warning or errors exist in the model file.</li>
+        <li>Save the file.</li>
+      </ol>
+
+      <h2>Apply the Email Check Function</h2>
+      <ol>
+        <li>Find and open the <span class="fn">account-validation</span> file that you worked with in the previous activity.</li>
+        <li>At the top, require the "account-model":
+<pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">const accountModel = require("../models/account-model")</code></pre>
+        </li>
+        <li>Scroll down to the check "account_email" rule.</li>
+        <li>Modify the rule by adding the following code directly beneath the existing statements. When done, the entire rule should look like this:
+          <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">// valid email is required and cannot already exist in the database
+body("account_email")
+  .trim()
+  .isEmail()
+  .normalizeEmail() // refer to validator.js docs
+  .withMessage("A valid email is required.")
+  .custom(async (account_email) =&gt; {
+    const emailExists = await accountModel.checkExistingEmail(account_email)
+    if (emailExists){
+      throw new Error("Email exists. Please log in or use different email")
+    }
+  }),</code></pre>
+        </li>
+        <li>
+          <h3>An Explanation</h3>
+        <li><strong>Lines 1-6 - </strong> the existing code from the original rule. [<b><i>Important! Note that the comma is gone from the end of line 6.</i></b>]</li>
+        <li><strong>Line 7 - </strong> creates a "custom" check. Within the custom check an asyncronous, arrow function is created and the "account_email" variable is a parameter.</li>
+        <li><strong>Line 8 - </strong> calling the function from the model and collecting the value returned (should be 0 or 1)</li>
+        <li><strong>Line 9 - </strong> an "if" control structure to check the result. Remember that "0" is FALSE, while any other value is TRUE.</li>
+        <li><strong>Line 10 - </strong> throws an error and an error message indicating the email already exists and cannot be reused if the row count is 1. Note that this is a separate error message that applies only if the email exists.</li>
+        <li><strong>Line 11 - </strong> ends the "if" control structure.</li>
+        <li><strong>Line 12 - </strong> ends the arrow function and custom check. The comma is added to the end of the line to separate this rule from the next rule in the array.</li>
+        <li>Check that there are no warnings or errors.</li>
+        <li>Save the file.</li>
+      </ol>
+
+
+      <h2>Make the form "Sticky"</h2>
+      <p>Up to this point, if the form was not filled in correctly, we created an error array, and returned the errors and the account names and email variables to the view via a render function. In the view, we built a method to display the errors, but the site visitor had to start over from scratch as they filled in the registration form. To provide a better user experience, we will make the form "sticky"; meaning that the values that they typed originally will appear back in the form input fields.</p>
+
+      <ol>
+        <li>Find and open the <span class="fn">registration</span> view.</li>
+        <li>In the form, locate and alter the account_firstname input to look like this example:
+          <pre><code class="language-JavaScript">&lt;input type="text" name="account_firstname" id="accountFirstname" required value="&lt;%= locals.account_firstname %&gt;"&gt;</code></pre>
+        </li>
+        <li>When you are sure your code is correct and no errors are being reported in your syntax, repeat this process for the account_lastname and account_email inputs.</li>
+        <li><strong>Do not do this for the password field!</strong> We always make the visitor re-type the password - <span class="warning">Always</span>!
+        </li>
+      </ol>
+      <h3>An Explanation</h3>
+      <p>The variable name should be clear enough, however the "locals" keyword may be unfamiliar. Express.js supports the storage of variables for use throughout the life of the application (e.g. <code>app.locals</code>) or through the entire request - response cycle (e.g. <code>res.locals</code>). In our code, we stored the variables as part of the validation process, and can now reuse them to make the form sticky. You will notice that we simply used "locals", which is a shorthand method for "res.locals". An added benefit is that if there is no value, such as when the registration view is initially loaded, it does not throw an error because the variable is undefined.</p>
+
+      <h2>Time to Test</h2>
+      <p>Just as you did previously, navigate to the registration form and reload to make sure the browser has the updated version. Then, 1) fill out the form making at least one mistake, 2) click the <b>novalidate!</b> tool to turn off the client-side validation, 3) submit the form. The view should be returned, error(s) displayed and the form re-populated (except for the password field).
+      </p>
+
+      <h2>Validate Login Data</h2>
+      <p>The login form is much simpler, as it only contains two inputs for the email and password. We want to implement client-side and server-side checks to it as we did to the registration form.</p>
+
+<h3>Missing Login Process</h3>
+      <p>Currently, we do not have a login process in place in the <span class="fn">accountRoute</span> or <span class="fn">accountController</span> files. To temporarily handle this situation, to allow for testing the server-side validations, add the following code to the <span class="fn">accountRoute</span> file below the existing routes, but before the module.exports statement:
+<pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">// Process the login attempt
+router.post(
+  "/login",
+  (req, res) =&gt; {
+    res.status(200).send('login process')
+  }
+)</code></pre>
+</p>
+<p>Ensure that there are no warnings or errors. Save the file.</p>
+
+<h4>An Explanation</h4>
+<ul>
+  <li><strong>Line 1 - </strong> a comment for the route.</li>
+  <li><strong>Line 2 - </strong> has the router listening for a "post" request.</li>
+  <li><strong>Line 3 - </strong> indicates the route being watched for inside the post request.</li>
+  <li><strong>Lines 4-6 - </strong> an arrow function that accepts the request and response objects as parameters. Line 5 indicates that the request was successful and returns "login process" to the browser to indicate that the correct route was reached. If errors occured (as a result of the server-side validation), the login view will be returned instead, with errors.</li>
+</ul>
+
+<h3>Check the login Form</h3>
+<p>Make sure that the login view's form has the correct method and action to reach the route you just built.</p>
+<ol>
+  <li>Find and open the <span class="fn">login</span> view.</li>
+  <li>Find and check the opening &lt;form&gt; tag for the correct method and action attributes.</li>
+  <li>If needed, alter the code to look like this:
+    <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-markup">&lt;form id="loginForm" action="/account/login" method="post"&gt;</code></pre>
+  </li>
+</ol>
+<p>Ensure that there are no warnings or errors. Save the file.</p>
+
+<h3>Add the Validations</h3>
+      <p>As a team building exercise, work with your learning team to repeat the process you just did to validate the registration form, but do so for the login form - using both client-side and server-side validations. Remember that much of the code you wrote for the registration validations, is the same as what you'll need for the login validation. <span class="notice">Build the server-side rules and check functions in the same <span class="fn">account-validation</span> file. This has the benefit of keeping the account related validations in a single location for ease of maintenance and implementation.</span> In addition, don't forget to add the errors display functionality to the <span class="fn">login</span> view, just as you did previously with the <span class="fn">registration</span> view.</p>
+
+      <h2>Final Test</h2>
+        <p>When done, be sure to test to ensure that the login form's client-side and server-side validations work. When done, be sure to shut down the server in a <span title='Visual Studio Code'>VSC</span> terminal, with "<code><mark>Control + C</mark></code>".</p>
+      
+
+
+    </main>
+    <footer>
+      <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US" target="_blank"><img alt="Creative Commons License" style="border-width:0" src="//i.creativecommons.org/l/by-sa/3.0/88x31.png"></a>
+      All materials (except as noted) are by Blaine Robertson and licensed under a <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US" title="Read the license" target="_blank">Creative
+        Commons Attribution-ShareAlike 3.0 License</a>.
+    </footer>
+  </div>
+  <script src="/340-js/js/prism-coy-dev.min.js"></script>
+</body>
+
+</html>

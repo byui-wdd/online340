@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Assignment 1 | Web Backend Development</title>
+  <meta name="description" content="CSE 340 Assignment 1 directions">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="/340-js/css/340course.css" media="screen">
+</head>
+
+<body>
+  <div id="wrapper">
+    <header id="header"><img src="/340-js/images/small_banner.jpg" alt="CSE 340 Banner Image"></header>
+    <main>
+
+      <h1>Assignment 1</h1>
+      
+      <h2>Purpose</h2>
+      <p>This assignment is a review of the concepts, skills and techniques that should have been learned in previous Web Frontend Development course(s). It requires you to apply these previous skills to work with the documents and processes from the activities, for a fictitious car dealership - <b>CSE Motors</b>.
+      </p>
+      <h2>When done, you will have:</h2>
+      <ul>
+        <li>Altered the existing <span class="fn">index.ejs</span> view and the existing partial files as needed to provide a home view for the car dealership.</li>
+        <li>The resulting page will meet the standards shown in the <a href="https://blainerobertson.github.io/340-js/views/dev-checklist.html" title="Open the web development checklist in a new tab" target="_blank">Frontend
+            Checklist</a>.</li>
+        <li>The page will use EJS partials for the <span class="fn">head</span>, <span class="fn">header</span>, <span class="fn">navigation</span>, and <span class="fn">footer</span>.</li>
+        <li>The <span class="fn">index</span> page will include the content shown in the sample images (mobile and large screens).</li>
+      </ul>
+
+      <h2>Notice!</h2>
+      <p class="notice">All code must be your own. No outside templates, frameworks, code copied from the Internet, or another individual are acceptable for this assignment or future assignments in the course. Submission of work which violates this standard will result in a zero for the assignment and referral to the standards' office for disciplinary action.</p>
+
+      <h3>Video Overview</h3>
+      <p>This video provides a brief demonstration of what your finished assignment should look like and how it should behave once done. This is the <a target="_blank" href="../transcripts/assignment1.txt">Transcript</a> of the video.</p>
+      </p>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/RDV6TmvIG1g" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+
+      <h2>Assumptions</h2>
+      <p>This enhancement assumes that you can code semantic and valid HTML5, CSS3 (including the use of media queries
+        and responsive layouts) and implement basic usability concepts. The resource materials listed at the top of this document are meant to help brush up with these skills as needed.</p>
+
+      <h2>Downloads</h2>
+      <p>The starter folder that you downloaded and implemented earlier contains the images and static folders needed. It is assumed that the routes, EJS layout and partials are fully operational from completing the activities.</p>
+
+      <h2>Tasks</h2>
+
+      <h3>Build the CSE Motors Home View</h3>
+      <p>Modify the existing <span class="fn">index.ejs</span> file and partials as needed to produce the CSE Motors home view. The view must contain the content as shown in the images below:</p>
+      <ol>
+        <li>
+          <figure><img src="/340-js/images/home-large.png" alt="Picture of the CSE Motors home page for large screen" style="border: 1px solid #000; width: 75%;">
+            <figcaption><i>CSE Motors home - Large Screen</i></figcaption>
+          </figure>
+          <figure><img style="max-width: 320px;" src="/340-js/images/home-mobile.png" alt="Picture of the CSE Motors home page for mobile screen" style="border: 1px solid #000;">
+            <figcaption><i>CSE Motors home - Mobile Screen</i></figcaption>
+          </figure>
+        </li>
+        <li>The content images (shown in the pictures) are found in the <span class="fn">public &gt; images</span> folder.</li>
+        <li>Write and implement CSS to position the page content to match as closely as possible the provided images for both large screen and mobile screen layouts.</li>
+        <li>Include the <code class="language-markup">media="screen"</code> attribute for the CSS link element, </li>
+        <li>Use a color scheme of your own choosing. However,
+          <span class="notice">selected colors must pass accessibility contrast checks with no errors.</span>
+        </li>
+        <li>Use fonts of your choice, but they should provide a professional, easy to read, look and feel.</li>
+        <li>Be fully responsive to a variety of devices so that the content loads without horizontal scrolling or
+          zooming
+          (see the video illustration below), </li>
+        <li>Meet usability standards as checked using the <a href="https://wave.webaim.org/" title="Open the WAVE site in a new tab" target="_blank">WAVE browser
+            extension</a>. No accessibility or contrast errors should be present.</li>
+        </ul>
+        </li>
+        <li>Use external CSS for all styling. The CSS must:
+          <ul>
+            <li>be stored in the provided <span class="fn">public &gt; css</span> folder, </li>
+            <li>start with a mobile first approach (this means that CSS for mobile devices is outside media
+              queries), </li>
+            <li>be responsive to varying screen sizes of a variety of devices, </li>
+            <li>use media queries for responsive layout only for larger screen sizes (don't go overboard here, limit the
+              number of media queries to one or two - but remember that CSS inside media queries adjusts styles for
+              larger devices), </li>
+            <li>be of your own writing.</li>
+          </ul>
+        </li>
+        <li>be valid HTML5 and CSS3 code.</li>
+      </ol>
+
+
+      <h2>Submission</h2>
+      <ul>
+        <li>Build and test your code using the Express server development environment.</li>
+        <li>Work with your learning team to accomplish the task and post to and read the weekly discussion board to help
+          one another.</li>
+        <li>Check your work to ensure that it meets all the expectations listed.</li>
+        <li>When satisfied that the code is operational:
+          <ol>
+            <li>Upload the project to your GitHub repository.</li>
+            <li>Go to the render.com dashboard and manually deploy to your web service.</li>
+            <li>Thoroughly test the application in the browser on the production server following deployment.</li>
+            <li>Fix any and all errors prior to submission.</li>
+            <li>Submit the render.com production URL <b>AND</b> the GitHub repository URL as a comment in the assignment submission.</li>
+          </ol>
+        </li>
+      </ul>
+      <!-- <ul>
+        <li>Build and test your code using the Express server development environment.</li>
+        <li>Work with your learning team to accomplish the task and post to and read the weekly discussion board to help
+          one another.</li>
+        <li>Check your work to ensure that it meets all the expectations listed.</li>
+        <li>When satisfied that the code is operational:
+          <ol>
+            <li>Create a short video of the home page. Include in the video:
+              <ol>
+                <li>the home view as it appears in the browser.</li>
+                <li>a demonstration of the home view in the browser meeting each of the standards shown in the <a href="https://blainerobertson.github.io/340-js/views/dev-checklist.html" title="Open the web development checklist in a new tab" target="_blank">Frontend
+                    Checklist</a>. No need to show or discuss your code. Just demonstrate that the home view meets the
+                  standards listed in the frontend checklist.</li>
+              </ol>
+            </li>
+            <li>post your video to your <b>YouTube channel</b> as <b>"Unlisted"</b> and copy the link to the video when
+              published.</li>
+            <li>zip the project folder and name it "assignment 1" (save this zip file outside your project folder).</li>
+            <li>submit the zip file to the assignment 1 submission and add the video URL as a comment to the submission.</li>
+          </ol>
+        </li>
+      </ul> -->
+<h2>Resources</h2>
+<p>Here are resources that may be helpful to you as you complete this assignment.</p>
+<ul>
+  <li>Install and check usability of web pages using the <a href="https://wave.webaim.org/" target="_blank">WAVE
+      Browser Extension</a> from
+    WebAIM</li>
+  <li><a href="https://www.youtube.com/watch?v=z8xUCzToff8" target="_blank">Accessibility Fundamentals Video</a></li>
+  <li><a href="/340-js/views/web-dev-ext.html" target="_blank">Install and Use the Web Developer Extension</a></li>
+  <li>Review <a href="https://blainerobertson.github.io/230br/views/semantics.html" target="_blank">HTML Semantic Structures</a></li>
+  <li>Review <a href="https://blainerobertson.github.io/230br/views/html-syntax.html" target="_blank">HTML Syntax</a></li>
+  <li>Review the <a class="inline_disabled" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Viewport_meta_tag" target="_blank">viewport meta element</a></li>
+  <li>Review <a href="https://youtu.be/_vZScP03IuQ" data-preview-alt="View the validation &quot;how to&quot; video" target="_blank">Validating Local HTML and
+      CSS</a>(05:44
+    mins, <a href="https://docs.google.com/document/d/e/2PACX-1vSjUeATgZsd731ckiifnwXEuLQY8Yq1IkhrQb3Kqikhp0AOhmdxT_3nCN0BHiKkKM0nUKoh7fBrgntH/pub" target="_blank">"Validating
+      Local HTML and CSS" Transcript</a>)</li>
+  <li><a href="http://devdocs.io/" target="_blank">Review DevDocs.io</a>, specifically:
+    <ul>
+      <li><a href="http://devdocs.io/css/media_queries/using_media_queries" target="_blank">Using&nbsp;CSS media queries</a></li>
+    </ul>
+  </li>
+  <li>Using <a href="https://blainerobertson.github.io/230br/views/flexbox_resources.html" target="_blank">Flexbox for Responsive Layout</a></li>
+
+</ul>
+
+      <h2>Grading Matrix</h2>
+      <p>Use the grading items below to pre-grade your work as these are the grading items the professor will use
+        to grade the work.</p>
+
+        <h3>Objective 1</h3>
+      <ul>
+        <li>The home view is styled with fonts and color scheme that are professional and easy to read.</li>
+        <li>The home view is shown meeting the standards shown in the <a href="https://blainerobertson.github.io/campus340-js/views/dev-checklist.html" title="Open the web development checklist in a new tab" target="_blank">Frontend Checklist</a>.</li>
+        <li>Obj. 1 value: Refer to grade book</li>
+      </ul>
+
+      <h3>Objective 2</h3>
+      <ul>
+        <li>The home view is fully operational and delivered using the index route.</li>
+        <li>The layout and partial files are delivered successfully, along with the content, to render the complete home view.</li>
+        <li>Obj. 2 value: Refer to grade book</li>
+      </ul>
+
+      <h3>Objective 6</h3>
+      <ul>
+        <li>The render.com production URL and the GitHub repository URL are both submitted on time and correctly. Both URL's must be present and operational for the assignment to be graded.</li>
+        <li>Obj. 6 value: Refer to grade book</li>
+      </ul>
+      <!-- <h3>Objective 1</h3>
+      <ul>
+        <li>The home view is styled with fonts and color scheme that are professional and easy to read.</li>
+        <li>The home view is shown meeting the standards shown in the <a href="https://blainerobertson.github.io/340-js/views/dev-checklist.html" title="Open the web development checklist in a new tab" target="_blank">Frontend Checklist</a>.</li>
+        <li>Obj. 1 value: Refer to grade book</li>
+      </ul>
+
+      <h3>Objective 2</h3>
+      <ul>
+        <li>The home view is fully operational and delivered using the index route.</li>
+        <li>The layout and partial files are delivered successfully, along with the content, to render the complete home view.</li>
+        <li>Obj. 2 value: Refer to grade book</li>
+      </ul>
+
+      <h3>Objective 6</h3>
+      <ul>
+        <li>The video URL of the finished project is present, narrated using your own voice, and meets the stated requirements for the video. The video URL must be present and correct for the assignment to be graded.</li>
+        <li>Obj. 6 value: Refer to grade book</li>
+      </ul> -->
+
+    </main>
+  </div>
+</body>
+
+</html>

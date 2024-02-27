@@ -1,0 +1,58 @@
+Having created a PostgreSQL database service at Render.com it is now time to connect to it from a local tool.
+
+The local tool used in the video is PgAdmin4, which is produced by the people at PostgreSQL. The tool can be downloaded free at https://www.pgadmin.org/
+
+The reason for using such a tool is that no such tools exist at Render.com. You need an external tool that will allow you to create the tables and other structures and then interact with them.
+
+Getting started, make sure pgAdmin4 is downloaded, installed and running.
+
+Login to render.com and click on your PostgreSQL database service from the dashboard.
+
+Scroll down to the "Access Control" section and make sure the Source shows "0.0.0.0/0". This allows you to make a remote connection from your development computer to the remote service.
+
+Now, scroll up to the "Connections" area.
+
+Click the "copy" button on the "External Database URL" line. While here, make sure you are aware of the database name and username. Leave this browser tab open as you may want to return and copy more values.
+
+Return to pgAdmin4 on your computer.
+
+Right-click on the "Servers" icon. Select "Register > Server".
+
+A dialog box should open. Enter a name in the Name box. This is a label to help you identify this server connection from any others you may create in the future.
+
+Click the "Connection" item in the navigation bar.
+
+Click in the "Host name / address" box and paste the external database URL that you copied from render.com. This contains the name of the host server, the password, the database name and user name.
+
+Now, you will edit this string.
+
+Highlight all of the characters from the first character in the string all the way to and including the @ symbol. Delete these.
+
+Move to the end of the remaining string and select the "/" all the way to the end. Delete these characters.
+
+Jump to the render.com tab in your browser and note again the Database and User names. If they are the same, copy one of them.
+
+Return to pgAdmin4 and enter the Database name into the "Maintenance database" text box and the Username into its field.
+
+Leave the port number as 5432.
+
+Click the "Parameters" item in the navigation bar.
+
+Change the "SSL Mode" to "Require".
+
+Click the "Save" button. pgAdmin will attempt to connect but will fail as it needs the password.
+
+Go the render.com tab and click the "copy" button for the password.
+
+Return to pgAdmin and click the "Connection" item in the navigation bar.
+
+Paste the password and click the "Remember password" option if desired. Click "Save".
+
+You should now connect to the remote server.
+
+When done interacting with the remote server, you should always disconnect from it by right-clicking on the server and choosing "Disconnect from Server".
+
+The icon will change and you are disconnected.
+
+In the future, you will only have to right-click the render server and select "Connect server". All settings should be stored and will not have to be entered again, unless you chose to not remember the password.
+

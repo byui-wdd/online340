@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Deliver Registration | Web Backend Development</title>
+  <meta name="viewport" content="width=device-width" />
+  <link rel="stylesheet" href="/340-js/css/340course-min.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="/340-js/css/prism-coy-dev.min.css" media="screen" />
+</head>
+
+<body>
+  <div id="wrapper">
+    <header>
+      <img src="/340-js/images/small_banner.jpg" alt="Course Banner" />
+    </header>
+    <main>
+      <h1>Deliver Registration View</h1>
+      <h2>Introduction</h2>
+      <p>
+        In the previous activity you used the MVC process to enable the "My Account" link, and successfully deliver the <span class="fn">Login</span> view to the client. That view contained a login form and a link to request the registration view, in order to create an account. This activity is all about making the link to request the registration view work.
+      </p>
+
+      <h2>Video Overview</h2>
+      <p>The video provides a general overview of the activity, but does not contain the detail needed to complete each process. Watch the video to obtain a general idea, but follow the written steps to complete the activity. This is the <a target="_blank" href="../transcripts/account-deliver-registration-view.txt">Transcript</a> of the video.</p>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/5H0aIxO1oC0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+      <h2>The Login View</h2>
+      <p>You'll start this activity where the last one ended - in the <span class="fn">login</span> view. Why? Because there needs to be a path assigned to the link, and it needs to match the general format of the "My Account" path.</p>
+      <p>You'll recall that the path in the "My Account" link looked like this:
+      <div>
+        <code class="language-markup">href="/account/login"</code>.
+      </div>
+      The <code>account</code> element was placed in the <span class="fn">server.js</span> file as the first element of the app.use() function, while "login" was part of the router file, to indicate the actual process to be executed, if detected in the GET object. <span class="notice">Understanding the path and how it fits into the MVC process is critical to the next step.</span> The two parts of the path, as mentioned, are shown here:</p>
+      <figure>
+        <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">// Account routes
+app.use("/account", require("./routes/accountRoute"))</code></pre>
+        <figcaption>app.use for account routes in <span class="fn">server.js</span> file</figcaption>
+      </figure>
+      <figure>
+      <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">// Route to build login view
+router.get("/login", utilities.handleErrors(accountController.buildLogin))</code></pre>
+      <figcaption>router.get method for login view in <span class="fn">accountRoute.js</span> file</figcaption>
+      </figure>
+
+      
+      <ol>
+        <li>Closely examine the register link href path (if any) below the login form.</li>
+        <li>Add or modify the href path (if needed) to resemble the "My Account" path, but indicate that the "registration" view is being requested.</li>
+        <li>Save the file.</li>
+      </ol>
+
+      <h2>The Registration Route</h2>
+      <p>
+        It's time to add a new route to the <span class="fn">accountRoute</span> file, to start the delivery of the registration view.
+      </p>
+      <ol>
+        <li>Open the <span class="fn">accountRoute</span> file in the <span class="fn">routes</span> folder.</li>
+        <li>
+          Using the login route as an example (refer to the example above), build a new <code class="language-javascript">registration</code> route.
+        </li>
+        <li>As before, the route should trigger a function, found in the <span class="fn">account controller</span>, which you will need to build.</li>
+        <li>
+          Ensure no warnings or errors are displayed by
+          <span title="Visual Studio Code">VSC</span>.
+        </li>
+        <li>Save the file.</li>
+      </ol>
+
+      <h2>Account Controller</h2>
+      <p>
+        With the registration route in place, the account controller function, to process the request for the registration view, needs to be built.
+      </p>
+      <ol>
+        <li>Find and open the <span class="fn">accountController</span> file in the <span class="fn">controllers</span> folder.</li>
+        <li>
+          Add a few empty lines below the existing function to deliver the login view. Then, add a comment and a function that will deliver the registration view (you'll build it later in this activity).
+        </li>
+        <li>
+          The registration function is shown below (<mark>your names may be different that what is shown</mark>):
+          <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">/* ****************************************
+*  Deliver registration view
+* *************************************** */
+async function buildRegister(req, res, next) {
+  let nav = await utilities.getNav()
+  res.render("account/register", {
+    title: "Register",
+    nav,
+  })
+}
+
+module.exports = { buildLogin, buildRegister }
+</code></pre>
+        </li>
+        <li>
+          <h3>An Explanation</h3>
+          <ul>
+            <li>
+              <strong>Lines 1 - 3 -</strong> a multi-line comment introducing
+              the function.
+            </li>
+            <li>
+              <strong>Line 4 -</strong> begins the function, declaring it as
+              asynchronous, and passing in request, response and next as
+              parameters.
+            </li>
+            <li>
+              <strong>Line 5 -</strong> retrieves and stores the navigation
+              bar string for use in the view.
+            </li>
+            <li>
+              <strong>Line 6 -</strong> calls the render function and
+              indicates the view to be returned to the client and opens the
+              object that will carry data to the view.
+              <span class="notice">Note: the path indicates that the view is inside the "account" folder, which should be within the "views" folder.</span>
+            </li>
+            <li>
+              <strong>Lines 7-8 -</strong> the data items to be sent to the
+              view.
+            </li>
+            <li>
+              <strong>Line 9 -</strong> closes the data object and the render
+              function (opened on line 6).
+            </li>
+            <li><strong>Line 10 -</strong> closes the function.</li>
+            <li><strong>Line 11 -</strong> left intentionally blank.</li>
+            <li>
+              <strong>Line 12 -</strong> exports the function for use
+              elsewhere <mark>[Note: this function is added to the exports object, the other function name should already exist.]</mark>.
+            </li>
+          </ul>
+        </li>
+        <li>
+          Ensure no warnings or errors are displayed by
+          <span title="Visual Studio Code">VSC</span>.
+        </li>
+        <li>Save the file.</li>
+      </ol>
+
+      <h2>Registration View</h2>
+      <p>
+        With everything else done, it is time to build the <span class="fn">registration</span> view. As with
+        the other views built, it should meet the following specifications:
+      </p>
+      <ol>
+        <li>
+          Be created inside the <span class="fn">account</span> folder, within the <span class="fn">views</span> folder.
+        </li>
+        <li>
+          Be named according to the name in the render function of the
+          controller.
+        </li>
+        <li>Use the title data value for both the title and h1 elements.</li>
+        <li>Have the ability to display a flash message, if one is sent.</li>
+        <li>
+          Display a registration HTML form that accepts four inputs: first name, last name, email address and password. Each input should be of the correct input type. <mark>Remember to apply the data trail technique from the last activity to these form inputs too.</mark>
+        </li>
+        <li>
+          The form should include a button to submit the registration data. Refer to this example:
+          <div class="callout">
+            <img src="/340-js/images/registration-form.png" alt="Image of an example registration form." />
+          </div>
+        </li>
+        <li>The form should indicate that all the inputs are required and that the password must be: 
+          <ul>
+            <li>12 characters in length, minimum</li>
+            <li>contain at least 1 capital letter</li>
+            <li>contain at least 1 number</li>
+            <li>contain at least 1 special character</li>
+          </ul>
+          <span class="notice">Enforcing these requirements is not necessary at this time, as it will be added later.</span>
+        </li>
+        <li>Optionally, you can add a button to toggle the password from bullets to plain text and back. Follow the process shown in this video to add this functionality to the form:
+<p><iframe title="YouTube video player" src="https://www.youtube.com/embed/4vIkaZ1qb74" width="560" height="315" allowfullscreen="allowfullscreen"></iframe></p>
+
+        </li>
+        <li>
+          Add appropriate CSS to render the view and form professionally.
+        </li>
+        <li>
+          Ensure no warnings or errors are displayed by
+          <span title="Visual Studio Code">VSC</span>.
+        </li>
+        <li>Save the file.</li>
+      </ol>
+
+      <h2>Test Time</h2>
+      <p>
+        Okay, it is important to test the functionality that has just been added.
+      </p>
+      <ol>
+        <li>
+          Ensure that all the file names are correct, particularly those that are being required by other files.
+        </li>
+        <li>
+          Open a <span title="Visual Studio Code">VSC</span> terminal and
+          start the development server - <code class="language-javascript">pnpm run dev</code>.
+        </li>
+        <li>
+          Open a browser to <code class="language-markup">localhost:5500</code>.
+        </li>
+        <li>Click the "My Account" link in the header.</li>
+        <li>
+          The <span class="fn">login</span> view should be delivered. Find and click the link to request the registration view.
+        </li>
+        <li>The <span class="fn">registration</span> view should be delivered.</li>
+        <li>Test the view against the Frontend checklist.</li>
+        <li>
+          If everything worked, pump your fist in the air and shout "Hooray". If
+          not, review the terminal logs to see if an error is reported, get
+          help from your learning team, the TA, or the professor.
+        </li>
+        <li>Stop the local server when done testing!</li>
+      </ol>
+
+      <h2>Conclusion</h2>
+      <p>
+        Practice makes perfect. You have now repeated the entire process that you started in the previous activity. Keep up the great work!
+      </p>
+    </main>
+    <footer>
+      <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width: 0" src="//i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+      All materials (except as noted) are by Blaine Robertson and licensed
+      under a
+      <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US">Creative Commons Attribution-ShareAlike 3.0 License</a>.
+    </footer>
+  </div>
+  <script src="/340br/js/prism-coy-dev.min.js"></script>
+</body>
+
+</html>

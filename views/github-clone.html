@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Github Setup | Web Backend Development I</title>
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="/340-js/css/340course-min.css" type="text/css" media="screen">
+</head>
+
+<body>
+  <div id="wrapper">
+    <header><img src="/340-js/images/small_banner.jpg" alt="Course Banner"></header>
+    <main>
+<h1>GitHub Desktop Client</h1>
+<h2>Introduction</h2>
+<p>Before using Git or GitHub, you must first ensure that your computer has Git installed. What is Git? It is software typically used for version control. This means that this software keeps track of your code as you write it and allows you to save your code at particular points (called commits). The commits are known by Git and allow you to rewind or go back to a previous commit as needed. This is helpful when learning or experimenting.</p>
+<h2>Check for Git</h2>
+<p>You will need to check to see if Git is already installed, and what version is present. If it is missing or old, then you'll install or update to the newest version. Follow the directions below for your Operating System:</p>
+<h3>Mac</h3>
+<ol>
+  <li>Do the <span class="language-markup">Command + Spacebar</span>  keystroke combination.</li>
+  <li>Type <span class="language-markup">Terminal</span>, hit Enter.</li>
+  <li>Type <span class="language-markup">git -v</span>, hit Enter.</li>
+  <li>If version 2.x is present, you're good to go.</li>
+</ol>
+<h3>Windows</h3>
+<ol>
+  <li>Click the <span class="language-markup">search</span> tool in the dock.</li>
+  <li>Type <span class="language-markup">Command</span> - Click the "Command Prompt" option.</li>
+  <li>Type <span class="language-markup">git -v</span>, hit Enter.</li>
+  <li>If version 2.x is present, you're good to go.</li>
+</ol>
+<h2>Installing Git</h2>
+<p>If Git is not found on your computer, then go to <a title="Open the Git download page in a new tab" target="_blank" href="https://git-scm.com/download/">https://git-scm.com/download/</a>. Then:</p>
+<ol>
+  <li>Click the download link for your computer's operating system</li>
+  <li>Mac users: Install homebrew and follow the directions found on the "Download for macOS" page.</li>
+  <li>Windows users: Click the download link for the latest version at the top of the page and follow the installation directions.</li>
+</ol>
+<p>When done with the installation, repeat the git version check shown above.</p>
+<p>To interact with GitHub, we will use the Source Control built-in extension in VS Code. We will use it to clone the remote repository (repo) to the local machine.</p>
+
+<h2>Repository Cloning</h2>
+<p>Follow the process described in the video below (pause and rewind as needed) to clone the remote repository to your local machine. <mark>Note: The video will mention "web" repository and have a repository name that includes "github.io". Both of these should be ignored. The process works with any repo. Use the repo you created on GitHub for our class as you follow along.</mark></p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/pVQCJ6sY8AQ" title="YouTube video player"
+  frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowfullscreen></iframe>
+
+<h2>Commit and Sync Content</h2>
+<p>In this video you will use VS Code to create and commit content to the Git version controller and sync the content between the local and remote repositories. When done you will confirm that the content has been backed up to GitHub. Remember to pause and rewind as needed until done. Check the outcomes list at the bottom of the page when finished.</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Wkg3WyP3SHY" title="YouTube video player"
+  frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowfullscreen></iframe>
+  <h3>Note</h3>
+  <p>If, at the ~3:20 mark, after clicking the <span class="language-markup">Commit</span> button, the green button does NOT change to "Sync" or "Publish", then you will force the push of the new file to the GitHub repo. To do this:</p>
+  <ol>
+    <li>Hover you mouse over the "SOURCE CONTROL" line.</li>
+    <li>Click the ellipse (...) icon, on the right.</li>
+    <li>Click the "Push" item (3rd from the top).
+      <div class="callout"><img src="/340-js/images/force-push.png" alt="Force push of file to remote repo"></div>
+    </li>
+    <li>When done, go to the remote repo on GitHub and reload the page in the browser. You should see your new file.</li>
+  </ol>
+
+<h2>Outcomes</h2>
+<ol>
+  <li>The remote repository was successfully created, then cloned, to the local computer.</li>
+  <li>A simple web page was created, then committed and synced with the remote repository using the source control tool of VS Code.</li>
+</ol>
+<p>If either of these outcomes was not successful, go back and review the process and/or get help until both have been completed.</p>
+
+    </main>
+    <footer>
+      <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License"
+          style="border-width:0" src="//i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a> All materials (except as
+      noted) are by Blaine Robertson and licensed under a <a rel="license"
+        href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US">Creative Commons Attribution-ShareAlike 3.0
+        License</a>. </footer>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>
+      Inventory Delivery By Classification | Web Backend Development
+    </title>
+    <meta
+      name="description"
+      content="Inventory Delivery By Classification activity for the CSE Motors site of CSE 340" />
+    <meta name="viewport" content="width=device-width" />
+    <link
+      rel="stylesheet"
+      href="/340-js/css/340course-min.css"
+      type="text/css"
+      media="screen" />
+
+    <link
+      rel="stylesheet"
+      href="/340-js/css/prism-coy-dev.min.css"
+      media="screen" />
+  </head>
+
+  <body>
+    <div id="wrapper">
+      <header id="header">
+        <img src="/340-js/images/small_banner.jpg" alt="CSE 340 Banner Image" />
+      </header>
+      <main>
+        <h1>Inventory Delivery By Classification</h1>
+        <p>
+          With the initial implementation of M-V-C complete, we are ready to put
+          it to work to deliver content. Our content consists of vehicles in inventory by
+          classification as well as information about individual vehicle. This
+          activity deals with delivering vehicles in inventory based on their classification.
+        </p>
+
+        <h2>Video Overview</h2>
+        <p>The video provides a general overview of the activity, but does not contain the detail needed to complete each process. Watch the video to obtain a general idea, but follow the written steps to complete the activity. This is the <a target="_blank" href="../transcripts/inventory-classification-process.txt">Transcript</a> of the video.</p>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/MpywtylaOSo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+        <h2>Inventory Routes</h2>
+        <p>
+          In the last activity, you built a dynamic navigation bar containing
+          links from the classifications in the csemotors database. Now we will
+          add the logic and structure to deliver inventory items, based on their
+          classification, to the browser when a navigation link is clicked.
+        </p>
+        <ol>
+          <li>
+            Open the working project in
+            <span title="Visual Studio Code">VSC</span>.
+          </li>
+          <li>
+            Create a new file, named <span class="fn">inventoryRoute.js</span> in the
+            <span class="fn">routes</span> folder.
+          </li>
+          <li>
+            At the top of the new file three resources must be declared, so they
+            can be used: Express, and new Express router, and an inventory
+            controller (which will be built later in this activity). The code
+            shown below should accomplish this:
+            <pre
+              class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-javascript">// Needed Resources 
+const express = require("express")
+const router = new express.Router() 
+const invController = require("../controllers/invController")
+</code></pre>
+          </li>
+          <li>
+            <h3>An Explanation</h3>
+            <ul>
+              <li>
+                <strong>Line 1 -</strong> a comment for the lines to follow.
+              </li>
+              <li>
+                <strong>Line 2 -</strong> brings Express into the scope of the
+                file.
+              </li>
+              <li>
+                <strong>Line 3 -</strong> uses Express to create a new <code class="language-javascript">Router</code> 
+                object. Remember in lesson 2 that using separate router files
+                for specific elements of the application would keep the
+                server.js file smaller and more manageable? That's what we're
+                doing.
+              </li>
+              <li>
+                <strong>Line 4 -</strong> brings the inventory controller into
+                this router document's scope to be used.
+              </li>
+            </ul>
+          </li>
+        </ol>
+
+        <h3>Add the Route</h3>
+        <p>
+          When visiting a car dealer site, it is not uncommon to filter the
+          inventory in some way: make, price, or type. Our goal with
+          this route is the latter, to indicate that we wish to see all the
+          vehicles in inventory of a particular type, based on which navigation link was
+          clicked.
+        </p>
+
+        <p>
+          If you were to go to the <span class="fn">index.js</span> file in the <span class="fn">utilities</span> folder and
+          look at the code in the <code class="language-javascript">getNav()</code> function, you would find that the
+          path for each link looks something like this:
+          <code class="language-javascript">/inv/type/#</code>. The "#" would be replaced by an integer,
+          which is the <code class="language-javascript">classification_id</code> value of the classification. The route
+          we build must match the route found in the link. Add the following
+          lines of code to the <span class="fn">inventoryRoute</span> file, below the
+          lines previously entered:
+        </p>
+
+        <pre
+          class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">// Route to build inventory by classification view
+router.get("/type/:classificationId", invController.buildByClassificationId);
+
+module.exports = router;
+</code></pre>
+
+        <h3>An Explanation</h3>
+        <ul>
+          <li><strong>Line 1 -</strong> a comment for the route.</li>
+          <li>
+            <strong>Line 2 -</strong> the route, which is divided into three
+            elements:
+            <ul>
+              <li>
+                "get" indicates that the route will listen for the GET method
+                within the request (typically a clicked link or the URL itself).
+              </li>
+              <li>
+                <code class="language-javascript">/type/:classificationId</code> the route being watched for (note that
+                the <code class="language-javascript">inv</code> element of the route is missing, but it will be
+                accounted for later).
+              </li>
+              <li>
+               <code class="language-javascript">invController.buildByClassification</code> indicates the <code class="language-javascript">buildByClassification</code>
+               function within the <span class="fn">invController</span> will
+                be used to fulfill the request sent by the route.
+              </li>
+            </ul>
+          </li>
+          <li><strong>Line 3 -</strong> left intentionally blank.</li>
+          <li>
+            <strong>Line 4 -</strong> exports the router object for use
+            elsewhere.
+          </li>
+          <li>
+            Check that <span title="Visual Studio Code">VSC</span> does not show
+            any warnings or errors for the code.
+          </li>
+          <li>Save the file.</li>
+        </ul>
+
+        <h2>server.js File</h2>
+        <p>
+          With the inventory route file built, let's incorporate its
+          functionality into the <span class="fn">server.js</span>  file.
+        </p>
+        <ol>
+          <li>Open the <span class="fn">server.js</span> file.</li>
+          <li>At the top of the file, find the "Require Statements" area and require the inventory route file you just created. Use the variable <code>inventoryRoute</code> to store the required resource. <mark>Use the require statement for the static file as an example.</mark></li>
+          <li>Scroll down to the "Routes" area of the file.</li>
+          <li>
+            Beneath the "Index route" add the following code:
+            <pre
+              class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">// Inventory routes
+app.use("/inv", inventoryRoute)
+</code></pre>
+          </li>
+          <li>
+            <h3>An Explanation</h3>
+            <ul>
+              <li>
+                <strong>Line 1 -</strong> A comment to introduce the route
+              </li>
+              <li>
+                <strong>Line 2 -</strong> composed of three elements:
+                <ul>
+                  <li>
+                    <code class="language-javascript">app.use()</code> is an Express function that directs the application to
+                    use the resources passed in as parameters.
+                  </li>
+                  <li>
+                    <code class="language-javascript">/inv</code> is a keyword in our application, indicating that a route
+                    that contains this word will use this route file to work
+                    with inventory-related processes; "inv" is simply a short
+                    version of "inventory".
+                  </li>
+                  <li>
+                    <code class="language-javascript">inventoryRoute</code> is the variable representing the <code class="language-JavaScript">inventoryRoute.js</code> file which was required (brought into
+                    the scope of the <span class="fn">server.js</span> file) earlier.
+                  </li>
+                </ul>
+              </li>
+              <li>
+                In short, any route that starts with <code class="language-javascript">/inv</code> will then be redirected to
+                the <span class="fn">inventoryRoute.js</span> file, to find the rest of the route in
+                order to fulfill the request.
+              </li>
+            </ul>
+          </li>
+        </ol>
+
+        <h2>The Inventory Controller</h2>
+        <p>
+          In the <span class="fn">inventoryRoute</span> file, we indicated that the inventory
+          controller would be required and a function within that controller
+          would be used. It's time to build this controller and the function.
+        </p>
+        <ol>
+          <li>
+            Find the <span class="fn">controllers</span> folder, click it, then create a new file
+            named <span class="fn">invController.js</span>.
+          </li>
+          <li>
+            Add the code shown below to the controller file:</li>
+            </ol>
+
+            <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-javascript">const invModel = require("../models/inventory-model")
+const utilities = require("../utilities/")
+
+const invCont = {}
+
+/* ***************************
+ *  Build inventory by classification view
+ * ************************** */
+invCont.buildByClassificationId = async function (req, res, next) {
+  const classification_id = req.params.classificationId
+  const data = await invModel.getInventoryByClassificationId(classification_id)
+  const grid = await utilities.buildClassificationGrid(data)
+  let nav = await utilities.getNav()
+  const className = data[0].classification_name
+  res.render("./inventory/classification", {
+    title: className + " vehicles",
+    nav,
+    grid,
+  })
+}</code></pre>
+
+<ol start="3">
+          <li>
+            <h3>An Explanation</h3>
+            <ul>
+              <li>
+                <strong>Line 1 -</strong> brings the <span class="fn">inventory-model.js</span>  file
+                into scope and stores its functionality into a <code class="language-javascript">invModel</code> variable.
+              </li>
+              <li>
+                <strong>Line 2 -</strong> brings the <span class="fn">utilities &gt; index.js</span> file into scope and stores its functionality into an <code class="language-javascript">utilities</code> variable.
+              </li>
+              <li><strong>Line 3 -</strong> left intentionally blank.</li>
+              <li>
+                <strong>Line 4 -</strong> creates an empty object in the <code class="language-javascript">invCont</code> variable.
+              </li>
+              <li><strong>Line 5 -</strong> left intentionally blank.</li>
+              <li><strong>Lines 6-8 -</strong> a multi-line comment.</li>
+              <li>
+                <strong>Line 9 -</strong> creates an asynchronous, anonymous
+                function which accepts the <code class="language-javascript">request</code> and <code class="language-javascript">response</code> objects,
+                along with the Express <code class="language-javascript">next</code> function as parameters. The
+                function is stored into a named method of <code class="language-javascript">buildByClassificationId</code>.
+              </li>
+              <li>
+                <strong>Line 10 -</strong> collects the <code class="language-javascript">classification_id</code> that
+                has been sent, as a named parameter, through the URL and stores it into the <code class="language-javascript">classification_id</code> variable.
+                <p class="notice">
+                  <code class="language-javascript">req</code> is the request object, which the client sends to the
+                  server. <code class="language-javascript">params</code> is an Express function, used to represent
+                  data that is passed in the URL from the client to the server.
+                  <code class="language-javascript">classificationId</code> is the name that was given to the
+                  <code class="language-javascript">classification_id</code> value in the <span class="fn">inventoryRoute.js</span> file (see
+                  line 7 of that file).
+                </p>
+              </li>
+              <li>
+                <strong>Line 11 -</strong> calls the <code class="language-javascript">getInventoryByClassificationId</code> function (you'll build that next), which is in the
+                <span class="fn">inventory-model</span> file and passes the <code class="language-javascript">classification_id</code> as a
+                parameter. The function "awaits" the data to be returned, and
+                the data is stored in the <code class="language-javascript">data</code> variable.
+              </li>
+              <li>
+                <strong>Line 12 -</strong> calls a utility function to build a grid, containing all vehicles within that classification (you'll build this later in this activity). Note that the "data" array is passed in as a parameter. An HTML string, containing a grid, is returned and stored in the <span class="fn">grid</span> variable.
+              </li>
+              <li>
+                <strong>Line 13 -</strong> calls the function to build the
+                navigation bar for use in the view and stores it in the <code class="language-javascript">nav</code> variable.
+              </li>
+              <li>
+                <strong>Line 14 -</strong> extracts the name of the
+                classification, which matches the <code class="language-javascript">classification_id</code>, from the
+                data returned from the database and stores it in the <code class="language-javascript">className</code> variable.
+              </li>
+              <li>
+                <strong>Line 15 -</strong> calls the Express <code class="language-javascript">render</code> function
+                to return a view to the browser. The view to be returned is
+                named <span class="fn">classification</span>, which will be created within an <span class="fn">inventory</span> folder, within the already existing <span class="fn">views</span> folder.
+              </li>
+              <li>
+                <strong>Line 16 -</strong> build the "title" value to be used in
+                the head partial, but you'll notice that it is dynamic to match
+                the data.
+              </li>
+              <li>
+                <strong>Line 17 -</strong> contains the <code class="language-javascript">nav</code> variable, which
+                will display the navigation bar of the view.
+              </li>
+              <li>
+                <strong>Line 18 -</strong> contains the HTML string, containing the - <code class="language-javascript">grid</code> -
+                of inventory items.
+              </li>
+              <li>
+                <strong>Line 19 -</strong> ends the "render" function which
+                started on line 11.
+              </li>
+              <li>
+                <strong>Line 20 -</strong> ends the function started on line 9.
+              </li>
+            </ul>
+          </li>
+
+          <li>
+            Add two empty lines at the bottom of the file. On the last empty
+            line add the following export statement:
+            <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">
+  module.exports = invCont
+</code></pre>
+          </li>
+          <li>
+            Check that <span title="Visual Studio Code">VSC</span> does not show
+            any warnings or errors.
+          </li>
+          <li>Save the file.</li>
+        </ol>
+
+        <h2>The Inventory Model</h2>
+        <p>
+          In the controller function, a function from the inventory model is
+          called in order to get vehicles that belong to a particular
+          classification. It's time to add this function to the model file.
+        </p>
+        <ol>
+          <li>
+            Find and open the <span class="fn">inventory-model.js</span> file in the <span class="fn">models</span> folder.
+          </li>
+          <li>
+            Create several empty lines between the existing function and the
+            module.exports line.
+          </li>
+          <li>
+            Leaving one empty line between the existing function and the new
+            function, create the new function as shown:</li>
+            </ol>
+
+            <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-javascript">/* ***************************
+ *  Get all inventory items and classification_name by classification_id
+ * ************************** */
+async function getInventoryByClassificationId(classification_id) {
+  try {
+    const data = await pool.query(
+      `SELECT * FROM public.inventory AS i 
+      JOIN public.classification AS c 
+      ON i.classification_id = c.classification_id 
+      WHERE i.classification_id = $1`,
+      [classification_id]
+    )
+    return data.rows
+  } catch (error) {
+    console.error("getclassificationsbyid error " + error)
+  }
+}</code></pre>
+<ol start="4">
+          <li>
+            <h3>An Explanation</h3>
+            <ul>
+              <li>
+                <strong>Lines 1-3 -</strong> a multi-line comment.
+              </li>
+              <li>
+                <strong>Line 4 -</strong> declares an asynchronous function by
+                name and passes a variable, which should contain the
+               <code class="language-javascript">classification_id</code> value, as a parameter.
+              </li>
+              <li><strong>Line 5 -</strong> opens a try - catch block.</li>
+              <li>
+                <strong>Lines 6-12 -</strong> creates an SQL query to read the
+                inventory and classification information from their respective
+                tables using an INNER JOIN. The query is written using a
+                prepared statement. The "$1" is a placeholder, which will be
+                replaced by the value shown in the brackets "[]" when the SQL
+                statement is run. The SQL is queried against the database via
+                the database pool. Note the <code class="language-javascript">await</code> keyword, which means this
+                query will wait for the information to be returned, where it
+                will be stored in the <code class="language-javascript">data</code> variable.
+              </li>
+              <li>
+                <strong>Line 13 -</strong> sends the data, as an array of all the
+                rows, back to where the function was called (in the controller).
+              </li>
+              <li>
+                <strong>Line 14 -</strong> ends the <code class="language-javascript">try</code> and opens the <code class="language-javascript">catch</code>,
+                with an <code class="language-javascript">error</code> variable being supplied to store any error that
+                may occur.
+              </li>
+              <li>
+                <strong>Line 15 -</strong> writes the error, if any, to the
+                console for us to read. We will have to deal with a better error
+                handler in the future.
+              </li>
+              <li><strong>Line 16 -</strong> closes the <code class="language-javascript">catch</code> block.</li>
+              <li><strong>Line 17 -</strong> ends the function.</li>
+              <li>
+               <span class="notice"> Very important! This function must now be included in the
+                  exports at the bottom of the file. If not, it will not be
+                  usable by the controller.</span></li>
+              <li>
+                Add the function to the module.exports code, like this:
+                <pre
+                  class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">module.exports = {getClassifications, getInventoryByClassificationId};
+</code></pre>
+              </li>
+            </ul>
+          </li>
+          <li>
+            Ensure that <span title="Visual Studio Code">VSC</span> does not
+            show any warnings or errors.
+          </li>
+          <li>Save the file.</li>
+        </ol>
+
+        <h2>The buildClassificationGrid Function</h2>
+        <p>In the previous activity, you created a utility file for storing functions that are not directly part of the M-V-C process. That is where you will build this function. Its purpose is to take an array of inventory items, break each item and its data out of the array and embed it into HTML. When done, there will be a string that will be embedded into the view. It will need CSS styling to be applied to make it look appropriate. But, let's build the function:</p>
+        <ol>
+          <li>Find and open the <span class="fn">utilities &gt; index.js</span> file.</li>
+          <li>Move below the existing function, create several blank lines and create the function.</li>
+        </ol>
+<pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-javascript">/* **************************************
+* Build the classification view HTML
+* ************************************ */
+Util.buildClassificationGrid = async function(data){
+  let grid
+  if(data.length &gt; 0){
+    grid = '&lt;ul id="inv-display"&gt;'
+    data.forEach(vehicle =&gt; { 
+      grid += '&lt;li&gt;'
+      grid +=  '&lt;a href="../../inv/detail/'+ vehicle.inv_id 
+      + '" title="View ' + vehicle.inv_make + ' '+ vehicle.inv_model 
+      + 'details"&gt;&lt;img src="' + vehicle.inv_thumbnail 
+      +'" alt="Image of '+ vehicle.inv_make + ' ' + vehicle.inv_model 
+      +' on CSE Motors" /&gt;&lt;/a&gt;'
+      grid += '&lt;div class="namePrice"&gt;'
+      grid += '&lt;hr /&gt;'
+      grid += '&lt;h2&gt;'
+      grid += '&lt;a href="../../inv/detail/' + vehicle.inv_id +'" title="View ' 
+      + vehicle.inv_make + ' ' + vehicle.inv_model + ' details"&gt;' 
+      + vehicle.inv_make + ' ' + vehicle.inv_model + '&lt;/a&gt;'
+      grid += '&lt;/h2&gt;'
+      grid += '&lt;span&gt;$' 
+      + new Intl.NumberFormat('en-US').format(vehicle.inv_price) + '&lt;/span&gt;'
+      grid += '&lt;/div&gt;'
+      grid += '&lt;/li&gt;'
+    })
+    grid += '&lt;/ul&gt;'
+  } else { 
+    grid += '&lt;p class="notice"&gt;Sorry, no matching vehicles could be found.&lt;/p&gt;'
+  }
+  return grid
+}</code></pre>
+<ol start="3">
+  <li><h3>An Explanation</h3>
+  <ul>
+    <li><strong>Lines 1-3 - </strong> A multi-line comment.</li>
+    <li><strong>Line 4 - </strong> declares the function as asynchronous and expects a <span class="fn">data</span> array as a parameter.</li>
+    <li><strong>Line 5 - </strong> declares a variable to hold a string.</li>
+    <li><strong>Line 6 - </strong> an "if" to see if the array is not empty.</li>
+    <li><strong>Line 7 - </strong> creates an unordered list element and adds it to the <span class="fn">grid</span> variable.</li>
+    <li><strong>Line 8 - </strong> sets up a "forEach" loop, to break each element of the data array into a <span class="fn">vehicle</span> object.</li>
+    <li><strong>Lines 9-25 - </strong> builds a single HTML &lt;li&gt;. Withing the list item is an &lt;a&gt; element that surrounds an &lt;img&gt; element. Next is a &lt;div&gt; that contains a horizontal rule, followed by an &lt;h2&gt; that contains another &lt;a&gt; with the Make and Model of the vehicle. Finally, is a &lt;span&gt; that contains a formatted price, in US dollars.</li>
+    <li><strong>Line 26 - </strong> closes the foreach process.</li>
+    <li><strong>Line 27 - </strong> closes the unordered list.</li>
+    <li><strong>Line 28 - </strong> ends the "if" and opens an "else". The else is executed if the <span class="fn">data</span> array is empty.</li>
+    <li><strong>Line 29 - </strong> stores a &lt;p&gt; with a message indicating that no vehicles match the classification.</li>
+    <li><strong>Line 30 - </strong> ends the "else".</li>
+    <li><strong>Line 31 - </strong> returns the variable to the calling location.</li>
+    <li><strong>Line 32 - </strong> ends the function.</li>
+  </ul>
+  </li>
+  <li><span class="notice">Be sure to carefully review the code, particularly lines 9 through 25 to understand the structure and what is happening.</span></li>
+  <li>Ensure there are no warnings or errors.</li>
+  <li>Save the file.</li>
+</ol>
+
+        <h2>Have you paid attention to the function names?</h2>
+        <p>
+          I trust that as you have built the functions in the inventory model
+          that you noticed that while we added comments, the function names should clearly describe what they do. Feel free to add to the comments. Whatever you do, be sure to make
+          your function names clear and meaningful to describe their purpose.
+        </p>
+
+        <h2>Take a Breath</h2>
+        <p>
+          Feel like you just ran a half-marathon? I don't blame you. But, if
+          you're here, it means that you finished everything up to this point.
+          All that's left is to build the view and deploy it to the server, so we
+          can see if it works. Let's build the view in the next activity.
+        </p>
+      </main>
+      <footer>
+        <a
+          rel="license"
+          href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"
+          target="_blank"
+          ><img
+            alt="Creative Commons License"
+            style="border-width: 0"
+            src="//i.creativecommons.org/l/by-sa/3.0/88x31.png"
+        /></a>
+        All materials (except as noted) are by Blaine Robertson and licensed
+        under a
+        <a
+          rel="license"
+          href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"
+          title="Read the license"
+          target="_blank"
+          >Creative Commons Attribution-ShareAlike 3.0 License</a
+        >.
+      </footer>
+    </div>
+    <script src="/340br/js/prism-coy-dev.min.js"></script>
+  </body>
+</html>

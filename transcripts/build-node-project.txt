@@ -1,0 +1,16 @@
+To "build" an application is very much running a pnpm command and it does the rest.
+
+Ensure that VS code is running and the working project folder is open within VS code.
+
+There should be a package.json file present in the project. Remember that this file is a manifest of all packages that the project needs to operate.
+
+Open the VS Code terminal. Type "pnpm install", then press Enter. Pnpm will build the application. You can see each step of the process in the terminal.
+
+When an application is "built", pnpm will read the package.json file and install the packages listed in the package.json file into a "node_modules" folder, and will create a "pnpm-lock.yaml" file.
+
+The contents of both of these new items should not be altered in any way at any time.
+
+When done, you will edit the .gitignore file to list both items so that GIT will not track either and neither will be uploaded to a remote repository.
+
+That's it. Building the application is very simple, but an absolute requirement for any Node-based project.
+

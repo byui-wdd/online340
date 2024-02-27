@@ -1,0 +1,58 @@
+In this video I will demonstrate Task Two for Assignment  Two. Before beginning, I suggest three things: 1) already be logged in to the Render.com dashboard, 2) have pgAdmin open and the master password entered, but the remote connection should NOT be active, 3) have the SQL file containing all of the creation code from the activities open in VS Code. Ensure that this file also contains the final query from Task 1 in it, as the very last code. Remember, in this file, order matters!
+
+As you can see, I am in my render.com dashboard, and this is my database.
+
+I click on the database, then scroll to the bottom. When I click to delete the database, a message appears telling me that I have to type  the line of code. 
+
+Instead, I'll  copy the command and paste it into the text box. Then, click "Delete the Database".
+
+While I am already in the dashboard, I will create the new database. Start by clicking the "New" button and select "PostgreSQL".
+
+I will give it a name similar to what I had previously. Then,   I will copy that and  paste it twice.
+
+Obviously you can use whatever name you want, but because the previous name was already used, this name must be slightly different..
+
+Select the server closest to your location, and leave the version at the default, which should be the latest stable release.
+
+Leave it on the free tier, and click "Create Database". Remember that when you created the database previously, it took some time to be "available". Therefore,  I'm going to pause my video until it is done.
+
+The database is now available. Scroll to the bottom and ensure that the external IP address remain available and uses 0.0.0.0/0.
+
+Scrolling up slightly, I will now click the "Copy" button for the external database URL.
+
+Returning to pgAdmin, which I already have running, I will right-click and delete the existing connection to my remote Render.com server.
+
+Then, right-click on server and select "Register > Server".
+
+I will reuse the previous name in the name box of the "General" tab.
+
+Click the "Connection" tab and paste the remote URL in the "Host name/address" box. 
+
+As before, highlight everthing from the first character to and including the "@" symbol, then delete.
+
+Moving to the end of the string, highlight the forward slash and everything to the end. Delete it.
+
+I will return to my browser and copy the password for the render database and remind myself of the database and user names. If they are the same, it make it easy.
+
+Returning to pgAdmin, I put the database and usernames in the Maintenance database and Username fields, and leave the Port value at 5432. I will also paste the password into the "Password" field and turn on the "Remember Password" option.
+
+The last step is to click the "Parameters" tab and change the sslmode to be "require". 
+
+Finally, Click "Save".
+
+The database should connect.
+
+Expanding the database and schema you should see there are no types or tables. Everything needs to be recreated.
+
+Find and open the SQL file that you created during the initial building of the database type, tables and data insertions in VS Code. Make sure that the final query, from Task 1 of this assignment is included at the very bottom of the SQL file being copied. Copy everything.
+
+Returning to pgAdmin4, find  "public" , under the "Schemas" item. Right-click and select "Query Tool". Paste the copied code into the new work space. Click the "Execute / Refresh" button. 
+
+It should take less than a second to rebuild everything. Right-click the "public" schema and select "Refresh". 
+
+Moving down and expanding the Type item, should reveal the "account_type"; likewise, expanding the tables item, all three tables should be present.
+
+Finally, right-clicking the classification or inventory table and selecting "View / Edit Data > All Rows" should display all of the data.
+
+That's it. Everything has been rebuilt and restored. That's what Task 2 shoulld look like.
+

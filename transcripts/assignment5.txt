@@ -1,0 +1,26 @@
+Assignment 5, the last of the unit assignments, is important for several reasons.
+
+First, it assumes that you are comfortable working in the MVC architecture. Second, you can read basic requirements and work though the development process alone or consulting with others in your learning team to plan and write a solution. Third, you are comfortable troubleshooting and overcoming obstacles as they occur. It also serves as a warmup to the final project which will follow.
+
+This assignment consists of six tasks.
+
+Task 1 calls for altering the header partial file in order to hide the "My Account" link when the client is logged in and display instead a "Logout" link. In addition, a welcome message, which is a link to the account management view, is also displayed when the client is logged in, but removed when they are not.
+
+Task 2 requires you to write middleware to check the account type for the logged in client and only allow employee or admin types into restricted areas of the application as described in the directions.
+
+Task 3 is to alter the account management view based on the account type. However, the ability to begin an account update process will be added for all clients to the view, regardless of the account type of the client.
+
+Task 4 involves building the view where the client can edit their registration information or change a password. These are two separate items allowing the client to change data without changing the password, and vice versa.
+
+Task 5 is to build the route, controller and model processes to deliver and process the account update processes from tasks 3 and 4.
+
+Finally, task 6 is to build the actually logout process.
+
+The final functionality of all tasks must be thoroughly tested in the development environment. Once satisified that everything is working, and the views meet the frontend checklist requirements, the application is deployed to the production environment.
+
+Once deployed, it must be thoroughly tested to ensure it continues to work. It should also be checked against the provided grading criteria by yourself and possibly another member of your learning team.
+
+After testing, follow the submission directions.
+
+Good luck as you work on this assignment.
+

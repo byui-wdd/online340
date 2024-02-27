@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Update Inventory Information (Step 1) | Web Backend Development</title>
+  <meta name="description" content="The update process for inventory information is begun in this activity where the data to be updated is selected and displayed, so the update can occur in the learning project for CSE 340">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="/340-js/css/340course-min.css" type="text/css" media="screen">
+  <link rel="stylesheet" href="/340-js/css/prism-coy-dev.min.css" media="screen">
+  <script defer src="/340-js/js/prism-coy-dev.min.js"></script>
+</head>
+
+<body>
+  <div id="wrapper">
+    <header id="header"><img src="/340-js/images/small_banner.jpg" alt="CSE 340 Banner Image"></header>
+    <main>
+      <h1>Update Inventory Information (Step 1)</h1>
+      <h2>Updating is a Two-Step Process</h2>
+      <p>An update requires two steps: 1) Once it is determined an update is occurring, the information to be changed
+        has to be requested from the database and made available to be edited; 2) When the edit is completed, the data
+        must then be stored back into the database and the user informed of the success or failure of the change. This
+        document covers step 1: getting the data from the database and displaying it for the change to occur.</p>
+
+      <h2>Video Demonstration</h2>
+      <p>The video provides a general overview of the activity, but does not contain the detail needed to complete each process. Watch the video to obtain a general idea, but follow the written steps to complete the activity. This is the <a target="_blank" href="../transcripts/update
+        -step1.txt">Transcript</a> of the video.</p>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/RIzYK1k7c-g" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+      <h2>Request Data to be Changed</h2>
+      <p>In the "Select Inventory" activity the make, model and id of each vehicle from inventory was queried from the database and used
+        to build a table where the vehicle make and model were displayed and links to begin the modify (update) and
+        delete processes were provided. When the "Modify" link is clicked, the URL is directed to the <b>inventory</b>
+        route, and then passed to the controller. Within the route is sent the inventory_id of the item to be
+        modified. Let's get started:</p>
+
+      <h2>The Inventory Route</h2>
+      <p>If you look closely at the route associated with the "Modify" item in the table which has been injected into
+        the <b>inventory management</b> view, you will see something like this:
+      <pre><code class="language-markup">localhost:5500/inv/edit/#</code></pre>
+      </p>
+      <p>Remember that "#" in the example, represents the "inventory id" value of the vehicle.</p>
+      <ol>
+        <li>Find and open the "inventory route" file.</li>
+        <li>Add a new route that matches the path shown above, and add a parameter to the end of the route to represent the inventory_id value that will be passed in through the URL.</li>
+        <li>Add a controller-based function to handle the incoming "get" request. [Notice that you are picking your own name for this function. Make sure the name represents that this is going to present a view to allow editing of the item's information.]</li>
+        <li>Don't forget to add the error handler to the route.</li>
+        <li>Be sure to have a proper comment for the route.</li>
+        <li>Look for and fix any warnings or errors.</li>
+        <li>Save the file.</li>
+      </ol>
+
+      <h3>The Inventory Controller</h3>
+      <p>As with previous interaction processes in the controller we will start by adding an appropriate function to handle the request.</p>
+      <ol>
+        <li>Open the <b>inventory</b> controller.</li>
+        <li>Scroll down and add space for the new function, at the bottom of the file, between the last function and the module.exports statement.</li>
+        <li>We will speed up the process, by borrowing some existing code. Find and copy the comment and function used to build the "Add new inventory view", which should already exist in the controller.</li>
+        <li>Paste the function into the empty space you created at the bottom of the controller.</li>
+        <li>Modify the comment and function name to indicate that this will build the "edit inventory" view. <mark>Make sure the function name matches the name you used in the route!</mark></li>
+        <li>Collect and store the incoming inventory_id as an integer (use the <i>parseInt</i> function in the collection and storage process) in a local variable.</li>
+        <li>Change the file name in the "render" function to be something like "edit-inventory", instead of "add-inventory".
+        </li>
+        <li>Between the call to the nav building function and the build classification select list function create a new empty line.</li>
+        <li>In the empty line, call the model-based function to get all the inventory item data, based on the inventory_id. This function should already exist in the model. Pass the collected inventory_id into the function as a parameter.</li>
+        <li>From the returned data, create a "name" variable to hold the Make and Model of the inventory item and append it into the "title" property of the data object. This should appear in the title and h1 elements of the view when rendered in the browser.</li>
+        <li>Add variables holding the item's information to the data object to be sent to the view.</li>
+        <li>When done, the function could look something like this:
+          <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-javascript">/* ***************************
+ *  Build edit inventory view
+ * ************************** */
+invCont.editInventoryView = async function (req, res, next) {
+  const inv_id = parseInt(req.params.inv_id)
+  let nav = await utilities.getNav()
+  const itemData = await invModel.getInventoryById(inv_id)
+  const classificationSelect = await utilities.buildClassificationList(itemData.classification_id)
+  const itemName = `${itemData.inv_make} ${itemData.inv_model}`
+  res.render("./inventory/edit-inventory", {
+    title: "Edit " + itemName,
+    nav,
+    classificationSelect: classificationSelect,
+    errors: null,
+    inv_id: itemData.inv_id,
+    inv_make: itemData.inv_make,
+    inv_model: itemData.inv_model,
+    inv_year: itemData.inv_year,
+    inv_description: itemData.inv_description,
+    inv_image: itemData.inv_image,
+    inv_thumbnail: itemData.inv_thumbnail,
+    inv_price: itemData.inv_price,
+    inv_miles: itemData.inv_miles,
+    inv_color: itemData.inv_color,
+    classification_id: itemData.classification_id
+  })
+}</code></pre>
+        </li>
+        <li>Ensure that no warnings or errors exist.</li>
+        <li>Save the file.</li>
+      </ol>
+
+      <h3>Inventory Update View</h3>
+      <p>This view has to do double duty, 1) display the data from the database to allow it to be modified prior to storing it back into the database, and 2) be able to handle errors upon submission just as we did when inserting the data for the new inventory item. Because some of that work is already done in the <b>add inventory</b> view, we will capitalize by duplicating that view and then making some changes.</p>
+      <ol>
+        <li>Find and open the <b>add inventory</b> view.</li>
+        <li>Do a "Save As..." and save the view into the "<b>views > inventory</b>" folder, but change the name to match the name used in the render function of the controller handler.
+        </li>
+
+        <li>Look for any text indicating that you are "adding" a new item. Delete all references to "adding" and replace them with "modifying" or "editing".</li>
+        <li>Scroll down into the opening form element and change the value to reflect that a "post" request is being made to update the inventory data. When done it could look something like this:
+          <pre><code class="language-markup">&lt;form action="/inv/update" method="post"&gt;</code></pre>
+        </li>
+        <li>Find the "submit" input and change its value to reflect that an update is happening. When done it could look like one of these two examples:
+          <pre><code class="language-markup">&lt;input type="submit" name="submit" value="Update Vehicle"&gt;</code></pre>
+          <p><mark>OR</mark></p>
+          <pre><code class="language-markup">&lt;button type="submit"&gt;Update Vehicle&lt;/button&gt;</code></pre>
+        </li>
+
+        <li>Rather than doing extensive remodeling of the existing code, we will reuse it. This means that when the values are brought in from the database to populate the form fields, as well as when we detect errors, we will use local params to do so. That is why each of the individual values were declared in the controller function as part of the render data object.</li>
+        <li>Ensure that no errors are displayed in the page. If so, fix them.</li>
+        <li>Save all files.</li>
+      </ol>
+
+      <h2>Test, Test, Test</h2>
+      <ol>
+        <li>Start the development server and go the local site in the browser.</li>
+        <li>Navigate to the inventory management view by altering the URL.</li>
+        <li>Select a classification type from the drop-down list.</li>
+        <li>Click the "Modify" link for an inventory item (any will do for now). We just want to make sure the data is being retrieved and displayed in our view.</li>
+        <li>The <b>Update Inventory</b> view should appear and the data for the item should be displayed in the form, including the classification select drop-down.</li>
+        <li>Check the view for compliance with the frontend checklist.</li>
+        <li>If everything works, you have completed this activity and can move on to the second step in the update process.</li>
+        <li>If the data does not appear, an error is displayed, or their are compliance issues, then troubleshoot it, get help from members of your learning team, use the discussion channel, contact the TA or the professor. But in any case, it needs to be
+          operational in order to move on.
+        </li>
+        <li>Be sure to close down the server in the terminal when done testing.</li>
+      </ol>
+    </main>
+    <footer>
+      <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US" target="_blank"><img alt="Creative Commons License" style="border-width:0" src="//i.creativecommons.org/l/by-sa/3.0/88x31.png"></a>
+      All materials (except as noted) are by Blaine Robertson and licensed under a <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US" title="Read the license" target="_blank">Creative
+        Commons Attribution-ShareAlike 3.0 License</a>.
+    </footer>
+  </div>
+  <script src="/340br/js/prism-coy-dev.min.js"></script>
+</body>
+
+</html>

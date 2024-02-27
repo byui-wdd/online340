@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Starter Files | Web Backend Development</title>
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="/340-js/css/340course-min.css" type="text/css" media="screen">
+</head>
+
+<body>
+  <div id="wrapper">
+    <header><img src="/340-js/images/small_banner.jpg" alt="Course Banner"></header>
+    <main>
+      <h1>Starter Files</h1>
+      <h2>Introduction</h2>
+      <p>Having created a new repo and cloned it to your computer, let's take a few minutes and add a few more folders and make a name change, then become familiar with what's here and why.</p>
+      
+      <h2>Video Overview</h2>
+      <p>The video provides a general overview of the activity, but does not contain the detail needed to complete each process. Watch the video to obtain a general idea, but follow the written steps to complete the activity. This is the <a target="_blank" href="../transcripts/review-local-starter-repo.txt">Transcript</a> of the video.</p>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/6hXAK9_MF0Y" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+      <h2>Change the File Name</h2>
+      <p>Notice that you have a file named <span class="fn">.env.sample</span>. We need to change the name.</p>
+      <ol>
+        <li>Right-click the <span class="fn">.env.sample</span> file, select "Rename".</li>
+        <li>Remove the <span class="fn">.sample</span> part of the name leaving just <span class="language-javascript">.env</span></li>
+        <li>Click off of the file and ensure that the name is now correct.</li>
+      </ol>
+      
+      <h2>Add Some Folders</h2>
+      <p>Using VS Code's "New Folder" icon, add the following folders to the repo. <span class="notice">Make sure that you do not create these folders inside one another. Each should be at the root of the project folder.</span>: 1) <span class="fn">controllers</span>, 2) <span class="fn">database</span>, 3) <span class="fn">models</span>, and 4) <span class="fn">views</span>. When done, your repo work space should look like the image below.
+      <div class="callout"><img src="/340-js/images/starter-files.png" alt="Image of folders and files in the starter download."></div> <mark>Notice that all folders and files are lower-case (except for README.md). Please ensure this is true of your folders and files.</mark>
+      </p>
+
+      <h2>The Root Files</h2>
+      <p>Your repo folder constitutes the "root" of your application. There should be five new files at the root: <span class="fn">.env</span>,
+        <span class="fn">.gitignore</span>, <span class="fn">package.json</span>, <span class="fn">readme.md</span>, and <span class="fn">server.js</span>.</p>
+
+      <h3>.env</h3>
+      <p>Any file that begins with a period is typically a "hidden" file, meaning that the operating system will hide it
+        in the finder generated list of files and folders. However, VS Code will show this file as it is meant to be
+        worked with.</p>
+      <p>Open the file, and you'll find that it has some name - value pairs already present. These name - value pairs
+        hold information critical for the operation of the application on your local machine. Later, you'll create
+        equivelent name - value pairs in your production environment. "Env" is short for "environment". It is a place to
+        store these critical, sensitive values where the application can use them, without exposing them to others.</p>
+      <h3>.gitignore</h3>
+      <p>Like the <span class="fn">.env</span> file, the <span class="fn">.gitignore</span> file is not visible in the OS provided list of file and folders. This file
+        is specific to GIT. As the name implies, it directs GIT to ignore any folder or file that is listed inside this file.</p>
+      <p>Open the file. You'll find that it currently is mostly comments, but lists three items: node_modules, .env, and
+        .DS_Store. Read the comments associated with each. This file will be modified later in the course to include
+        other items. For now, know that any file or folder listed in the .gitignore file will NOT be synced to your
+        remote GitHub repo, which is exactly why we have it.</p>
+      <h3>package.json</h3>
+      <p>When building a Node application, this file is critical. It lists all the resources needed for the
+        application to function. It includes scripts and directions for running the application in a local, development
+        environment and can also be modified to include directions for remote, production environments.</p>
+      <h3>Readme.md</h3>
+      <p>The readme file is not required, but can be helpful. In this case, it contains a brief overview of how to make
+        use of these starter files and folders.</p>
+      <p><strong>Let's make your first edit to the <span class="fn">.gitignore</span> file.</strong></p>
+      <ol>
+        <li>Open the <span class="fn">.gitignore</span> file.</li>
+        <li>Move to the bottom and add the <span class="fn">README.md</span> file to it.</li>
+        <li>Save the <span class="fn">.gitignore</span> file, and close it.</li>
+        <li>When you make your next commit, the readme file will NOT be included and the copy that was synced previously
+          to your remote repo will be removed.</li>
+      </ol>
+      <h3>server.js</h3>
+      <p>This file is the primary operational file for the application. It is the default file that will be read by the
+        Node application. We will work with it extensively in the coming weeks. Note: this file can typically have one
+        of three different names: <span class="fn">index.js</span>, <span class="fn">app.js</span>, or <span class="fn">server.js</span>. You will see all three used. The reason I have choosen
+        for us to use <span class="fn">server.js</span> is that I think it adds clarity since it is where we will declare the server operations
+        for our application.</p>
+      <p>If you open the <span class="fn">package.json</span> file, looking at line 5 you will see that the <span class="fn">server.js</span> file is declared as the
+        "main" file for the application. It is also mentioned on lines 7 and 8 as the file to be run in our different
+        operating environments ("start" is for production, while "dev" is for development).</p>
+
+      <h2>The Folders</h2>
+      <h3>controllers</h3>
+      <p>We will be using a "Model - View - Controller" (MVC) design pattern for our application. This is the most
+        common pattern for application development and one that you'll want to know and be comfortable with. The
+        <span class="fn">controllers</span> folder is where all controller files will be stored.</p>
+
+      <h3>database</h3>
+      <p>When we build our database and begin to interact with it, we'll want to store the file that allows us to connect to and communicate with the database. This is where that file will be stored. It could be stored elsewhere, but by storing it in a
+        <span class="fn">database</span> folder, I hope to add clarity.</p>
+
+      <h3>models</h3>
+      <p>In the MVC design pattern, a "model" is where data is described and interactions with that data can be stored.
+        In our case, we will build models that will contain the SQL statements and JavaScript functions that will use
+        the SQL statements to actually work with the data in the database. These functions will be responsible for the
+        CRUD (CREATE, READ, UPDATE, DELETE) operations between our application and the database.</p>
+
+      <h3>public</h3>
+      <p>A Node application is primarily involved with generating dynamic content (content built by the application as
+        it interacts with the database). However, a web application is seldom 100% dynamic. It relies on "static"
+        (non-dynamic) files, e.g. CSS, HTML and client-side JavaScript. The <span class="fn">public</span> folder is where these static files
+        will be stored.</p>
+
+      <h3>routes</h3>
+      <p>A popular holiday song, in the United States, has the lyric "over the river and through the woods to grandmother's house we go". This
+        describes the route or way to get to grandmother's house. A route is a path to be followed to arrive at a
+        destination. Our application will use routes to describe how a particular dynamic interaction is to occur. A URL is a route that describes such an interaction.</p>
+      <p>In a small application all routes could be written in the main file (<span class="fn">server.js</span>). However, as
+        applications grow larger and more complex, the routes for a specific type of interaction are broken out into
+        their own files. These specific route files will be stored here.</p>
+
+      <h3>views</h3>
+      <p>A view is a dynamically generated page, containing content that the server produces and returns to the browser.
+        The scaffolds that will hold the content are built and stored in the <span class="fn">views</span> folder. A view is what appears in the browser - it is how content is "viewed". The view is how the backend process is substantiated, or confirmed, to the client. <span class="notice">An interaction between the client and the server, typically begins and ends with a view</span>, except in the case of an API (application programming interface).</p>
+
+      <h2>Conclusion</h2>
+      <p>You should now have a clearer notion of the purposes of these files and folders. Keep in mind that we will add to these over the semester, but this basic structure gives us what we need to get started.</p>
+    </main>
+    <footer>
+      <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License"
+          style="border-width:0" src="//i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a> All materials (except as
+      noted) are by Blaine Robertson and licensed under a <a rel="license"
+        href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US">Creative Commons Attribution-ShareAlike 3.0
+        License</a>. </footer>
+  </div>
+</body>
+
+</html>

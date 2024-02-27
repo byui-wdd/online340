@@ -1,0 +1,50 @@
+In this assignment, you are to apply client-side validation, server-side validation, and form stickiness to the inventory process both adding new classification and new inventory items.
+
+Let's demonstrate how the application should look when the assignment is complete.
+
+Begin with remembering that there are no direct links into the inventory system it can only be accessed through manipulating the URL.
+
+When the URL is changed by adding "/inv" to the basic route of the site, the vehicle management view should be delivered. From here, I can click the link to add a new classification of vehicle.
+
+Client-side validation has been implemented, so if I attempt to add an empty classification, it does not allow it.
+
+Also, notice that the data requirements are clearly stated.
+
+If the rule is ignored,  client-side validation keeps that from happening.
+
+If client-side validation is disabled, using the  noValidate tool, and the form is submitted, the server-side validation catches the error, and an error message is returned.
+
+With only a single input, the form can be empty, as mentined in the directions. However, stickiness could be added if you decide to do so, as demonstrated here.
+
+Correcting the errors and submitting the classification, the navigation bar should update to reflect the new value and the management view is displayed with a success message.
+
+That is both server-side and client-side validations for the add classification process.
+
+Now, the link to add a new vehicle is clicked.
+
+The new vehicle process also has client-side and server-side validation.
+
+Choose a classification from the dynamic drop-down list, which should include the newly added classification.
+
+In the form itself, please convey to the user what the minimum requirements are for each input.
+
+I will enter values and note that CSS has been implemented to provide a visual indiation when the input is valid or not.
+
+The price can be decimal or integer. As either number is entered you can see the form responding to show validity of the data.
+
+The 4-Digit year we'll just say 2017.
+
+The miles is digits only. If I type 39500 it's allowed, but if I type 39, 500 it is not.
+
+I will leave the color empty for now. Attempting to add the vehicle, the client-side validation keeps that from happening. If the noValidate tool is clicked, and the form submitted, the server-side validation stops the insertion, the data is returned, along with the error message.
+
+Finally, once the data is correct, the vehicle is submitted and the success message is returned.
+
+The vehicle should be accessible via the navigation bar.
+
+All views - Inventory management, add classification and add vehicle - should meet the requirements of the frontend checklist. Be sure to test each for compliance.
+
+You are stongly encouraged to check your own site operations against the grading matrix and trade with others in your learning team to check their application against the grading matrix prior to submission to catch and correct errors.
+
+Good luck as you work on your solution to this assignment.
+

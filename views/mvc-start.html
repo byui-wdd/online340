@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>M-V-C Implementation | Web Backend Development</title>
+  <meta name="description" content="An overview of the Model - View - Control (M-V-C) for CSE 340" />
+  <meta name="viewport" content="width=device-width" />
+  <link rel="stylesheet" href="/340-js/css/340course-min.css" media="screen" />
+  <link rel="stylesheet" href="/340-js/css/prism-coy-dev.min.css" />
+</head>
+
+<body>
+  <div id="wrapper">
+    <header id="header">
+      <img src="/340-js/images/small_banner.jpg" alt="CSE 340 Banner Image" />
+    </header>
+    <main>
+      <h1>Model - View - Control Implementation</h1>
+
+      <h2>Conceptual Overview</h2>
+      <p>The video provides a high level overview of Model View Control. This is the <a target="_blank" href="../transcripts/mvc-overview.txt">Transcript</a> of the video.</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Ar7pcvjCS4o" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+      <h2>Activity Overview</h2>
+      <p>The video provides a general overview of the activity, but does not contain the detail needed to complete each process. Watch the video to obtain a general idea, but follow the written steps to complete the activity. This is the <a target="_blank" href="../transcripts/mvc-getting-started.txt">Transcript</a> of the video.</p>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/PjEWKpZv0R4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+      <h2>Get Organized</h2>
+      <p>
+        We'll begin by creating several new files and storing these into
+        existing folders.
+      </p>
+      <ol>
+        <li>
+          Create a new <span class="fn">index.js</span> file in the <span class="fn">database</span> folder.
+        </li>
+        <li>
+          Create a new <span class="fn">inventory-model.js</span> file in the <span class="fn">models</span> folder.
+        </li>
+        <li>
+          Create a new <span class="fn">baseController.js</span> file in the <span class="fn">controllers</span> folder.
+        </li>
+      </ol>
+
+      <h2>Database Connection</h2>
+      <p>
+        With the database created, we need a means for our application to talk
+        to it. That is what we'll do now.
+      </p>
+      <ol>
+        <li>
+          Open the <span class="fn">package.json</span> file.
+          <ul>
+            <li>Look at the list of dependencies.</li>
+            <li>
+              You'll find "pg" in the list. "pg" is a short-hand reference to
+              the node-postgres package that Express can use to talk with a
+              PostgreSQL database.
+            </li>
+            <li>
+              Open the
+              <a href="https://node-postgres.com/
+" target="_blank">node-postgres Documentation</a>
+              in your browser.
+            </li>
+            <li>
+              Bookmark this documentation, so you can refer back to it as
+              needed.
+            </li>
+            <li>
+              You can close the <span class="fn">package.json</span> file. I just wanted you to know
+              that this package was listed and should be installed already.
+            </li>
+          </ul>
+        </li>
+        <li>Find and open the <span class="fn">.env</span> file, which should be at the root of the project. Make sure that the name is ".env" and not ".envsample".</li>
+        <li>Add the following code to the <span class="fn">.env</span> file:
+          <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">NODE_ENV='development'</code></pre>
+          This code helps us to identify when we are working and testing locally vs in a remote, production environment, which will be done later. Save and close the file.
+        </li>
+        <li>Open the <span class="fn">index.js</span> file in the <span class="fn">database</span> folder.</li>
+        <li>
+          Add the code shown to the
+          <span class="fn">index.js</span> file:
+          <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">const { Pool } = require("pg")
+require("dotenv").config()
+/* ***************
+ * Connection Pool
+ * SSL Object needed for local testing of app
+ * But will cause problems in production environment
+ * If - else will make determination which to use
+ * *************** */
+let pool
+if (process.env.NODE_ENV == "development") {
+  pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+      rejectUnauthorized: false,
+    },
+})
+
+// Added for troubleshooting queries
+// during development
+module.exports = {
+  async query(text, params) {
+    try {
+      const res = await pool.query(text, params)
+      console.log("executed query", { text })
+      return res
+    } catch (error) {
+      console.error("error in query", { text })
+      throw error
+    }
+  },
+}
+} else {
+  pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+  })
+  module.exports = pool
+}
+</code></pre>
+        </li>
+        <li>
+          <h3>An Explanation</h3>
+          <ul>
+            <li>
+              <strong>Line 1 -</strong> imports the "Pool" functionality from
+              the "pg" package. A pool is a collection of connection objects
+              (10 is the default number) that allow multiple site visitors to
+              be interacting with the database at any given time. This keeps
+              you from having to create a separate connection for each
+              interaction.
+            </li>
+            <li>
+              <strong>Line 2 -</strong> imports the "dotenv" package which
+              allows the sensitive information about the database location and
+              connection credentials to be stored in a separate location and
+              still be accessed.
+            </li>
+            <li>
+              <strong>Line 3-8 -</strong> a multi-line comment concerning the
+              "ssl" code found in the connection pool function.
+              <span class="notice">This is critical code. Be sure to read and understand the comment.</span>.
+            </li>
+            <li>
+              <strong>Line 9 -</strong> creates a local <code class="language-javascript">pool</code> variable to
+              hold the functionality of the "Pool" connection.
+            </li>
+            <li><strong>Line 10 -</strong> an <code class="language-javascript">if</code> test to see if the code exists in a developent environment, as declared in the .env file. In the production environment, no value will be found.</li>
+            <li><strong>Line 11 -</strong> creates a new pool instance from the imported Pool class.</li>
+            <li><strong>Line 12 -</strong> indicates how the pool will connect
+              to the database (use a connection string) and the value of the
+              string is stored in a name - value pair, which is in the .env
+              file locally, and in an "environment variable" on a remote
+              server. These are equivelent concepts, but different
+              implementations.
+            </li>
+            <li>
+              <strong>Lines 13 through 15 -</strong> describes how the Secure Socket Layer (ssl) is used in the connection to the database, but only in a remote connection, as exists in our development environment.
+              <h3>A Short Explanation</h3>
+              <p>
+                SSL is a means of excrypting the flow of information from one
+                network location to another. In this case, when we attempt to
+                communicate with the remote database server from our own
+                computer the code indicates that the server should not reject
+                our connection. However, when we work in a remote production server, the ssl lines must not exist. This is because our application server and the database
+                server will be in the same system and their communication will
+                be secure, which is what we will require.
+              </p>
+            </li>
+            <li>
+              <strong>Line 16 -</strong> ends the pool function started on
+              line 11.
+            </li>
+            <li><strong>Line 17 -</strong> left blank.</li>
+            <li><strong>Lines 18-19 -</strong> comments related to the function to be exported in lines 21 through 31.</li>
+            <li><strong>Lines 20-31 -</strong> exports an asynchronous <code class="language-javascript">query</code> function that accepts the text of the query and any parameters. When the query is run it will add the SQL to the console.log. If the query fails, it will console log the SQL text to the console as an error. This code is primarily for troubleshooting as you develop. As you test the application in your development mode, have the terminal open, and you will see the queries logged into the terminal as each is executed.</li>
+            <li><strong>Line 32 -</strong> ends the <code class="language-javascript">if</code> and opens the <code class="language-javascript">else</code> structure.</li>
+            <li><strong>Line 33 -</strong> creates a new "pool" instance from the "Pool" class.</li>
+            <li><strong>Line 34 -</strong> indicates the value of the connection string will be found in an environment variable. In the production environment, such a variable will not be stored in our .env file, but in the server's settings.</li>
+            <li><strong>Line 35 -</strong> ends the Pool object and instance creation.</li>
+            <li><strong>Line 36 -</strong> exports the pool object to be used whenever a database connection is needed. <span class="notice">This is for the production environment, which means the queries will not be entered into the console.</span></li>
+            <li><strong>Line 37 -</strong> ends the <code class="language-javascript">else</code> structure.</li>
+          </ul>
+        </li>
+        <li>
+          Confirm that the code is typed correctly and the
+          <span title="Visual Studio Code">VSC</span> does not report any
+          warnings or errors.
+        </li>
+        <li>Save and close the file.</li>
+      </ol>
+
+      <h2>Add the Connection String to the <span class="fn">.env</span> file</h2>
+      <p>
+        In the database file that you just built, the code indicates that the
+        connection pool will find the information it needs to talk with the
+        database server in the <span class="fn">.env</span> file. Let's get that inserted, so it is there.
+      </p>
+      <ol>
+        <li>
+          In your browser, go to <span class="fn">render.com</span> and login using your GitHub
+          credentials.
+        </li>
+        <li>Open the database server in the dashboard.</li>
+        <li>Scroll down to the "Connections" area.</li>
+        <li>Click the "Copy" button on the "External Database URL" line.</li>
+        <li>
+          Open the <span class="fn">.env</span> file in <span title="Visual Studio Code">VSC</span>.
+        </li>
+        <li>
+          On a blank line type, <code><mark>DATABASE_URL=</mark></code>, then paste the string copied from <span class="fn">render.com</span>. Make sure there is
+          no space in the entire string.
+        </li>
+        <li>Confirm that no warnings or errors appear in the <span class="fn">.env</span> file.</li>
+        <li>Save and close the file.</li>
+      </ol>
+      <p>
+        When you get ready to run and test your application, the database
+        connection pool will look in the <span class="fn">.env</span> file for a variable of
+        <code class="language-javascript">DATABASE_URL</code>. When found, it will use the connection string to
+        attempt to talk to the database server. If successful, the pool will
+        then have the ability to run the query in the <span class="fn">inventory-model</span> file,
+        which you will build next, and return the data from the server.
+      </p>
+
+      <h2>The Inventory Model</h2>
+      <p>
+        With the database connection pool created we can now use it to begin
+        interacting with the database. I hope you'll remember that in an M-V-C
+        approach, the "Model" is where all data interactions are stored. Our
+        <span class="fn">inventory-model.js</span> document is where we'll write all the
+        functions to interact with the classification and inventory tables of
+        the database, since they are integral to our inventory.
+      </p>
+      <ol>
+        <li>
+          Open the <span class="fn">inventory-model.js</span> file in the <span class="fn">models</span> folder.
+        </li>
+        <li>
+          Type the code shown in the image into the file:
+          <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">const pool = require("../database/")
+
+/* ***************************
+ *  Get all classification data
+ * ************************** */
+async function getClassifications(){
+  return await pool.query("SELECT * FROM public.classification ORDER BY classification_name")
+}
+
+module.exports = {getClassifications}
+</code></pre>
+        </li>
+        <li>
+          <h3>An Explanation</h3>
+          <ul>
+            <li>
+              <strong>Line 1 -</strong> imports the database connection file
+              (named <span class="fn">index.js</span>) from the <span class="fn">database</span> folder which is one level
+              above the current file. Because the file is <span class="fn">index.js</span>, it is
+              the default file, and will be located inside the <span class="fn">database</span> folder
+              without being specified. The path could also be
+              <span class="fn">../database/index.js</span>. It would return the same result.
+            </li>
+            <li><strong>Line 2 -</strong> left intentionally blank.</li>
+            <li><strong>Lines 3-5 -</strong> a multi-line comment introducing the function.</li>
+            <li>
+              <strong>Line 6 -</strong> creates an "asynchronous" function,
+              named <code class="language-javascript">getClassifications</code>. An asynchronous function returns a
+              <code class="language-javascript">promise</code>, without blocking (stopping) the execution of the code.
+              It allows the application to continue and will then deal with
+              the results from the <code class="language-javascript">promise</code> when delivered.
+            </li>
+            <li>
+              <strong>Line 7 -</strong> will return (send back) the result of
+              the SQL query, which will be sent to the database server using a
+              pool connection, when the resultset (data) or an error, is sent
+              back by the database server.
+              <mark>Notice the two keywords: return and await. <code class="language-javascript">Await</code> is part of
+                the <code class="language-javascript">Async - Await</code> promise structure introduced in ES6.
+                <code class="language-javascript">Return</code> is an Express keyword, indicating that the data
+                should be sent to the code location that called the function
+                originally.</mark>
+            </li>
+            <li>
+              <strong>Line 8 -</strong> ends the function began on line 6.
+            </li>
+            <li><strong>Line 9 -</strong> left intentionally blank.</li>
+            <li>
+              <strong>Line 10 -</strong> exports the function for use
+              elsewhere.
+            </li>
+          </ul>
+        </li>
+        <li>
+          Confirm that the code is typed correctly and the
+          <span title="Visual Studio Code">VSC</span> does not report any
+          warnings or errors.
+        </li>
+        <li>Save and close the file.</li>
+      </ol>
+
+      <h2>The base controller</h2>
+      <p>
+        A controller is the location where the logic of the application
+        resides. It is responsible for determining what action is to be
+        carried out in order to fulfill requests submitted from remote
+        clients. The "base" controller will be responsible only for requests
+        to the application in general, and not to specific areas (such as
+        inventory or accounts).
+      </p>
+      <ol>
+        <li>
+          Find and open the <span class="fn">baseController.js</span> file that should be in
+          the <span class="fn">controllers</span> folder.
+        </li>
+        <li>
+          Add the code shown below to the file:
+          <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">const utilities = require("../utilities/")
+const baseController = {}
+
+baseController.buildHome = async function(req, res){
+  const nav = await utilities.getNav()
+  res.render("index", {title: "Home", nav})
+}
+
+module.exports = baseController
+</code></pre>
+        </li>
+        <li>
+          <h3>An Explanation</h3>
+          <ul>
+            <li>
+              <strong>Line 1 -</strong> imports an <span class="fn">index.js</span> file (which does
+              not yet exist) from a <span class="fn">utilities</span> folder (which does not yet
+              exist) which is one level above the current location inside the
+              <span class="fn">controllers</span> folder.
+            </li>
+            <li>
+              <strong>Line 2 -</strong> creates an empty object named
+              <code class="language-javascript">baseController</code>.
+            </li>
+            <li><strong>Line 3 -</strong> left intentionally blank.</li>
+            <li>
+              <strong>Line 4 -</strong> creates an anonymous, asynchronous
+              function and assigns the function to <code class="language-javascript">buildHome</code> which acts as a
+              method of the <code class="language-javascript">baseController</code> object. In short, this is similar
+              in concept to creating a method within a class, where
+              <code class="language-javascript">baseController</code> would be the class name and <code class="language-javascript">buildHome</code> would
+              be the method. Being asynchronous, it does not block (stop) the
+              application from executing while it awaits the results of the
+              function to be returned. The function itself accepts the
+              <code class="language-javascript">request</code> and <code class="language-javascript">response</code> objects as parameters.
+            </li>
+            <li>
+              <strong>Line 5 -</strong> calls a <code class="language-javascript">getNav()</code> function that will
+              be found in the <span class="fn">utilities &gt; index.js</span> file. The results, when
+              returned (notice the "await" keyword), will be stored into the
+              <code class="language-javascript">nav</code> variable.
+            </li>
+            <li>
+              <strong>Line 6 -</strong> is the Express command to use EJS to
+              send the <span class="fn">index</span> view back to the client, using the <code class="language-javascript">response</code>
+              object. The <span class="fn">index</span> view will need the "title" name - value
+              pair, and the <code class="language-javascript">nav</code> variable. The <code class="language-javascript">nav</code> variable will contain the
+              string of HTML code to render this dynamically generated navigation bar.
+            </li>
+            <li>
+              <strong>Line 7 -</strong> ends the function started on line 4.
+            </li>
+            <li><strong>Line 8 -</strong> left intentionally blank.</li>
+            <li>
+              <strong>Line 9 -</strong> exports the <code class="language-javascript">baseController</code> object
+              for use elsewhere.
+            </li>
+          </ul>
+        </li>
+        <li>
+          Confirm that the code is typed correctly and the
+          <span title="Visual Studio Code">VSC</span> does not report any
+          warnings or errors.
+        </li>
+        <li>Save and close the file.</li>
+      </ol>
+
+<h2>Differences in Implementation</h2>
+<p>In the <span class="fn">inventory-model.js</span> file, you should have noticed that the function was created, and then exported within an unnamed object, e.g.:</p>
+<code class="language-JavaScript">module.exports = { getClassifications }</code>
+<p>However, in the <span class="fn">baseController.js</span> file, a named object was created on line 2:</p>
+<code>const baseController = {}</code>
+<p>Then, the function was built as a named method of the object on line 4:
+ <code class="language-JavaScript">baseController.buildHome = async function(req, res) { ...</code> 
+  </p>
+  <p>At the bottom of the controller the named object is exported:
+    <code class="language-JavaScript">module.exports = baseController</code>
+    </p>
+
+    <p>Both of these methods do the exact same thing. In fact, there are additional ways of doing the same thing. But the code found in the examples throughout the course are limited to these two. You may ask, "Why not use one way for everything?" The answer is that different organizations approach things differently, and we want you to see and use a variety. <i><b>Just know, this approach is intentional.</b></i></p>
+    
+      <h2>Alter the "Index Route"</h2>
+      <p>
+        With the model and controller in place, it is time to alter the route
+        to deliver the <span class="fn">index.ejs</span> view using the entire M-V-C approach.
+      </p>
+      <ol>
+        <li>
+          Find and open the <span class="fn">server.js</span> file, at the root of the project.
+        </li>
+        <li>
+          Locate the "Require Statements" area, near the top of the file. Add
+          a new require statement to bring the base controller into scope:
+        </li>
+        </ol>
+        <div class="callout"><code class="language-javascript">const baseController = require("./controllers/baseController")</code></div>
+        <ol start="3">
+        <li>Save the file.</li>
+        <li>Locate the "Index" route in the "Routes" area of the file.</li>
+        <li>
+          Alter the route to match this image:
+          <div class="callout">
+            <img src="/340-js/images/call-base-controller-method.png" alt="Screenshot of code to call the base controller method in the server.js file." />
+          </div>
+        </li>
+        <li>
+          <h3>An Explanation</h3>
+          <ul>
+            <li>
+              Previously the <span class="fn">index.ejs</span> view was rendered directly in the route.
+              While it worked, it did not follow the M-V-C methodology.
+            </li>
+            <li>
+              The new code uses the imported "baseController" to "call" the
+              "buildHome" method.
+            </li>
+            <li>
+              This will execute the function in the controller, build the
+              navigation bar and pass it and the title name-value pair to the
+              <span class="fn">index.ejs</span> view, which will then be sent to the client.
+            </li>
+          </ul>
+        </li>
+        <li>
+          While we are close to testing, there is one more loose thread to tie
+          up.
+        </li>
+        <li>
+          Confirm that the code is typed correctly and the
+          <span title="Visual Studio Code">VSC</span> does not report any
+          warnings or errors.
+        </li>
+        <li>Save and close the file.</li>
+      </ol>
+
+      <h2>Build the Utilities file and functions</h2>
+      <p>
+        In the <span class="fn">baseController</span> file we wrote code to import a file from the
+        <span class="fn">utilities</span> folder. That file will contain a function, which will use the inventory model to get the data from the database, then will build an HTML unordered list around the data. The finished HTML will be sent back as a string to be used in the <span class="fn">navigation</span> partial to render the
+        actual navigation bar, based on the vehicle classification found in
+        the database. Let's build the function, then test.
+      </p>
+
+      <h3>The "getNav" Function</h3>
+      <ol>
+        <li>
+          In <span title="Visual Studio Code">VSC</span> click at the very
+          bottom of the explorer pane so that no folder or file is selected.
+        </li>
+        <li>Click the "New File..." icon.</li>
+        <li>
+          Type "<code class="language-javascript">utilities/index.js</code>", press the "Enter" key.
+        </li>
+        <li>
+          A new folder named <span class="fn">utilities</span> should appear with an <span class="fn">index.js</span> file
+          within it.
+        </li>
+        <li>
+          The new <span class="fn">index.js</span> file should be open in the work area. If not,
+          open it.
+        </li>
+        <li>
+          This file will hold functions that are "utility" in nature, meaning
+          that we will reuse them over and over, but they don't directly
+          belong to the M-V-C structure.
+        </li>
+        <li>
+          In the file, type the code shown below:
+          <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">const invModel = require("../models/inventory-model")
+const Util = {}
+
+/* ************************
+ * Constructs the nav HTML unordered list
+ ************************** */
+Util.getNav = async function (req, res, next) {
+  let data = await invModel.getClassifications()
+  let list = "&lt;ul&gt;"
+  list += '&lt;li&gt;&lt;a href="/" title="Home page"&gt;Home&lt;/a&gt;&lt;/li&gt;'
+  data.rows.forEach((row) =&gt; {
+    list += "&lt;li&gt;"
+    list +=
+      '&lt;a href="/inv/type/' +
+      row.classification_id +
+      '" title="See our inventory of ' +
+      row.classification_name +
+      ' vehicles"&gt;' +
+      row.classification_name +
+      "&lt;/a&gt;"
+    list += "&lt;/li&gt;"
+  })
+  list += "&lt;/ul&gt;"
+  return list
+}
+
+module.exports = Util
+</code></pre>
+
+        </li>
+        <li>
+          <h3>An Explanation</h3>
+          <ul>
+            <li>
+              <strong>Line 1 -</strong> requires the <span class="fn">inventory-model</span> file,
+              so it can be used to get data from the database.
+            </li>
+            <li>
+              <strong>Line 2 -</strong> creates an empty <code class="language-javascript">Util</code> object. Just
+              as you did earlier in the base controller.
+            </li>
+            <li><strong>Line 3 -</strong> left intentionally blank.</li>
+            <li>
+              <strong>Lines 4 through 6 -</strong> a multi-line comment
+              introducing the function.
+            </li>
+            <li>
+              <strong>Line 7 -</strong> creates an asynchronous function, which
+              accepts the <code class="language-javascript">request</code>, <code class="language-javascript">response</code> and <code class="language-javascript">next</code> methods as parameters. The function is then
+              stored in a <code class="language-javascript">getNav</code> variable of the <code class="language-javascript">Util</code> object.
+            </li>
+            <li><strong>Line 8 -</strong> calls the <code class="language-javascript">getClassifications()</code> function from the <span class="fn">inventory-model</span> file and stores the returned resultset into the <code class="language-javascript">data</code> variable.</li>
+            <li>
+              <strong>Line 9 -</strong> creates a JavaScript variable named
+              <code class="language-javascript">list</code> and assigns a string to it. In this case, the string is
+              the opening of an HTML unordered list.
+              <span class="notice">Note the use of <code class="language-javascript">let</code>. This is because the value will be
+                changed as the upcoming lines of the function are
+                processed.</span>
+            </li>
+            <li>
+              <strong>Line 10 -</strong> the <code class="language-javascript">list</code> variable has an addition
+              string added to what already exists. Note the use of <code class="language-javascript">+=</code>, which
+              is the JavaScript append operator. In this instance a new list
+              item, containing a link to the index route, is added to the
+              unordered list.
+            </li>
+            <li>
+              <strong>Line 11 -</strong> uses a <code class="language-javascript">forEach</code> loop to move through
+              the rows of the <code class="language-javascript">data</code> array one at a time. For each row, the
+              row is assigned to a <code class="language-javascript">row</code> variable and is used in the function.
+            </li>
+            <li>
+              <strong>Line 12 -</strong> appends an opening list item to the
+              string in the <code class="language-javascript">list</code> variable.
+            </li>
+            <li>
+              <strong>Line 13 -</strong> appends the code that is found on
+              lines 14 through 20 as a string to the <code class="language-javascript">list</code> variable.
+            </li>
+            <li>
+              <strong>Line 16 -</strong> a string that includes the beginning
+              of an HTML anchor. The <code class="language-javascript">+</code> sign is the JavaScript concatenation
+              operator, used to join two strings together. The value in the
+              href attribute is part of a route that will be watched for in an
+              Express router.
+            </li>
+            <li>
+              <strong>Line 17 -</strong> the <code class="language-javascript">classification_id</code> value found in
+              the row from the array. It is being added into the link route.
+            </li>
+            <li>
+              <strong>Line 18 -</strong> the title attribute of the anchor
+              element.
+            </li>
+            <li>
+              <strong>Line 19 -</strong> the <code class="language-javascript">classification_name</code> value found
+              in the row from the array. It is being added into the title
+              attribute.
+            </li>
+            <li>
+              <strong>Line 20 -</strong> the last part of the string forming
+              the opening HTML anchor tag.
+            </li>
+            <li>
+              <strong>Line 21 -</strong> the <code class="language-javascript">classification_name</code> from the row
+              being displayed between the opening and closing HTML anchor
+              tags. This is the display name in the navigation bar.
+            </li>
+            <li><strong>Line 22 -</strong> the closing HTML anchor tag.</li>
+            <li>
+              <strong>Line 23 -</strong> the closing list item tag being added
+              to the <code class="language-javascript">list</code> variable.
+            </li>
+            <li>
+              <strong>Line 24 -</strong> the ending of the <code class="language-javascript">forEach</code> loop and
+              enclosed anonymous function.
+            </li>
+            <li>
+              <strong>Line 25 -</strong> the closing HTML unordered list tag
+              being appended to the <code class="language-javascript">list</code> variable.
+            </li>
+            <li>
+              <strong>Line 26 -</strong> sends the finished string, back to
+              where the <code class="language-javascript">getNav</code> function was called.
+            </li>
+            <li>
+              <strong>Line 27 -</strong> ends the function which started on
+              line 7.
+            </li>
+          </ul>
+        </li>
+        <li>
+          Confirm that the code is typed correctly and the
+          <span title="Visual Studio Code">VSC</span> does not report any
+          warnings or errors.
+        </li>
+        <li>Save the file.</li>
+      </ol>
+      <p>
+        If you look at the code (lines 7 to 24) carefully, it should be
+        somewhat familiar. It simply keeps adding strings to a variable. When
+        done, the entire string is nothing more than an HTML unordered list
+        that contains some anchor elements. When the function is done building
+        the string, the variable is sent to where the function was called.
+      </p>
+
+      
+      <h3>Where does this leave us?</h3>
+      <p>
+        The flow of the M-V-C for our application runs something like this, so
+        far:
+      </p>
+      <ol>
+        <li>
+          A client types or clicks a link containing the index route of our
+          application.
+        </li>
+        <li>That triggers a <code class="language-javascript">request</code> to our <span class="fn">server.js</span> page.</li>
+        <li>
+          The route is found in the page, which calls the function in the
+          <span class="fn">baseController</span> file.
+        </li>
+        <li>
+          The controller calls the <code class="language-javascript">getNav</code> function and awaits the result to
+          be returned.
+        </li>
+        <li>
+          When the finished string is returned, it is stored in the <code class="language-javascript">nav</code>
+          variable.
+        </li>
+        <li>
+          The controller, then tells Express and EJS to send the <span class="fn">index.ejs</span> file back to the client, and send the nav string and title
+          name-value pair along with it. These items will be used in the
+          <span class="fn">head.ejs</span> and <span class="fn">navigation.ejs</span> partials.
+        </li>
+        <li>
+          The server builds the finished <span class="fn">home</span> page and sends it to the browser.
+        </li>
+      </ol>
+
+      <h2>Adjust the <span class="fn">navigation.ejs</span> Partial File</h2>
+      <p>
+        With all the code in place, there is one more minor change to be
+        made, then we can test.
+      </p>
+      <ol>
+        <li>
+          Find and open the <span class="fn">navigation.ejs</span> file in the <span class="fn">partials</span> folder.
+        </li>
+        <li>
+          Highlight and delete the existing unordered list that you typed as
+          static code previously.
+        </li>
+        <li>
+          Type this code where the previous code was located:
+          <code class="language-javascript">&lt;&percnt;- nav &percnt;&gt;</code>
+        </li>
+        <li>
+          When done, the <span class="fn">navigation.ejs</span> partial should look like this:
+          <div class="callout">
+            <img src="/340-js/images/nav-partial-finished.png" alt="Screenshot of code for the finished navigation.ejs partial file." />
+          </div>
+        </li>
+        <li>
+          Confirm that the code is typed correctly and the
+          <span title="Visual Studio Code">VSC</span> does not report any
+          warnings or errors.
+        </li>
+        <li>Save and close the file.</li>
+      </ol>
+
+      <h2>Time to Test</h2>
+      <ol>
+        <li>Save all of your work.</li>
+        <li>Open a new <span title='Visual Studio Code'>VSC</span> terminal window.</li>
+        <li>Type <code class="language-javascript">pnpm run dev</code>, press "Enter".</li>
+        <li>The node server should start showing that it is running on localhost:5500</li>
+        <li>In a browser, type <code class="language-markup">http://localhost:5500/</code>.</li>
+        <li>If things work as they should, you should be looking at your home
+          page.
+        </li>
+        <li>Hover your mouse over any of the navigation items. You should now see a tooltip generated from the title attribute. You'll recall that the original, static, navigation items did not have this. But, your dynamic navigation items do!</li>
+        <li>You should also be able to look in the terminal pane and see the query that was run when the page loaded. It is the same query that exists in the <span class="fn">inventory-model</span>, and is being written in the terminal as part of the code we placed in the database pool code, found in the <span class="fn">database &gt; index.js</span> file.</li>
+        <li>
+          If things didn't work, check spelling, file and folder names and the
+          path. Talk to your learning team, the TA or the professor. Be sure that you can get it to work.
+        </li>
+        <li><span class="notice">When done testing, be sure to stop the server with <b>Control + C</b> in the terminal.</span></li>
+      </ol>
+
+      
+      
+    </main>
+    <footer>
+      <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US" target="_blank">
+        <img alt="Creative Commons License" style="border-width: 0" src="//i.creativecommons.org/l/by-sa/3.0/88x31.png" />
+      </a>
+      All materials (except as noted) are by Blaine Robertson and licensed
+      under a
+      <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US" title="Read the license" target="_blank">Creative Commons Attribution-ShareAlike 3.0 License</a>.
+    </footer>
+  </div>
+  <script src="/340br/js/prism-coy-dev.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Assignment 3 | Web Backend Development</title>
+  <meta name="description" content="CSE 340 Assignment 3 directions">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="/340-js/css/340course.css" media="screen">
+</head>
+
+<body>
+  <div id="wrapper">
+    <header id="header">
+      <img src="/340-js/images/small_banner.jpg" alt="CSE 340 Banner Image">
+    </header>
+    <main>
+      <h1>Assignment 3 Directions</h1>
+      <h2>Introduction</h2>
+      <p>
+        This week's activities saw us implementing dynamic code for the navigation bar, delivering inventory items by classification, become familiar with debugging, and implementing error handling. This assignment will expand each of these concepts, except for debugging, which is constant and ongoing.
+      </p>
+
+      <h2>Video Overview</h2>
+      <p>
+        This short video demonstrates what the finished assignment may look like and the functionality it could possess. This is the <a target="_blank" href="../transcripts/assignment3.txt">Transcript</a> of the video.</p>
+      </p>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/jUFZ5PnTzPw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+      <h2>Tasks</h2>
+      <h3>Task One</h3>
+      <ol>
+        <li>Using the activities related to delivering the inventory items by classification view as an example, build a process to deliver a specific inventory item detail view. <span class="notice">Note: This will be a <b>single view</b>, which will allow any vehicle's information to be displayed, based on the parameters passed through the URL.</span> <span class="warning">It is NOT a separate view for each item.</span></li>
+        <li>The detail delivery process must include:
+          <ol>
+            <li>an appropriate route as part of the <span class="fn">inventory route</span> file,</li>
+            <li>a controller function, which is part of the <span class="fn">inventory controller</span>,</li>
+            <li>a function to retrieve the data for a specific vehicle in inventory, based on the inventory id (this should be a single function, not a separate one for each vehicle), which is part of the <span class="fn">inventory-model</span>,</li>
+            <li>
+              Build a custom function in the <span class="fn">utilities &gt; index.js</span> file that
+              will take the specific vehicle's information and wrap it up in HTML
+              to deliver to the view, </li>
+            <li>The view must be created and stored in the <span class="fn">views &gt; inventory</span> folder and meet these specifications:
+              <ul>
+                <li>
+                  Display the vehicle make and model in the title element and in the main content heading.
+                </li>
+                <li>Use the full-size image, not the thumbnail image.</li>
+                <li>
+                  The make, model, year and price should be prominent in the view. All descriptive data must also be displayed.
+                </li>
+                <li>
+                  The price must display as U.S. Dollars with appropriate currency
+                  symbol and proper place value commas.
+                </li>
+                <li>The mileage must display with proper place value commas.</li>
+                <li>
+                  Each item must be displayed with appropriate supporting text to make sense to a site visitor. See this image from Enterprise car sales as an example:<br />
+                  <img src="/340-js/images/car-example.jpg" alt="Example of a car detail view from Enterprise car sales" />
+                </li>
+                <li>
+                  Meet the standards shown in the
+                  <a href="/340-js/views/dev-checklist.html" title="Open the web development checklist in a new tab" target="_blank">Frontend Checklist</a>
+                  and display the vehicle information for easy reading and
+                  presenting a professional appearance.
+                </li>
+                <li>
+                  <span class="notice">For large screens, the image and content must sit side-by-side
+                    (similar to the example car image). On small screens, the content should stack into a single column.</span>
+                </li>
+                <li>
+                  The content (including images) must be responsive and maintain its clarity of
+                  presentation in the browser as the browser window grows or
+                  shrinks. No horizontal scrolling or zooming should be required, and the content should adapt to the screen and not overflow it.
+                </li>
+              </ul>
+            </li>
+          </ol>
+
+          <h3>Task 2</h3>
+           <p>Apply the error handling middleware, from the activities, to all routes throughout the application. Make sure each process is included to catch and report errors should they occur in the application. You should test to make sure this works, but do NOT leave any intentional errors in place other than the one called for in task 3.</p>
+
+          <h3>Task 3</h3>
+          <p>Implement an intentional error process into the application (including a route, controller and middleware) that will generate a 500-type error. Add a link to trigger the route to the <span class="fn">footer partial</span> file. Make sure that when the link is clicked that the process is directed through a router and controller (these can be existing routers and controller or new just for this task), but the middleware catches the error and redirects to the error view. Ensure that the error view meets the requirements of the frontend checklist. See <a href="https://rollbar.com/blog/handling-node-js-exceptions/#" target="_blank">Throw exceptions in Node</a> for a suggested means of causing the error to trigger.</p>
+
+          <h2>Test, Test, Test</h2>
+          <p>Be sure to complete all tasks and then test that they work.</p>
+          <ol>
+            <li>
+              Load the project to GitHub, then deploy to your render.com server.
+            </li>
+            <li>Load the site into your browser.</li>
+            <li>Click a link in the main navigation bar.</li>
+            <li>
+              From the classification view that should be presented in the
+              browser click the link for any vehicle.
+            </li>
+            <li>
+              The details should be visible in a new view. The details
+              are clear, professional in appearance that can be easily consumed by
+              the human looking at the browser.
+            </li>
+            <li>
+              Change the screen size to emulate delivery to various device sizes.
+              The content should be responsive and adjust to allow clear
+              presentation regardless of screen size.
+            </li>
+            <li>Check the view for HTML and CSS validity and WAVE compliance.</li>
+            <li>
+              Repeat multiple times (clicking on navigation link, then "drilling
+              down" to the detail) to ensure that the process works with
+              all vehicles.
+            </li>
+            <li>Test for a non-existent view using a fake route. A 404 error should be delivered via the error view.</li>
+            <li>Click the error link in the footer. A 500 error should be delivered via the error view.</li>
+          </ol>
+
+          <h2>Submission</h2>
+          <ul>
+            <li>
+              Work with your learning team to accomplish the tasks and post to and read the weekly discussion board to help one another.
+            </li>
+            <li>
+              Build, run and test to make sure that each of the tasks works.
+            </li>
+            <li>
+              When satisfied that the code is operational:
+              <ol>
+                <li>Upload the project to your GitHub repository.</li>
+                <li>Go to the render.com dashboard and manually deploy to your web service.</li>
+                <li>Thoroughly test the application in the browser on the production server following deployment.</li>
+                <li>Fix any and all errors prior to submission.</li>
+                <li>Submit the render.com production URL <b>AND</b> the GitHub repository URL as a comment in the assignment submission.</li>
+              </ol>
+              </ol>
+            </li>
+          </ul>
+
+          <h2>Grading Matrix</h2>
+          <p>
+            The operation of this process should follow the principles from the class. This assignment has values in multiple objectives as shown below:
+          </p>
+          <h3>Objective 1</h3>
+          <ul>
+            <li>
+              The detail view meets the standards shown in the
+              <a href="/340-js/views/dev-checklist.html" title="Open the web development checklist in a new tab" target="_blank">Frontend Checklist</a>.
+            </li>
+            <li>
+              The detail information is responsive and can be easily read on
+              changing screen sizes without zooming or horizontal scrolling. This includes a multi-column layout on large screens and stacked layout on small screens.
+            </li>
+            <li>
+              The price is formatted correctly using commas and contains the
+              currency symbol for US dollars.
+            </li>
+            <li>The mileage is formatted correctly and uses commas in the appropriate place values.</li>
+            <li>Obj. 1 value: Refer to grade book</li>
+          </ul>
+
+          <h3>Objective 2</h3>
+          <ul>
+            <li>A route exists to handle the incoming  detail request and works correctly.</li>
+            <li>
+              The <span class="fn">inventory</span> controller contains the control structure and process to deliver the detail view and data and works correctly.
+            </li>
+            <li>
+              A new custom function exists in the <span class="fn">utilities &gt; index.js</span> file to build HTML around the vehicle detail data, then return the resulting string to the controller and works correctly.
+            </li>
+            <li>Obj. 2 value: Refer to grade book</li>
+          </ul>
+
+          <h3>Objective 3</h3>
+          <ul>
+            <li>The detail delivery process works and is an MVC solution, including route, controller, model and utility as required.</li>
+            <li>The footer-based error process works and uses an MVC approach.</li>
+            <li>Obj. 3 value: Refer to grade book</li>
+          </ul>
+
+          <h3>Objective 4</h3>
+          <ul>
+            <li>A function exists in the <span class="fn">inventory model</span> to get data for a particular inventory item based on the inventory id, uses a Prepared Statement approach, and works.</li>
+            <li>Obj. 4 value: Refer to grade book</li>
+          </ul>
+
+          <h3>Objective 5</h3>
+          <ul>
+            <li>Error handling has been implemented throughout the routes and work successfully to deliver error views when an error is detected.</li>
+            <li>The footer-based error link is present and works generate an error, as described in the directions, which is caught and handled using the error handler middleware.</li>
+            <li>Obj. 5 value: Refer to grade book</li>
+          </ul>
+
+          <h3>Objective 6</h3>
+          <ul>
+            <li>The render.com production URL and the GitHub repository URL are both submitted on time and correctly. Both URL's must be present and operational for the assignment to be graded.</li>
+            <!-- <li>The project folder zip file is submitted on-time, correctly, and in a finished state.</li>
+            <li>The production URL is submitted on-time, correctly and works.</li> -->
+            <li>Obj. 6 value: Refer to grade book</li>
+          </ul>
+    </main>
+  </div>
+</body>
+
+</html>

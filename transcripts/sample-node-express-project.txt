@@ -1,0 +1,66 @@
+When building a Node project, it is important to understand the basic steps of adding and using resources.
+
+This short video uses Node and Pnpm to demonstrate building a simple application.
+
+Node and Pnpm are already installed, and a project folder has been created.
+
+Open the project folder in VS Code.
+
+In a terminal window, type "pnpm init", then Enter.
+
+This will create the project and create a "package.json" file. This file acts as a manifest of all resources needed for the project and how the project will operate. 
+
+Opening the file we will make a simple change, indicating that the main file of the project will be "server.js". For beginners, I believe that this name is more meaningful to understand that this is where the Node project is configured and its operation defined. It becomes the "application server" (software, not hardware).
+
+Next, we'll add a package, named "Express". Express make much of the common work of an application server easier to implement.
+
+In the terminal, type "pnpm add express", press "Enter". Wait for Express to be installed. You'll notice that a new "node_modules" folder is added to the project. This is were all packages reside and this folder should NOT be edited or changed in any way.
+
+Open the package.json file and you will see Express and its version number listed as a dependency. This means that the project "depends" on Express to operate.
+
+Now, add a new file, name it "server.js".
+
+As explained earlier, this file describes the operation of the application being built. It is always helpful to add clear comments to help organize this and any file.
+
+Add the code shown. Pause the video while doing so. When done, we'll explain each part.
+
+All done? Good. Let's briefly describe what each element does.
+
+There is a simple concept of "You have to have it, before you can use it." That is why, at the top of the document Express is required. There is alternative syntax where it can be imported. Both do the same thing.
+
+With express available, it is used to to create an "app" (short for application) variable. This variable is now our local way of accessing all of the Express functionality.
+
+Next, the name and port numbers of the application are defined.
+
+Finally, the application is told to "listen" for incoming traffic. Remember, this is our server. It waits for browser traffic to contact it.
+
+Save the file. Let's start it up and do a quick test.
+
+In the VS Code terminal, type "node server.js". This tells node to run the server.js file, thus starting our application.
+
+Now, in a browser, change the URL to "localhost:3000". This sends a GET request to the application. It, in turn, sends a reply. The reply tells us that it received the request, but cannot do anything with it.
+
+Let's stop the server and fix this. Then we'll test again.
+
+In the ternimal type "Control + C", then press Enter.
+
+Returning to the server.js file lets add the comment and route with its handler and function as shown. Placement here is important, so pay close attention. Pause the video as needed.
+
+This line of code uses our Express application to watch for a "GET" request, that has a path of "/". This means that no specific item has been requested, it is a request made just to the application generally.
+
+If such a request is received, a function will execute. This function has access to the request (req) and response (res), meaning incoming request traffic from the browser and outgoing response traffic from the application to the browser.
+
+Using the response, we will send the "Welcome home!" message.
+
+Save the file and once again start the application in the terminal, by typing "node server.js", press "Enter".
+
+Return to the browser tab, where the error was displayed and reload.
+
+This time, you should see the message that was sent from the application.
+
+You have successfully created a basic Node / Express application.
+
+Be sure to return to the terminal in VS Code and stop the server with "Control + C".
+
+Congratulations on building your first application.
+

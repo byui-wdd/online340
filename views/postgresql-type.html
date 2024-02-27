@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <title>PostgreSQL Type | Web Backend Development</title>
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="/340-js/css/340course-min.css" type="text/css" media="screen">
+</head>
+
+<body>
+  <div id="wrapper">
+    <header><img src="/340-js/images/small_banner.jpg" alt="Course Banner"></header>
+    <main>
+      <h1>PostgreSQL Type</h1>
+      <h2>Introduction</h2>
+      <p>Perhaps you have worked with a database previously and created an enumerated (ENUM) field. This is a field where you pre-set the possible values that the field can hold. When data is entered into the field, it will not allow any value if it does not exist in the list of possibilities. Unfortunately, PostgreSQL does not support this field type. Therefore, we must create it as a separate "type" definition in our database. It does give us an opportunity to start working with our database.</p>
+      <h2>Assumptions</h2>
+      <p>Before continuing, the following are assumed to be true:</p>
+      <ol>
+        <li>A successful connection exists between the database server and pgAdmin from the previous activities.</li>
+        <li>You have completed the "<a
+            href="https://go.oreilly.com/byu-idaho/library/view/simply-sql/9780980455250/Text/ch01.html" target="_blank">Introduction
+          to SQL</a>" chapter reading assignment.</li>
+        <li>You have completed the "<a href="https://youtu.be/zw4s3Ey8ayo" target="_blank">PostgreSQL Crash Course</a>"
+           activity.</li>
+      </ol>
+
+      <h2>Video Overview</h2>
+      <p>The video provides a general overview of the activity, but does not contain the detail needed to complete each process. Watch the video to obtain a general idea, but follow the written steps to complete the activity. This is the <a target="_blank" href="../transcripts/create-postgres-type.txt">Transcript</a> of the video.</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/ZDtFtJQqcIk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+      <h2>Create the Type</h2>
+      <ol>
+        <li>Open the connection to the Render.com database from pgAdmin.
+          <ul>
+            <li>Expand the Servers list (if needed)</li>
+            <li>Right-click on the Render connection</li>
+            <li>Select "Connect to Server"</li>
+            <li>Be prepared to supply the password from the database connection information panel in the Render dashboard.</li>
+          </ul>
+        </li>
+        <li>Expand the "Databases" item.</li>
+        <li>Expand the 340 database item (you named this item).</li>
+        <li>Expand the "Schemas" item.</li>
+        <li>Expand the "public" schema item.</li>
+        <li>Right-click on the "Types" item, select "Create &gt; Type...".</li>
+        <li>Type <code class="language-sql">account_type</code> in the "Name" text box. Leave the other settings as they are.
+        <div class="callout"><img src="/340-js/images/create-type-name.png"
+            alt="Screenshot of the pgAdmin Create Type dialog box"></div>
+        </li>
+        <li>Click "Definition" in the top bar.
+          <div class="callout"><img src="/340-js/images/create-type-definition.png"
+              alt="Screenshot of the pgAdmin Create Type definition dialog box"></div>
+        </li>
+        <li>Change the "Type" to "Enumeration".</li>
+        <li>Click the "+" to the right of "Enumeration type".</li>
+        <li>Type <code class="language-sql">Client</code> in the text box.</li>
+        <li>Click the "+" to the right of "Enumeration type".</li>
+        <li>Type <code class="language-sql">Employee</code> in the text box.</li>
+        <li>Click the "+" to the right of "Enumeration type".</li>
+        <li>Type <code class="language-sql">Admin</code> in the text box.</li>
+        <li>Click "SQL" in the top bar. <mark>The image is only an example. Your code should match the values you typed.</mark>
+          <div class="callout"><img src="/340-js/images/create-type-sql.png"
+              alt="Screenshot of the pgAdmin Create Type SQL dialog box"></div>
+        </li>
+        <li>You'll see the SQL code that pgAdmin wrote behind the scene that will execute when you click the "Save" button.</li>
+        <li>You will want to save this SQL code.
+          <ol>
+            <li>In <span title='Visual Studio Code'>VSC</span>, click the <span class="fn">database</span> folder.</li>
+            <li>Click the "New file..." icon.</li>
+            <li>Name the file meaningfully (e.g. db-sql-code.sql)</li>
+            <li>Save the file.</li>
+            <li>Copy the Create - Type SQL code from the pgAdmin dialog box.</li>
+            <li>Paste the code into the new file in <span title="Visual Studio Code">VSC</span>.</li>
+            <li>Save and close the <span title='Visual Studio Code'>VSC</span> file.</li>
+          </ol>
+        </li>
+        <li>Click "Save" in the Create - Type dialog box.</li>
+        <li>If successful, the "account_type" type will now appear beneath the "Types" item in the database.</li>
+      </ol>
+      <h2>Conclusion</h2>
+      <p>With the type item created, it can now be used when a table is created in the database.</p>
+
+      <h2>Close the Connection</h2>
+      <p>As stated in the previous activity, it is recommended that when you are done with your interaction between pgAdmin and the database server that the connection be closed. To do so:</p>
+      <ol>
+        <li>Right-click on the Render server object in the Servers panel of pgAdmin.</li>
+        <li>Select "Disconnect from Server".</li>
+        <li>You're done.</li>
+      </ol>
+    </main>
+    <footer>
+      <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License"
+          style="border-width:0" src="//i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a> All materials (except as
+      noted) are by Blaine Robertson and licensed under a <a rel="license"
+        href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US">Creative Commons Attribution-ShareAlike 3.0
+        License</a>. </footer>
+  </div>
+</body>
+
+</html>

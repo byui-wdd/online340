@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Assignment 4 | Web Backend Development</title>
+  <meta name="description" content="CSE 340 Assignment 4 directions">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="/340-js/css/340course.css" media="screen">
+  <link rel="stylesheet" href="/340-js/css/prism-coy-dev.min.css" media="screen">
+  <script defer src="/340-js/js/prism-coy-dev.min.js"></script>
+</head>
+
+<body>
+  <div id="wrapper">
+    <header id="header">
+      <img src="/340-js/images/small_banner.jpg" alt="CSE 340 Banner Image">
+    </header>
+    <main>
+      <h1>Assignment 4</h1>
+
+      <h2>Overview</h2>
+      <p>In this assignment you get the opportunity to re-apply the MVC and all the various skills and principles to add both classification and inventory data to their respective tables in the database, while also implementing data checks to protect the data store and data-handling process from basic attacks. You will also implement message handling and improve the user experience through implementing stickiness within form inputs.
+      </p>
+
+      <h2>Video Demo</h2>
+      <p>This video demonstrates the deliverables, outcomes and what the finished enhancement could look like when complete. This is the <a target="_blank" href="../transcripts/assignment4.txt">Transcript</a> of the video.</p>
+
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/TBOvuf8cGUg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      
+
+      <h3>Keeping Things Straight (Re-emphasized)</h3>
+      <p>As I mentioned earlier in this unit, one of the most difficult tasks for new programmers is keeping data coming from the browser, being stored into variables, then inserted to database straight. While there is no perfect way to do this, there is a simple practice that may help: use the database field name for the same piece of data in all of its locations.</p>
+      <p>For example, When adding a new item to the inventory table, a field in the table to store the name is "<b>inv_make</b>". So, in the form give the input that name:
+        <br>
+        <code class="language-markup">&lt;input name="inv_make" id="invMake" type="text"&gt;</code> Then, in the controller when collecting the value, store it into a variable of the same name:
+        <br>
+        <code class="language-JavaScript">{ inv_make, ...} = req.body</code> While not foolproof, it does help to keep track of what form field is sending the data, what variable is storing the value and what database field the data should be stored into.
+      </p>
+
+      <h2>Tasks</h2>
+      <p>There are three tasks involved in this assignment: </p>
+      <ol>
+        <li>Creation of a management view that will contain the links to begin and end the processes for tasks 2 and 3.
+        </li>
+        <li>Implement a process to add new classifications  to the <span class="fn">classification</span> table of the database. While doing so, both client-side and server-side validation will be implemented.
+        </li>
+        <li>Implement a process to add new items to the inventory table of the database. While doing so, both client-side and server-side validation will be implemented. In addition,
+          the new inventory form inputs should be "sticky" so previously entered values are maintained (don't worry about the new classification form since it only has a single input).</li>
+      </ol>
+
+      <p>During the insertion process, appropriate messages are expected to be set, passed, and displayed in views to keep the user informed.</p>
+      <p>For each task, it is expected that you will follow the principles and processes already introduced in the course in general, and account registration process specifically. <mark>This includes adding error handling middleware to all new routes.</mark></p>
+
+      <h3>Task One</h3>
+      <ol>
+        <li>Create a new <span class="fn">management</span> view inside the <span class="fn">views &gt; inventory</span> folder.</li>
+        <li>The view should contain an appropriate title and h1 value to represent its role as a management view for all things dealing with inventory.</li>
+        <li>The view must be capable of displaying a flash message sent from the existing <span class="fn">inventory</span> controller.</li>
+        <li>The view should contain two links (no links are directly to a view, all must use the MVC approach):
+          <ul>
+            <li>One to trigger a process to deliver an <span class="fn">add new classification</span> view (see Task 2).</li>
+            <li>One to trigger a process to deliver an <span class="fn">add new inventory</span> view (see Task 3).</li>
+          </ul>
+        </li>
+        <li>The view must be delivered using the MVC architecture as with all other views.</li>
+        <li>The view must meet the requirements of the frontend checklist.</li>
+        <li><i style="font-size: larger;">For now, there should NOT be a link to reach this view in any other view. <span class="notice">It will be accessed only by direct manipulation of the URL. Use this route: <code class="language-markup">site-name/inv/</code>)</span>.</i></li>
+        <li>Thoroughly test all operations for functionality! Make sure it works.</li>
+      </ol>
+
+      <h3>Task Two</h3>
+      <ol>
+        <li>Create an <span class="fn">add-classification</span> view inside the <span class="fn">inventory</span> folder within the <span class="fn">views</span> folder.</li>
+        <li>The view must:
+          <ul>
+            <li>Contain a form for adding a new classification (you will only need to add the classification name, the primary key in the table is auto-incrementing).</li>
+              <li>The form must contain a direction that the new classification name cannot contain a space or special character of any kind.</li>
+              <li>The form must contain client-side validation.</li>
+            <li>The view must be delivered via a route and using the MVC architecture as with all other views.</li>
+            <li>The view must meet the requirements of the frontend checklist.</li>
+          </ul>
+        </li>
+        <li>The form must send all data through the appropriate router, where server-side validation middleware is present, then on to the <span class="fn">inventory</span> controller and then to a function within the <span class="fn">inventory</span> model for insertion to the database.</li>
+        <li>The view must have the means of displaying a flash message returned to it from the controller, as well as errors returned as a result of the server-side validation.</li>
+        <li>If the insertion works, the controller should create a new navigation bar (which shows the new classification) and render the management view, along with a success message. <span class="notice">Note: if it works, the new classification should appear as a navigation item immediately, without a page refresh.</span> However, if it fails, then the add classification view should be rendered with a clear failure message.
+        </li>
+        <li>Thoroughly test all operations for functionality! Make sure it works.</li>
+      </ol>
+
+      <h3>Task Three</h3>
+      <ol>
+        <li>Create an <span class="fn">add inventory</span> view in the <span class="fn">views &gt; inventory</span> folder. The view must:
+          <ul>
+            <li>Contain a form for adding a new vehicle to the inventory table. (<i>Hint: Check the inventory table in the database for the fields that will be needed in the form. <b>DO NOT</b> have a form field for the primary key as it is auto-incrementing in the database table</i>).
+            </li>
+            <li>The form must use client-side validation for all inputs.</li>
+            <li>Form inputs, including the select list for classifications, must be sticky, to retain the information when errors are detected and returned.</li>
+            <li>When indicating the classification the vehicle belongs to, the classification options must appear in a
+              <a href="//www.w3schools.com/html/html_form_elements.asp" title="See an example of a select element"
+                target="_blank">drop-down select list</a>. The classification name must appear to the human eye, but
+              the classification_id must be the value of each option. The select element drop-down list that should have
+              been dynamically pre-built in the <span class="fn">utilities &gt; index</span> file and passed to the view by the controller. (<i>Hint: This will be similar to
+                building the navigation bar, but will be wrapped inside a select element with options instead of an
+                unordered list with list items.)</i>
+            </li>
+            <li>When adding image paths, use the path to the <span class="fn">No Image Available</span> image and thumbnail respectively, that already exists in the
+              <span class="fn">vehicle images</span> folder, or you could find and add a new image for the vehicle manually to the images folder
+              and include the path in the form.</li>
+            <li>The view must have the means of displaying a flash message returned to it from the controller, as well as errors returned from the server-side validation process.</li>
+            <li>The view must meet the requirements of the frontend checklist.</li>
+          </ul>
+        </li>
+        <li>The form must send all data via a route and using the MVC architecture as with other processes.</li>
+        <li>The data must be written to the inventory table within the database.</li>
+        <li>If the new inventory item is added successfully, a success message must be displayed in the <span class="fn">management</span> view. <mark>If successful, you can navigate through the appropriate navigation item to ensure the item appears in the inventory by classification view, and can be clicked to see all the item's details.</mark></li>
+        <li>If the new item fails to be added to the database, a failure message must be displayed in the <span class="fn">add inventory</span> view.</li>
+        <li>Thoroughly test all operations for functionality! Make sure it works.</li>
+      </ol>
+
+      <h2>Submission</h2>
+
+      <ul>
+        <li>Work with your learning team to accomplish the tasks and post to and read the collaboration tool to help one another.
+        </li>
+        <li>Build, run and test the application to insert the new classifications and inventory item locally first, also testing that the client-side and server-side checks work and that the new inventory form is sticky.</li>
+        <li>Check your work to ensure that it meets all the expectations listed.</li>
+        <li>When satisfied that the code is operational:
+          <ol>
+            <li>Upload the project to your GitHub repository.</li>
+            <li>Go to the render.com dashboard and manually deploy to your web service.</li>
+            <li>Thoroughly test the application in the browser on the production server following deployment.</li>
+            <li>Fix any and all errors prior to submission.</li>
+            <li>Submit the render.com production URL <b>AND</b> the GitHub repository URL as a comment in the assignment submission.</li>
+          </ol>
+          <!-- <ol>
+            <li>Save your work, do a Git commit and upload the code to your GitHub repository.</li>
+            <li>Deploy the application to your render.com service.</li>
+            <li class="notice">Thoroughly test the deployed application in the production environment.</li>
+            <li>Zip the project folder, name it assignment 4 (save this zip file outside your project folder).
+            </li>
+            <li>Submit the zip file to the assignment 4 submission and add the project URL to the 
+              submission comment.</li>
+          </ol> -->
+        </li>
+      </ul>
+
+      <h2>Grading Matrix</h2>
+      <p>This enhancement has values in multiple objectives as shown below:</p>
+      <h3>Objective 1</h3>
+      <ul>
+        <li>All views meet the standards found in the <a href="/340-js/views/dev-checklist.html"
+            title="Open the frontend checklist in a new tab" target="_blank">Frontend Checklist</a></li>
+            <li>The add inventory form is sticky when server-side checks return errors.</li>
+        <li>Obj. 1 value: Refer to grade book</li>
+      </ul>
+
+      <h3>Objective 2</h3>
+      <ul>
+        <li>Each of the three processes: 1) delivery of the management view, 2) processing of the new classification, and 3) processing of the new inventory item work correctly and meet the requirements listed in the tasks.</li>
+        <li>Messages are passed correctly through the session and displayed appropriately in views.</li>
+        <li>Obj. 2 value: Refer to grade book</li>
+      </ul>
+
+      <h3>Objective 3</h3>
+      <ul>
+        <li>Each of the task processes is implemented using the MVC architecture.</li>
+        <li>Each element of the MVC performs its proper function and is fully operational:
+          <ul>
+            <li>Routes function appropriately and call the controller to carry out the task.</li>
+            <li>Error handling middleware has been added to new routes.</li>
+            <li>Server-side validation middleware has been added to insertion routes.</li>
+            <li>The controller contains all logic for the application.</li>
+            <li>The model contains the database functionality and returns outcome information to the controller.</li>
+            <li>The classification select list is built using a custom function within the <span class="fn">utilities &gt; index</span> file.</li>
+            <li>The views display the needed information for the human visitor.</li>
+          </ul>
+        </li>
+        <li>Obj. 3 value: Refer to grade book</li>
+      </ul>
+
+      <h3>Objective 4</h3>
+      <ul>
+        <li>The functions in the model successfully insert data to the database using prepared statements.</li>
+        <li>The functions in the model successfully report the outcome of the insertion back to the controller.</li>
+        <li>Obj. 4 value: Refer to grade book</li>
+      </ul>
+
+      <h3>Objective 5</h3>
+      <ul>
+        <li>Client-side validation is present and operational for all inputs in both the "add classification" and "add inventory" forms.</li>
+        <li>Server-side validation is present and operational for all inputs from the "add classification" and "add inventory" forms.</li>
+        <li>Correct data types for incoming data have been implemented.</li>
+        <li>Errors are successfully detected and returned to the appropriate view for correction.</li>
+        <li>Obj. 5 value: Refer to grade book</li>
+      </ul>
+
+      <h3>Objective 6</h3>
+      <ul>
+        <li>The render.com production URL and the GitHub repository URL are both submitted on time and correctly. Both URL's must be present and operational for the assignment to be graded.</li>
+        <!-- <li>The project folder zip file is submitted on-time, correctly, and in a finished state.</li>
+<li>The production URL is submitted on-time, correctly and works.</li> -->
+        <li>Obj. 6 value: Refer to grade book</li>
+      </ul>
+    </main>
+  </div>
+  
+</body>
+
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Classification View | Web Backend Development</title>
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="/340-js/css/340course-min.css" type="text/css" media="screen">
+  <link rel="stylesheet" href="/340-js/css/prism-coy-dev.min.css" media="screen">
+ <script defer src="/340-js/js/prism-coy-dev.min.js"></script>
+</head>
+
+<body>
+  <div id="wrapper">
+    <header><img src="/340-js/images/small_banner.jpg" alt="Course Banner"></header>
+    <main>
+      <h1>Classification View</h1>
+      <h2>Introduction</h2>
+      <p>In the inventory controller, when the route that requests to see all the vehicles in inventory by a particular classification is processed, the data is sent to a view to be displayed. Let's build that view now.</p>
+
+      <h2>Video Overview</h2>
+      <p>The video provides a general overview of the activity, but does not contain the detail needed to complete each process. Watch the video to obtain a general idea, but follow the written steps to complete the activity. This is the <a target="_blank" href="../transcripts/build-inventory-classification-view.txt">Transcript</a> of the video.</p>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/N-0IqZFYCZ8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      
+
+<h2>Build the folder and view</h2>
+<ol>
+  <li>Click the <span class="fn">views</span> folder.</li>
+  <li>Now create an <span class="fn">inventory</span> folder with the <span class="fn">classification.ejs</span> file inside it.</li>
+  <li>The <span class="fn">classification.ejs</span> view should open in the workspace.</li>
+  <li>This view will consist of three distinct sections: A content heading, a message, and the inventory items display.</li>
+  <li>I suggest adding a comment (EJS or HTML) prior to each of the sections to explain what it does.</li>
+  <li>We'll build each section in order.</li>
+</ol>
+
+<h2>The Content Heading</h2>
+<p>An often overlooked best practice is to implement a value for the &lt;title&gt; element that describes the content of the view. Closely associated is to have a &lt;h1&gt; heading that does the same thing. We are already building the title value in the controller, and passing it as a name-value pair to the view. We will take advantage of that, to use the same value as our main content heading. Add the following code block to the top of the view.</p>
+<pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">&lt;% if (title) { %&gt;
+&lt;h1&gt;&lt;%= title %&gt;&lt;/h1&gt;
+&lt;% } else {
+  res.redirect('/')
+} %&gt;
+</code></pre>
+<h3>An Explanation</h3>
+<ul>
+  <li><strong>Line 1 -</strong> uses a EJS code block to contain a JavaScript <code class="language-javascript">if</code> structure to determine if a "title" variable exists.</li>
+  <li><strong>Line 2 -</strong> if the variable exists, it is displayed within an &lt;h1&gt; element.</li>
+  <li><strong>Line 3 -</strong> ends the <code class="language-javascript">if</code> structure and begins an <code class="language-javascript">else</code> structure.</li>
+  <li><strong>Line 4 -</strong> redirects the response object to the default index route, to deliver the home view.</li>
+  <li><strong>Line 5 -</strong> ends the <code class="language-javascript">else</code> structure.</li>
+</ul>
+<p>While this approach may seem unduly extreme, it reinforces the concept of best practice and our desire to deliver meaningful content. The use of redundant values in the title and h1 may also help our <span title="Search Engine Optimization">SEO</span> rating.</p>
+
+<h2>A Message Block</h2>
+<p>It is not uncommon to need to display messages in a view, for example, if an error occurs. While we don't currently have a message, we don't know if we will. By adding the capacity to display a message, we're future-proofing our view. <mark>For now this will be commented out, but we'll make it live in the next unit.</mark> Let's add this small code block below the code you already added. I suggest leaving a blank line between the two.</p>
+<pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">&lt;%# messages() %&gt;
+</code></pre>
+<h3>An Explanation</h3>
+<p>An EJS code block, using a comment mark (#), disables this code. In the future, when messages have been implemented, you'll replace the comment with the unescaped mark (&mdash;), while will allow any messages that have been set to be displayed.</p>
+
+<h2>The Inventory Items Display</h2>
+<p>This code block is the main content delivery mechanism for the view. You'll notice that it is very simple. The reason is that the view is meant to display content, not necessarily to contain logic. All the logic and building were done previously, the view only displays the result.</p>
+<pre class="line-numbers"><code class="language-javascript">&lt;%- grid %&gt;</code></pre>
+<h3>An Explanation</h3>
+<ul>
+  <li><strong>Line 1 -</strong> An EJS code block with an "unescaped" indicator <code class="language-javascript">&mdash;</code>. This allows HTML to be displayed. Remember our <span class="fn">grid</span> variable contains HTML.</li>
+  <li>Be sure to check for and fix any <span title='Visual Studio Code'>VSC</span> warnings or errors.</li>
+  <li>Save the file.</li>
+</ul>
+
+<h2>Styling</h2>
+<p>In the building process, various classes and id's were added to the code. It is your responsibility to write CSS rules to style the output to be responsive and professional.</p>
+
+<h2>Test, Now!</h2>
+<p>When a navigation item in the application is clicked, all the inventory vehicles belonging to that classification are queried and eventually sent to this view. Now would be a perfect time to start your local server, bring up your project in a browser tab and click one of the navigation classification items. If it worked, you should see an unordered list of inventory vehicles belonging to that classification. Keep at it until it works. Remember that you can discuss things with your learning team, then reach out for additional help as needed.</p>
+<p class="notice">Be sure to shut down the local server <code>Control + C</code> when done testing.</p>
+    </main>
+    <footer>
+      <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License"
+          style="border-width:0" src="//i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a> All materials (except as
+      noted) are by Blaine Robertson and licensed under a <a rel="license"
+        href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US">Creative Commons Attribution-ShareAlike 3.0
+        License</a>. </footer>
+  </div>
+ 
+
+</body>
+
+</html>

@@ -1,0 +1,74 @@
+Render.com is a service that provides hosting for a variety web and database technologies. It offers a generous free-tier and is relatively easy to setup and use.
+
+In a previous video, setting up a PostgreSQL database server was demonstrated.
+
+In this video, setting up a Node web service will be demonstrated as well as connecting the  database service to the Node service.
+
+Pnpm is used in the project and will be used in the service setup as well. If using npm or yarn, the process will be different, although similar.
+
+Prior to beginning this video, it is assumed that you have a GitHub repository, which has a current repo with a current commit of your local development project. The development project was working, with no errors, prior to being committed and pushed to GitHub.
+
+Begin by logging into Render.com. Previously I connected my GitHub account to Render. This makes deploying projects from GitHub to Render easy and is recommended.
+
+From the dashboard, select "New", then Web Service.
+
+When asked if a GitHub repository is to be connected, select the repo and click "Connect".
+
+Provide a label for the new web service, this will help distinguish it from any others that may be created in the future.
+
+Select the server in the region closest to your location.
+
+When asked what branch to use as the default from the GitHub repository, "Main" is the most common choice.
+
+Leave the "Root Directory" text box empty.
+
+Change the Environment to "Node".
+
+Change the build command to "pnpm install". This is the same command used to build the application locally. It reads the package.json file and installs the package dependencies found there.
+
+Change the start command to "pnpm start". This command is also found in the package.json file in the "Scripts" area. In this case it starts the server.js file using Node, not "nodemon", which is only for use in a development environment.
+
+Leave the instance type as "Free".
+
+Click the "Advanced" button.
+
+Change the "Auto-deploy" slider to "No". This allows us to control when to deploy changes from GitHub to the Render production environment. If left to "Yes", each time we committed to the GitHub repository, the application would be redeployed to Render.
+
+Scroll to the bottom and click the "Create Web Service" button. The service will spin up and will attempt to deploy the code from GitHub. Watch for the "Live" message. Once it appears, then move on.
+
+Click the "Events" item on the left. The item that is of interest is "First deploy started..." and will list the date and time.
+
+There should also be an item saying "Deploy live for..." and the date and time. This message means the project was deployed and worked.
+
+However, since the project is dependant on the database, the two must be connected for the application to actually function.
+
+Right-click the "Dashboard" item at the top of the screen and select "Open in New tab".
+
+Open the existing database service.
+
+Scroll down to the Connections area and click the "Copy to clipboard" button next to the Internal Database URL item.
+
+Return to the other tab, where the Web Service is located.
+
+Click the "Environment" item, then click the "Add Environment Variable" button.
+
+Click in the "Value" text box and paste the copied URL.
+
+Click in the "Key" text box, to the left, and type "DATABASE_URL", all uppercase. This should be the same key used in the .env file for use in the development environment.
+
+Click the "Save Changes" button.
+
+In the Dashboard, at the top of the Events window, should be the name of the service, and below it the URL of the web service.
+
+Click the link and a new tab should open and it will attempt to load your application. If you see the successful rending of the home view, that's a good start.
+
+Click each of the classifications in the navigation bar and they should load the vehicles into the browser, using the classification view, just as in the development environment.
+
+One last item of importance. Because you are using the Free tier, tracking use is very important.
+
+Click each of the services in the dashboard, and then the "Metrics" option.
+
+A document will open showing the amount of use, compared to the limits of the free-tier. If you exceed the use limits, the service will be shut down until the end of the month and/or you will have to upgrade to paid plan. Check your usage often to make sure you stay within the limits.
+
+From this point forward, the workflow will be to build on the application in the local development environment and test thoroughly. Once satisfied that everything is ready, then commit and push to the GitHub repo. Finally, open the render.com web service and click the "Deploy" button to deploy the working code from GitHub to the production server. Then, thoroughly test in your browser.
+

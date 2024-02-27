@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <title>JWT Authorization | Web Backend Development</title>
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="/340-js/css/340course-min.css" type="text/css" media="screen">
+  <link rel="stylesheet" href="/340-js/css/prism-coy-dev.min.css" media="screen">
+  <script defer src="/340-js/js/prism-coy-dev.min.js"></script>
+</head>
+
+<body>
+  <div id="wrapper">
+    <header><img src="/340-js/images/small_banner.jpg" alt="Course Banner"></header>
+    <main>
+      <h1>JWT Authorization</h1>
+
+      <h2>Authentication vs. Authorization</h2>
+      <p>Did you notice in the previous activity that the word "authenticate" was used, but not "authorize" or "authorization"? You may ask, "What's the difference?" That is a good question!</p>
+
+      <h3>Authentication</h3>
+      <p>In the previous activity you followed a process where the client provided data (email address and password) which was sanitized and validated. Once the data was deemed safe, the email address was used to see if a matching email was found in the database from registered accounts. If so, the stored hash of the password was used and a comparison process carried out to see if the provided password, once hashed, matched the one stored in the database. If all of this was "true", then we are said to have "authenticated" the user - confirmed that what was sent matched data that was already stored.</p>
+
+      <h3>Authorization</h3>
+      <p>As a result of a successful authentication, a JWT token was created, which includes all the account data, except for the hashed password. The token was placed in a cookie and is automatically sent to the browser when the account management view is delivered. This token, carried by the cookie, will continue to be sent back and forth between the client's browser and the server, until one or the other of them expires. Each time it arrives at the server, the token can be checked and used as a "ticket" to enter areas of the site, that would otherwise be "off limits". In other words, it "authorizes" them to enter areas that they would not be able to if they did not have the token.</p>
+
+      <h2>Video Overview</h2>
+      <p>The video provides a general overview of the activity, but does not contain the detail needed to complete each process. Watch the video to obtain a general idea, but follow the written steps to complete the activity. This is the <a target="_blank" href="../transcripts/jwt-authorization.txt">Transcript</a> of the video.</p>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/C2JiypeJqbQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+      <h2>Implementation</h2>
+      <p>With some explanation out of the way, let's add the functionality to make authorization a reality. As in previous situations, this function is "Middleware". Meaning that it operates between the request and response objects. Once written, the function will be processed after the request object has arrived at the server and before the response object returns anything to the client.</p>
+
+      <ol>
+        <li>Find and open the <span class="fn">utilities > index.js</span> file.</li>
+        <li>Scroll to the bottom of the file and create some blank lines between the last function and the module.exports statement.</li>
+        <li>Add the following function:
+          <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-javascript">/* ****************************************
+ *  Check Login
+ * ************************************ */
+ Util.checkLogin = (req, res, next) =&gt; {
+  if (res.locals.loggedin) {
+    next()
+  } else {
+    req.flash("notice", "Please log in.")
+    return res.redirect("/account/login")
+  }
+ }</code></pre>
+        </li>
+        <li>
+          <h3>An Explanation</h3>
+          <ul>
+            <li><strong>Lines 1-3 - </strong> a comment explaining the function.</li>
+            <li><strong>Line 4 - </strong> creates the function and assigns it to the "Util" object with a name of "checkLogin". Passes in request, response and next as parameters.</li>
+            <li><strong>Line 5 - </strong> an "if" check to see if the login flag exists and is "true" in the response object.</li>
+            <li><strong>Line 6 - </strong> allows the process of the application to continue by using the "next()" function.</li>
+            <li><strong>Line 7 - </strong> ends the "if" and begins an "else" block.</li>
+            <li><strong>Line 8 - </strong> create a flash message.</li>
+            <li><strong>Line 9 - </strong> redirects to the login route, because the login flag does not exist.</li>
+            <li><strong>Line 10 - </strong> ends the "else" block.</li>
+            <li><strong>Line 11 - </strong> ends the function.</li>
+          </ul>
+        </li>
+        <li>Examine the code and ensure that no warnings or errors are present.</li>
+        <li>Save the file.</li>
+      </ol>
+
+      <h2>Add to Route</h2>
+      <p>Currently, we have a check to determine if the JWT token valid which is used with every route. We just added a second check, to see if the client is logged in. Think of a ticket taker checking to see if your ticket is for the correct day and time. It is general in nature, so should only be used for gaining access to general locations which should be authorized. It is NOT checking for anything specialized. Currently, we only have one such location, the account-management route.</p>
+
+      <ol>
+        <li>Find and open the <span class="fn">routes > accountRoute</span> file.</li>
+        <li>Locate the <span class="fn">default "/" route</span>, that will trigger the process to deliver the <span class="fn">account-management</span> view. (You and your learning team were to write this route as part of the exercise found in a previous activity).</li>
+        <li>Between the route indicator "<code>/</code>" and the controller function call (e.g. <code>accountController.buildManagement</code>), add the middleware function you just wrote - <code class="language-javascript">utilities.checkLogin</code>.</li>
+        <li>When done, the route could look like this:
+          <pre><code class="language-javascript">router.get("/", utilities.checkLogin, utilities.handleErrors(accountController.buildManagement))</code></pre>
+          <i><b>Your function in the controller may be named something different. Use your name, not the one shown in the example.</b></i>
+        </li>
+        <li>Examine the code and ensure that no warnings or errors are present.</li>
+        <li>Save the file.</li>
+      </ol>
+
+      <h2>Time to test</h2>
+      <ol>
+        <li>Ensure that all files are saved.</li>
+        <li>In a <span title='Visual Studio Code'>VSC</span> terminal, run the server - type <code><mark>pnpm run dev</mark></code>, press "Enter".</li>
+        <li>Open a browser tab and attempt to gain access to the <span class="fn">account-management</span> view by manipulating the URL, like this:
+          <mark><code>localhost:5500/account/</code></mark>
+        </li>
+        <li>You should be re-routed to the login page and see the flash message.</li>
+        <li>If you are not sent to the login view, check the cookies. If the JWT cookie exists, delete it. Then try getting to the account management view again.</li>
+        <li>Register three new accounts with the following information using your registration form:
+          <ol>
+            <li>account_firstname: Basic <br>
+              account_lastname: Client <br>
+              account_email: basic@340.edu <br>
+              account_password: I@mABas1cCl!3nt</li>
+            <li>account_firstname: Happy <br>
+              account_lastname: Employee <br>
+              account_email: happy@340.edu <br>
+              account_password: I@mAnEmpl0y33</li>
+            <li>account_firstname: Manager <br>
+              account_lastname: User <br>
+              account_email: manager@340.edu <br>
+              account_password: I@mAnAdm!n1strat0r</li>
+          </ol>
+        </li>
+        <li><i>Save these accounts' information as you will be using it often in the future.</i></li>
+        <li>Login to your database and change the account_type of the Employee account to "Employee".</li>
+        <li>Change the account_type of the Manager account to "Admin".</li>
+        <li>Login as "Basic Client". 
+          The <span class="fn">account-management view</span> should appear indicating you are logged in. Check the jwt cookie using the <mark>Web Development Tool > Cookies tab > View Cookie Information</mark>. Look at the value of the token, perhaps writing down the last 4 or 5 characters of the token. Delete the cookie and close the tab where you were looking at the cookie information.</li>
+        <li>Login as either the "Happy Employee" or "Manager User". Again, you should be directed to the <span class="fn">account-management view</span>. Examine the value of the jwt token in the cookie. The jwt token value should be different from that of the first token. This is because the payload is different.</li>
+      </ol>
+
+      <h2>Conclusion</h2>
+      <p>Assuming that everything worked, you can log in and the cookie containing the token is set and sent to the browser, and it is checked to allow the client access to the <span class="fn">account-management view</span>, then the authentication is working. Notice the general nature of the check. All three accounts are allowed access, even though all three are different types of account. Yay! Do a happy dance. If not, then talk to your learning team, the TA or the professor. But, get it working before moving on to the enhancement.</p>
+
+    </main>
+    <footer>
+      <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="//i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a> All materials (except as
+      noted) are by Blaine Robertson and licensed under a <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US">Creative Commons Attribution-ShareAlike 3.0
+        License</a>.
+    </footer>
+  </div>
+</body>
+
+</html>

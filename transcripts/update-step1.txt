@@ -1,0 +1,44 @@
+Updating information in a database table is a two-step process.
+
+Step one is to identify the particular item to be updated, query the data from the database and deliver to a view, so that it can be edited.
+
+Step two is to deliver the edited data back to a controller for the actual update to be made back into the database, via a model.
+
+This video covers step one.
+
+A follow-up video will cover step two.
+
+We are using an MVC approach and begin in the view where a list of inventory items has been displayed.
+
+Next to each, is a link to begin the update or delete process for that item.
+
+Each of these links passes the appropriate route and unique identifier to the application, where it will be routed to the appropriate handler in a controller.
+
+Within the controller, to begin the update process, the unique identifier is captured and stored in a local variable.
+
+All incoming data must be checked for appropriate data types, both client-side and server-side.
+
+Once stored, the value is sent into a model-based function to query the data from the database.
+
+The result set, returned from the model, is then stored into a local variable.
+
+If no data was returned, the default error handler should display  a server error. 
+
+However, if data, for the inventory item, is returned, then a view, which is an adaptation of the view used to insert a new inventory item, is returned.
+
+The view has a form, containing the data for the inventory item, so that it can be easily edited.
+
+Under no circumstances should the form within this view be empty. If empty, it is an insert form, not an update form.
+
+The view should show the inventory vehicle make and model in the title element and repeat the same in the h1 heading of the file. This should clearly identify the content being updated.
+
+Each data element within the form must also be sticky, in case an error is detected during step 2 of the update process.
+
+In addition, the form's submit button value must represent an update process.
+
+Finally, the view must meet the requirements of the frontend checklist.
+
+Once this is working, then step 1 is complete and you're ready to proceed to step 2, which is to return the data to the application to be updated in the database.
+
+When done testing, make sure to close down the development server.
+

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Express Routes | Web Backend Development</title>
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="/340-js/css/340course-min.css" type="text/css" media="screen">
+  <link rel="stylesheet" href="/340-js/css/prism-coy-dev.min.css" media="screen">
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <header><img src="/340-js/images/small_banner.jpg" alt="Course Banner"></header>
+    <main>
+      <h1>Express Routes</h1>
+      <h2>Video Overview</h2>
+      <p>The video provides a general overview of the activity, but does not contain the detail needed to complete each process. Watch the video to obtain a general idea, but follow the written steps to complete the activity. This is the <a target="_blank" href="../transcripts/express-routes.txt">Transcript</a> of the video.</p>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/T-gb8LZ0I0I" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      <p class="notice">The index view shown in this video reflects that view when the assignment at the end of this unit is complete. Yours will NOT look like this during this activity.</p>
+      
+      <h2>Introduction</h2>
+      <p>As mentioned earlier, a route indicates to the server which resource is to be processed and a resulting view
+        (or if building an API, a resulting content object) is returned to the requesting browser or frontend
+        application. The server software we are using is called "Express" (<a href="https://expressjs.com/"
+          target="_blank">https://expressjs.com/</a>). It is very popular in Node application development, but it is not the only option.</p>
+      <p>When you downloaded the starter code, it included a <span class="fn">routes</span> folder. This is where specialized routes will be
+        stored and then tied back to the <span class="fn">server.js</span> page. Let's take a look at such a file now.</p>
+      <h2>static.js Routes</h2>
+      <p>In an earlier activity the concept of static files was introduced. Let's see how Express knows to use them.</p>
+      <ol>
+        <li>Open the <span class="fn">static.js</span> file found in the <span class="fn">routes</span> folder.</li>
+
+        <li>The code should look like the image:
+          <div class="callout"><img src="/340-js/images/static-routes.png" alt="Static routes code">
+          </div>
+        </li>
+      </ol>
+
+      <h3>An Explanation</h3>
+      <ol>
+        <li><strong>Line 1 -</strong> The express package is brought into the scope of the file and assigned to a local
+          variable.</li>
+        <li><strong>Line 2 -</strong> The Express "router" functionality is invoked and stored into a local variable for
+          use. <span class="notice">Notice the
+          (), indicating that Router is a function.</span></li>
+        <li><strong>Lines 4 & 5 -</strong> Comments</li>
+        <li><strong>Line 6 -</strong> Indicates that the Express router is to "use" the "express.static" function,
+          meaning this is where
+          static resources will be found, with the <span class="fn">public</span> folder.</li>
+        <li><strong>Line 7 -</strong> Indicates that any route that contains <code class="language-markup">/css</code> is to refer to the <span class="fn">public/css</span>
+          folder, which is found at the root level of the project.</li>
+        <li><strong>Line 8 -</strong> Indicates that any route that contains <code class="language-markup">/js</code> is to refer to the <span class="fn">public/js</span>
+          folder, which is found at the root level of the project.</li>
+        <li><strong>Line 9 -</strong> Indicates that any route that contains <code class="language-markup">/images</code> is to refer to the
+          <span class="fn">public/images</span> folder, which is found at the root level of the project.</li>
+        <li>Lines 7, 8 and 9 allow you to write paths pointing to these resources easily and also to add the subfolders
+          for images, CSS and JavaScript and have them still operate correctly.</li>
+        <li><strong>Line 11 -</strong> Exports the router object, along with all of these use statements for use in other areas of the application. This is VERY IMPORTANT. If a resource is NOT exported, it cannot be used somewhere
+          else.</li>
+      </ol>
+
+      <h2>server.js File</h2>
+      <p>Because the static routes have been exported, they can be imported and used elsewhere. Let's see how this is done.</p>
+      <ol>
+        <li>Open the <span class="fn">server.js</span> file at the root of the repository.</li>
+        <li>Note that in the "Require Statements" section of the document, Express, as a function, is assigned to the "app" variable. This is common practice in a Node application.</li>
+        <li>In this same section, note that a route file, named "static", which you reviewed earlier, is imported and stored into a "static" variable.</li>
+        <li>Find the "Routes" comment and locate the use statement below it.</li>
+        <li>Notice that instead of <code class="language-javascript">router.use</code>, it is now <code class="language-javascript">app.use</code>, meaning that the application itself will use this
+          resource.</li>
+        <li>The resource which has been exported in the <span class="fn">static</span> file is now to be used by the app. This single line of
+          code now allows the app to know where the <span class="fn">public</span> folder is located and that it and all of its subfolders
+          will be used for static files.</li>
+        <li>By doing things in this manner it allows for all the functionality, while allowing the <span class="fn">server.js</span> file to
+          remain uncluttered.</li>
+      </ol>
+      <h3>The "index" Route</h3>
+      <p>From previous classes you should understand that a typical default file name in web development is <span class="fn">index</span>,
+        regardless of file extension. The same is true in a Node, Express and EJS application. In this section you are
+        going to build the route that will deliver <span class="fn">index</span>, and then build the index content and test it.</p>
+      <ol>
+        <li>Create an empty line beneath the existing static route in <span class="fn">server.js</span>.</li>
+        <li>Add the comment and two lines of code shown in the image:
+          <div class="callout"><img src="/340-js/images/index-route-original.png"
+              alt="server.js code for the index route"></div>
+        </li>
+        <li>The first line is a comment, feel free to alter it as needed.</li>
+        <li>The second line does a number of things:
+          <ol>
+            <li><strong>app.get -</strong> The express application will watch the "get" object, within the HTTP Request, for a particular route.
+            </li>
+            <li><strong>"/" -</strong> This is route being watched. It indicates the base route of the application or
+              the route which has no specific resource requested.</li>
+              <li><strong>function(req, res){ -</strong> A JavaScript function that takes the request and response objects as parameters.</li>
+            <li><strong>res.render() -</strong> The "<code class="language-javascript">res</code>" is the response object, while "<code class="language-javascript">render()</code>" is an Express function that will retrieve the specified view - "<span class="fn">index</span>" - to be sent back to the browser.</li>
+            <li><strong>{title: "Home" } -</strong> The curly braces are an object (treated like a variable), which holds a name - value pair. This object supplies the value that the "<span class="fn">head</span>" partial file expects to receive. The object is passed to the view.</li>
+            <li><strong>}) -</strong> The right curly brace closes the function, while the right parentheses closes the "<code class="language-javascript">get</code>" route.</li>
+            <li>Save the file.</li>
+            </ol>
+        </li>
+      </ol>
+
+   
+
+      <h2>Build the index.ejs View</h2>
+      <p>For now, the index view is going to be dead simple. You'll get a chance to expand it later.</p>
+      <ol>
+        <li>Click the <span class="fn">views</span> folder to highlight it.</li>
+        <li>Click the "new file" icon, name the new file <span class="fn">index.ejs</span>.</li>
+        <li>In the new file only add a <code class="language-markup">&lt;h1&gt;</code> element with your own name inside.</li>
+        <li>Save the file.</li>
+        <li>Notice that there is no other HTML in the file, just the <code class="language-markup">h1</code> element. Why? Because all the other HTML
+          already exists in the layout and partial files. EJS and Express will dynamically build the entire view using
+          all the pieces when the server reads the "/" route. The <span class="fn">index</span> view is the "body" that will be supplied to
+          the layout.</li>
+      </ol>
+      <h2>Time to Test</h2>
+      <p>It's time to make sure everything works. It is always a good idea to test whenever it is easy to see if the
+        process can accomplish a task. In this case, all the fundamentals are in place to request a view and see if
+        the server can fulfill that request.</p>
+      <ol>
+        <li>Make sure all the files are saved (look for any black dots in the VSC tabs of open files).</li>
+        <li>Open a new terminal window, if one is not already open.</li>
+        <li>Type <code class="language-javascript">pnpm run dev</code>, press "Enter"</li>
+        <li>Watch for the message telling you that the server is running on localhost:5500.</li>
+        <li>In a browser, open a new tab and type, <code class="language-javascript">localhost:5500/</code>, press "Enter".</li>
+        <li>You should now be looking at a web page that contains a header, navigation bar, a h1
+          with your name, and a footer. Also, note the value "Home" in the tab. That is the value passed into the view in the object parameter. You can change its value in the server.js file and save the file. Then reload the page in the browser.</li>
+        <li>If everything worked, high five anyone close by. If it didn't go back and check your code, talk to your
+          learning team or get help from the TA or professor.</li>
+        <li>When done testing, type <code><mark>Control + C</mark></code>, in the terminal, to stop the server.</li>
+      </ol>
+      <h2>Conclusion</h2>
+      <p>The process of using routes and views is fundamental to modern web development. In later lessons, we'll add models and controllers. As you practice and repeat this process you'll become comfortable with it. Practice makes perfect!</p>
+    </main>
+    <footer>
+      <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License"
+          style="border-width:0" src="//i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a> All materials (except as
+      noted) are by Blaine Robertson and licensed under a <a rel="license"
+        href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US">Creative Commons Attribution-ShareAlike 3.0
+        License</a>. </footer>
+  </div>
+  <script src="/340br/js/prism-coy-dev.min.js"></script>
+
+</body>
+
+</html>

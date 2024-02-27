@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Understanding Data Results | Web Backend Development</title>
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="/340-js/css/340course-min.css" type="text/css" media="screen">
+  <link
+      rel="stylesheet"
+      href="/340-js/css/prism-coy-dev.min.css"
+      media="screen">
+    <script defer src="/340-js/js/prism-coy-dev.min.js"></script>
+  <style>
+     /* Style the buttons that are used to open and close the accordion panel */
+.accordion {
+  background-color: #bbf0f4;
+  color: #444;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  text-align: left;
+  border: none;
+  outline: none;
+  transition: 0.4s;
+}
+
+button.accordion::after
+{
+  content: '\002B';
+  color: #777;
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active, .accordion:hover {
+  background-color: #ccc;
+}
+
+/* Style the accordion panel. Note: hidden by default */
+.panel {
+  padding: 0 18px;
+  background-color: white;
+  display: none;
+  overflow: hidden;
+} 
+  </style>
+</head>
+
+<body>
+  <div id="wrapper">
+    <header><img src="/340-js/images/small_banner.jpg" alt="Course Banner"></header>
+    <main>
+      <h1>Understanding Data Results</h1>
+      <h2>Introduction</h2>
+      <p>In the previous activity, you ran a query against the classification table in the database. Do you know what you got back? In this activity, you will be introduced to the concepts of multiple versus single record result sets, and how to access the returned data.</p>
+   
+
+<h2>Querying Many Items</h2>
+<p>As mentioned above, in the previous activity, you wrote a SQL query, as part of a model-based function, to get the data from the classification table. The function, with the query, looks like this:</p>
+<pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">/* ***************************
+   *  Get all classification data
+   * ************************** */
+  async function getClassifications(){
+    return await pool.query("SELECT * FROM public.classification ORDER BY classification_name")
+  }
+  </code></pre>
+<p>What actually is returned? Let's find out.</p>
+<ol>
+  <li>If you opened the index.js file in the <span class="fn">utilities</span> folder.</li>
+  <li>And added a new, empty line between the second and third line of the getNav function.</li>
+  <li>In the new line, you typed the following code: <mark>console.log(data)</mark></li>
+  <li>When the function is called and the data returned, it will be written to the server console and can be seen in the built-in VS Code terminal. It would look like the illustration below.</li>
+  <li><img src="../images/classification-data-object.png" alt="The data object containing the classifications"></li>
+  <li>It is an object (note the curly braces surrounding everything). What is most important, is the "rows" area.</li>
+  <li>"rows" is the name associated with an array, which holds objects of data from the classification table.</li>
+</ol>
+
+      <h2>Just the array, please!</h2>
+        <p>All we are interested in, is the array and the objects in it. So, we need to take steps to isolate the array. Looking back into the getNav function, you'll notice three lines below where the console.log() was added, says <mark>data.rows</mark>. This indicates that within the data object, we are only interested in the "rows" array.</p>
+        <p>While this seems easy, and it is, it remains a critical concept.</p>
+
+        <h2>The Point</h2>
+        <p>When querying the database for multiple items, an object will be returned. The items will <b>ALWAYS</b> be stored in an array named "rows" within the object! When you want to access the data, you must do so via the "rows" array.</p>
+
+<h2>Querying a Single Item</h2>
+<p>Later, you will query the database to find the information for a single account. What is returned then?</p>
+<p>I hope you will not be surprised to know that an object is returned. Here is a partial capture of the data that is returned:<br><br>
+<img src="../images/account_data_object.png" alt="Part of the code for the returned account query object.">
+</p>
+<p>Just as before, the data that we are interested in, is found in the "rows" array, but there should only be a single element within the array. Hopefully, you remember that arrays are "zero indexed", meaning that the first element of the array is identified using the number zero.</p>
+<h3>What's Your Point?</h3>
+<p>When a query is made for a single item, it too is returned in the "rows" array of the object. But, since there is only one, you have to provide its numeric index. For example, if the object is called "data", then you would access the single item as <mark>data.rows[0]</mark> - meaning, in the data object, find the rows array and access the first (and hopefully only) element in the array.
+</p>
+
+      <h2>Conclusion</h2>
+      <p>To help you understand how to access data, based on the query, is it important to remember:</p>
+      <h3>Multiple Items Returned</h3>
+      <p>[objectName].rows - (e.g. classificationData.rows.foreach(.....))</p>
+      <h3>Single Item Returned</h3>
+      <p>[objectName.rows[0] - (e.g. accountData.rows[0]), will provide access to the single object in the rows array.</p>
+
+      <h2>Comprehension Question</h2>
+      <p>Let's assume that you fully understand the concepts just presented. If you only wanted to return the actual array to the controller from the model, when querying multiple items, or just the single element from the array to the model from the controller, when querying a single item. How would you modify the model function to do this?</p>
+
+      <h3>Comprehension Question Solution</h3>
+      <p>Expand the accordion to view the solution.</p>
+      <button class="accordion">Multiple Items</button>
+<div class="panel">
+  <pre class="line-numbers">
+  <code class="language-JavaScript">async function getClassifications() {
+    const data = await pool.query(
+      "SELECT * FROM public.classification ORDER BY classification_name"
+    )<br>
+    return data.rows
+  }</code></pre>
+</div>
+
+<button class="accordion">Single Item</button>
+<div class="panel">
+  <pre class="line-numbers">
+  <code class="language-JavaScript">async function getClassificationById(classification_id) {
+    const data = await pool.query(
+      "SELECT * FROM public.classification WHERE classification_id = $1 ORDER BY classification_name",
+       [classification_id]
+    )
+    return data.rows[0]
+  }</code>
+  </pre>
+</div>
+    </main>
+    <footer>
+      <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License"
+          style="border-width:0" src="//i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a> All materials (except as
+      noted) are by Blaine Robertson and licensed under a <a rel="license"
+        href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US">Creative Commons Attribution-ShareAlike 3.0
+        License</a>. </footer>
+  </div>
+  <script>
+    // Add the click event to the accordion button
+    let acc = document.getElementsByClassName("accordion");
+    let i;
+
+    for (i = 0, x = acc.length; i < x; i++) {
+      acc[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        let panel = this.nextElementSibling;
+        if (panel.style.display === "block") {
+          panel.style.display = "none";
+        } else {
+          panel.style.display = "block";
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>

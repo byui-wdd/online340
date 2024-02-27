@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Server-Side Data Validation | Web Backend Development</title>
+  <meta name="description" content="This activity introduces server-side data validation for the CSE 340 project.">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="/340-js/css/340course-min.css" type="text/css" media="screen">
+  <link rel="stylesheet" href="/340-js/css/prism-coy-dev.min.css" media="screen">
+  <script defer src="/340-js/js/prism-coy-dev.min.js"></script>
+</head>
+
+<body>
+  <div id="wrapper">
+    <header id="header"><img src="/340-js/images/small_banner.jpg" alt="CSE 340 Banner Image"></header>
+    <main>
+      <h1>Server-Side Data Validation</h1>
+      <p>In the client-side validation activity you read that client-side validation can be bypassed. When tools like
+        the novalidate bookmarklet are used, native HTML validation is disabled. You need to also recognize that even if
+        you use JavaScript validation instead, that JavaScript can be disabled in the browser. <span class="notice">Therefore, client-side validation is not enough!</span></p>
+
+      <p>Server-side validation is implementing equivalent checks on the server in order to double-check incoming
+        data to make sure that it meets the same requirements that we asked the browser to check. That is what we will
+        do in this activity.
+      </p>
+
+      <h2>Example Video</h2>
+      <p>The video provides a general overview of the activity, but does not contain the detail needed to complete each process. Watch the video to obtain a general idea, but follow the written steps to complete the activity. This is the <a target="_blank" href="../transcripts/server-side-validation.txt">Transcript</a> of the video.</p>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/zkoPq7nbH3s" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+      <h2>New Package</h2>
+      <p>We'll install a new package that should help us in the validation process. Validating and sanitizing data is
+        important to protect the application and the database. Install <a href="https://express-validator.github.io/docs/" target="_blank">express-validator</a> - a middleware package
+        that contains validator and sanitizer functionality.</p>
+      <ol>
+        <li>Open a <span title='Visual Studio Code'>VSC</span> terminal.</li>
+        <li>Type,
+          <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">pnpm add express-validator</code></pre>, press "Enter".
+        </li>
+        <li>When done, close the terminal.</li>
+      </ol>
+
+      <h3>Sanitize</h3>
+      <p>Sanitization functions remove characters or convert potentially harmful characters to entities that are not executable. Think of washing your hands. The soap is meant to sanitize your skin, to remove
+        germs or organisms that could cause you to get sick. Some functions built into the express validator do the same
+        thing - they remove undesirable items from incoming data.</p>
+
+      <h3>Validate</h3>
+      <p>In simple terms, to validate is to ensure that what we expect to receive is what we actually receive. A way of
+        making sure that an email address is one, and that a password meets the stated requirement.</p>
+        <p class="notice">Be aware that adding sanitization rules without validation rules will NOT work. If you have sanitization in place, you must have at least one validation check as well.</p>
+
+      <h2>Express Validator Documentation</h2>
+      <p>The <a href="https://express-validator.github.io/docs" target="_blank">Express Validator documentation</a> is
+        extensive. Open it and look specifically at the "Sanitization", "Validation Chain API" and "validationResult()"
+        items in the left navigation bar.</p>
+
+      <p>As you look at the documentation, you will find that the Express Validator is built on top of the validator.js
+        library. Which itself has helpful documentation. Open the <a href="https://github.com/validatorjs/validator.js" target="_blank">documentation for the validator library</a> and look through the sanitizor and validator
+        functions listed. We will not use all of these, but it is good to be familiar with what is available, so you
+        know where to look when you need these tools in the future.</p>
+
+        <h2>Important!</h2>
+        <p>Once the server-side validation is in place, and errors can be displayed in views, it is important that the following code be added to each res.render data object when the view is initially delivered:
+         <mark><code>errors: null,</code></mark>
+        </p>
+        <p>For example, in the <span class="fn">accountController</span>, the "Deliver registration view" function would be altered to look like this:</p>
+        <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it."><code class="language-JavaScript">/* ****************************************
+*  Deliver registration view
+* *************************************** */
+async function buildRegister(req, res, next) {
+  let nav = await utilities.getNav()
+  res.render("account/register", {
+    title: "Register",
+    nav,
+    errors: null,
+  })
+}
+</code></pre>
+<p>If this is missed, the EJS view engine could throw an error because an "errors" variable is expected, and not found.</p>
+
+      <h2>Implementation</h2>
+
+      <h3>Declare the Registration Rules</h3>
+      <p>Sanitization and validation should occur in that order. 1) Sanitize (remove unwanted characters) incoming data
+        first, then 2) validate (check) what is left and see if it is what's expected and/or allowed.</p>
+      <p>To keep our application code manageable, we will write our checks in their own document, then implement it into
+        the applicable route. <i>[Note: validation occurs prior to data reaching the controller, that is why the checks
+          will be implemented into the route.]</i></p>
+      <p>You are <strong>STRONGLY ENCOURAGED</strong> to open the links (see above) to the Express-Validator and Validator.js documentation while implementing
+        the sanitizing and validation functions below.</p>
+
+      <ol>
+        <li>We'll begin with the registration data.</li>
+        <li>Create a new JavaScript file in the <span class="fn">utilities</span> folder, named <span class="fn">account-validation</span>.</li>
+        <li>At the top of the new file you'll require the <span class="fn">utilities > index.js</span> file and the express validator.
+          Finally, you'll create a "validate" object, as shown:
+          <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">const utilities = require(".")
+const { body, validationResult } = require("express-validator")
+const validate = {}</code></pre>
+        </li>
+        <li>In line 2, the express validator contains multiple tools, two of which we have indicated we wish to use:
+          body and validationResult. The body tool allows the validator to access the body object, which contains all
+          the data, sent via the HTTPRequest. The validationResult is an object that contains all errors detected by the
+          validation process. Thus, we use the first tool to access the data and the second to retrieve any errors.</li>
+        <li>Next, we will create a function that will return an array of rules to be used when checking the incoming data. Each rule focuses on a specific input from the registration form. We will build the entire function first, then examine each rule
+          individually.</li>
+        <li>
+          <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">/*  **********************************
+ *  Registration Data Validation Rules
+ * ********************************* */
+validate.registationRules = () =&gt; {
+  return [
+    // firstname is required and must be string
+    body("account_firstname")
+      .trim()
+      .isLength({ min: 1 })
+      .withMessage("Please provide a first name."), // on error this message is sent.
+
+    // lastname is required and must be string
+    body("account_lastname")
+      .trim()
+      .isLength({ min: 2 })
+      .withMessage("Please provide a last name."), // on error this message is sent.
+
+    // valid email is required and cannot already exist in the DB
+    body("account_email")
+    .trim()
+    .isEmail()
+    .normalizeEmail() // refer to validator.js docs
+    .withMessage("A valid email is required."),
+
+    // password is required and must be strong password
+    body("account_password")
+      .trim()
+      .isStrongPassword({
+        minLength: 12,
+        minLowercase: 1,
+        minUppercase: 1,
+        minNumbers: 1,
+        minSymbols: 1,
+      })
+      .withMessage("Password does not meet requirements."),
+  ]
+}</code></pre>
+        </li>
+        <li>
+          <h3>An Explanation</h3>
+          <ul>
+            <li><strong>Lines 1-3 - </strong> a multi-line comment</li>
+            <li><strong>Line 4 - </strong> creates and opens an anonymous function and assigns it to the
+              "registrationRules" property of the "validate" object.</li>
+            <li><strong>Line 5 - </strong> the "return" command and the opening of the array of checks for the incoming
+              data.</li>
+            <li><strong>Line 6 - </strong> a single line comment for the check that begins on the next line.</li>
+            <li><strong>Line 7 - </strong> looks inside the HTTPRequest body for a name - value pair, where the name is
+              "account_firstname". <i>Remember the data trail concept? The form input has been given the same name as the
+                column in the database table.</i></li>
+            <li><strong>Line 8 - </strong> <b>.trim()</b> is a sanitizing function used to remove whitespace (empty
+              characters) on either side of the incoming string.</li>
+            <li><strong>Line 9 - </strong> <b>.isLength()</b> is a validation function where a specified length
+              requirement for the incoming data can be declared. In our code, the option is an object that declares the
+              minimum required length of the first name must be 1 character.</li>
+            <li><strong>Line 10 - </strong> <b>.withMessage()</b> is a function that allows an error message, specific
+              to this rule, to be declared if the requirements are not met. If this custom message were not provided a
+              default message of "invalid value" would be provided.</li>
+            <li><strong>Line 11 - </strong> left intentionally blank.</li>
+            <li><strong>Lines 12-16 - </strong> a rule of the last name, that is nearly identical to that for the first name.</li>
+            <li><strong>Line 17 - </strong> left intentionally blank.</li>
+            <li><strong>Line 18 - </strong> a comment introducing the email check.</li>
+            <li><strong>Line 19 - </strong> indicates that the "account_email" name - value pair is to be located in the
+              HTTPRequest body.</li>
+            <li><strong>Line 20 - </strong> whitespace should be removed from either side of the text.</li>
+            <li><strong>Line 21 - </strong> <b>isEmail()</b> is a validation function that checks the string for
+              characters that should be present in a valid email address. Check the validator.js documentation for
+              additional options and default settings.</li>
+            <li><strong>Line 22 - </strong> <b>normalizeEmail()</b> is a sanitization function that makes the email all
+              lowercase, as well as additional alterations to "canonicalize" an email. Refer to the validator.js
+              documentation for default settings and options. <span class="notice">Note that the official documentation specifies that the checks on lines 21 and 22 must be in this order.</span> </li>
+            <li><strong>Line 23 - </strong> provides a custom error message for the email data.</li>
+            <li><strong>Line 24 - </strong> left intentionally blank.</li>
+            <li><strong>Line 25 - </strong> a comment for the password check</li>
+            <li><strong>Line 26 - </strong> begins the password check process.</li>
+            <li><strong>Line 27 - </strong> removes whitespace before and after the string.</li>
+            <li><strong>Line 28 - </strong> <b>isStrongPassword()</b> is a function for checking a password string to
+              meet specific requirements to be considered a strong password. By default, the function returns a boolean - True or
+              False. Can also have an option added to return a strength score.</li>
+            <li><strong>Line 29 - </strong> a name - value pair within the options object that indicates the minimum
+              length of the password must be 12 characters.</li>
+            <li><strong>Line 30 - </strong> a name - value pair within the options object that indicates the minimum
+              number of lowercase alphabetic characters must be one.</li>
+            <li><strong>Line 31 - </strong> a name - value pair within the options object that indicates the minimum
+              number of uppercase alphabetic characters must be one.</li>
+            <li><strong>Line 32 - </strong> a name - value pair within the options object that indicates the minimum
+              number of numeric characters must be one.</li>
+            <li><strong>Line 33 - </strong> a name - value pair within the options object that indicates the minimum
+              number of symbol characters must be one.</li>
+            <li><strong>Line 34 - </strong> ends the option object and isStrongPassword function.</li>
+            <li><strong>Line 35 - </strong> the custom message if the password check fails.</li>
+            <li><strong>Line 36 - </strong> ends the array containing all the checks.</li>
+            <li><strong>Line 37 - </strong> ends the anonymous function opened on line 4.</li>
+          </ul>
+        </li>
+        <li>Carefully review the code for any warnings or errors.</li>
+        <li>Save the file.</li>
+      </ol>
+
+      <h3>The Registration Check Function</h3>
+      <p>The previous function declares the rules to be used to check the incoming registration data. Now, we will
+        write the function to check the data against the rules. In addition, if errors are found, then the errors, along
+        with the initial data, will be returned to the registration view for correction. This returning of data, so it
+        doesn't have to be re-typed, is referred to as "Stickiness".</p>
+
+      <ol>
+        <li>In the same <span class="fn">account-validation.js</span> file, create a few empty lines below the previous function.</li>
+        <li>Add the function as shown below:</li>
+        </ol>
+<pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-javascript">/* ******************************
+ * Check data and return errors or continue to registration
+ * ***************************** */
+validate.checkRegData = async (req, res, next) => {
+  const { account_firstname, account_lastname, account_email } = req.body
+  let errors = []
+  errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav()
+    res.render("account/register", {
+      errors,
+      title: "Registration",
+      nav,
+      account_firstname,
+      account_lastname,
+      account_email,
+    })
+    return
+  }
+  next()
+}
+
+module.exports = validate</code></pre>
+        <ol start="3">
+        <li>
+          <h4>An Explanation</h4>
+          <ul>
+            <li><strong>Lines 1-3 - </strong> a multi-line comment introducing the function.</li>
+            <li><strong>Line 4 - </strong> creates an asynchronous, anonymous function which accepts the request,
+              response and next objects as parameters and assigns it to the "checkRegData" property of the validate
+              object.</li>
+            <li><strong>Line 5 - </strong> use JavaScript destructuring method to collect and store the firstname,
+              lastname and email address values from the request body. Notice that the password is not stored. These
+              variables will be used to re-populate the form if errors are found. Best practice is to make the client
+              redo the password. So, the password value will NOT be returned.</li>
+            <li><strong>Line 6 - </strong> creates an empty "errors" array.</li>
+            <li><strong>Line 7 - </strong> calls the express-validator "validationResult" function and sends the request
+              object (containing all the incoming data) as a parameter. All errors, if any, will be stored into the
+              errors array.</li>
+            <li><strong>Line 8 - </strong> checks the errors array to see if any errors exist. Notice the "!" which
+              inverts the test, meaning errors IS NOT empty.</li>
+            <li><strong>Line 9 - </strong> calls for the navigation bar to be queried and built.</li>
+            <li><strong>Line 10 - </strong> calls the render function to rebuild the registration view.</li>
+            <li><strong>Lines 11-17 - </strong> sends these items back to the view. Notice the errors array is returned,
+              as are the values for the first and last names and email address.</li>
+            <li><strong>Line 18 - </strong> the "return" command sends control of the process back to the application,
+              so the view in the browser does not "hang".</li>
+            <li><strong>Line 19 - </strong> ends the check for errors begun on line 8.</li>
+            <li><strong>Line 20 - </strong> if no errors are detected, the "next()" function is called, which allows the
+              process to continue into the controller for the registration to be carried out.</li>
+            <li><strong>Line 21 - </strong> ends the function begun on line 4 of this code.</li>
+            <li><strong>Line 22 - </strong> left intentionally blank.</li>
+            <li><strong>Line 23 - </strong> exports the validate object for use elsewhere.</li>
+          </ul>
+        </li>
+        <li>Carefully review the code for any warnings or errors.</li>
+        <li>Save the file.</li>
+      </ol>
+
+      <h2>Registration Route</h2>
+      <p>With the validation rules and error handler function written, we can apply them to the registration process,
+        and the place to do that is in the route. <span class="notice">Remember that the data should be validated before being sent to the
+          controller for processing.</span></p>
+
+      <ol>
+        <li>Find and open the <span class="fn">accountRoute.js</span> file in the <span class="fn">routes</span> folder.</li>
+        <li>At the top of the file, add a require statement to bring the <span class="fn">account-validation</span> page, from the
+          <span class="fn">utilities</span> folder into the routes scope. Like this:
+          <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">const regValidate = require('../utilities/account-validation')</code></pre>
+        </li>
+        <li>Locate the <b>POST route</b> that watches to process the incoming registration attempt.</li>
+        <li>Alter the route by adding the rules function after the path, then add a comma and add the call to the
+          checkRegData function. Make sure it is separated from the controller function by a comma. These can be placed on their own lines to enhance readability. When done, the route could look like this:
+          <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">// Process the registration data
+router.post(
+  "/register",
+  regValidate.registationRules(),
+  regValidate.checkRegData,
+  utilities.handleErrors(accountController.registerAccount)
+)</code></pre>
+        </li>
+        <li>
+          <h3>An Explanation</h3>
+          <ul>
+            <li><strong>Line 1 - </strong> A comment for the route</li>
+            <li><strong>Line 2 - </strong> The router object using a "post" property.</li>
+            <li><strong>Line 3 - </strong> The path being watched for in the route.</li>
+            <li><strong>Line 4 - </strong> The function containing the rules to be used in the validation process.</li>
+            <li><strong>Line 5 - </strong> The call to run the validation and handle the errors, if any.</li>
+            <li><strong>Line 6 - </strong> The call to the controller to handle the registration, if no errors occur in
+              the validation process.</li>
+            <li><strong>Line 7 - </strong> ends the route.</li>
+          </ul>
+        </li>
+        <li>Carefully review the code for any warnings or errors.</li>
+        <li>Save the file.</li>
+      </ol>
+
+      <h2>Registration View Error Display</h2>
+      <p>With the validation in place, the registration view could be passed an array of errors (up to four total).
+        Currently, the view is not equipped to display more than one. We need to alter to code so that all errors could
+        be displayed.</p>
+
+      <ol>
+        <li>Find and open the <span class="fn">registration</span> view in the <span class="fn">views &gt; account</span> folder.</li>
+        <li>Add an EJS code block, below where messages are displayed, to display errors, like the example below:
+          <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">&lt;% if (errors) { %&gt;
+  &lt;ul class="notice"&gt;
+ &lt;% errors.array().forEach(error =&gt; { %&gt;
+   &lt;li&gt;&lt;%= error.msg %&gt;&lt;/li&gt;
+&lt;%  }) %&gt;
+ &lt;/ul&gt;
+&lt;% } %&gt;</code></pre>
+        </li>
+        <li>
+          <h3>An Explanation</h3>
+        <li><strong>Line 1 - </strong> an EJS code block containing an "if" control structure to detect if an error variable exists and is not null.</li>
+        <li><strong>Line 2 - </strong> If there are errors, create an unordered list with a class for styling.</li>
+        <li><strong>Line 3 - </strong> Treat the errors variable as an array and loop through the array, with each individual error being sent into a callback function.</li>
+        <li><strong>Line 4 - </strong> create a list item and display the message attached to the error element.</li>
+        <li><strong>Line 5 - </strong> closes the callback function and forEach loop.</li>
+        <li><strong>Line 6 - </strong> closes the unordered list.</li>
+        <li><strong>Line 7 - </strong> closes the if control structure.</li>
+        </li>
+        <li>Carefully review the code for any warnings or errors.</li>
+        <li>Save the file.</li>
+      </ol>
+
+      <p class="notice">With the addition of the errors display code block, we just broke the page. This is because when the controller is called to deliver the view initially, there is no errors array. This will cause an error. Let's fix this before moving forward.</p>
+      <ol>
+        <li>Open the <span class="fn">accountController</span> file.</li>
+        <li>Locate the <mark>buildRegister</mark> function.</li>
+        <li>Add the following line to the data object being sent to the view within the <mark>res.render()</mark> function.</li>
+        <li><code class="language-javascript">errors: null,</code></li>
+        <li>Save the file.</li>
+      </ol>
+      
+      <h2>A Recap</h2>
+      <ul>
+        <li>To this point we have built a function containing the rules needed to sanitize and validate the data submitted from the registration form.</li>
+        <li>A second function was built to run the checks and collect any errors then send those errors to the registration view for display.</li>
+        <li>Both of these functions were then imported into the <span class="fn">accounts route</span> document and applied to the registraion post route.</li>
+        <li>Finally, the <span class="fn">registration</span> view was altered to allow displaying the errors that were generated, if any.</li>
+        <li>We are not quite done, but it is a good time to test before going any further.
+        </li>
+      </ul>
+
+      <h2>Time to Test</h2>
+      <p>Testing this code can be tricky because we have already implemented the client-side validation. The easiest way is to use the novalidate! bookmarklet (installed into your browser in a separate activity this week). Fill out the form incorrectly or not completely, then click the <b>novalidate!</b> tool to turn off the client-side validation. Then, submit the form to the controller. See what happens. I demonstrate this in the video below.
+      </p>
+      
+      <ol>
+        <li>Ensure that all files are saved.</li>
+        <li>Start the local server using "<code><mark>pnpm run dev</mark></code>" in a <span title='Visual Studio Code'>VSC</span> terminal.</li>
+        <li>In your browser, open the project using "<code class="language-markup">localhost:5500</code>".</li>
+        <li>Navigate to the <span class="fn">registration</span> view using the "My Account" link and the registration link in the <span class="fn">login</span> view.</li>
+        <li>Click the "noValidate" bookmarklet to disable all client-side checks.</li>
+        <li>Attempt to submit the form with all fields empty. The errors should be displayed for all four inputs.</li>
+        <li>If this worked, continue to attempt different types of errors to test the ability of your checks to catch the errors.</li>
+        <li><strong>Note that the inputs will be empty when errors are returned because we have not yet implemented stickiness into the form.</strong></li>
+        <li>If this worked, then stand up and do a dance. If not, troubleshoot, talk to your learning team members, get help, but get it working.</li>
+        <li>Do not move to the next activity until this process is functioning.</li>  
+        <li>When done, be sure to shut down the server in a <span title='Visual Studio Code'>VSC</span> terminal, with "<code><mark>Control + C</mark></code>". </li>
+      </ol>
+
+      <h2>Successful Registration</h2>
+      <p>Once the testing is complete and the checks are working correctly, when correct data is submitted, a new client should be registered. You can confirm this by checking the database.</p>
+
+    </main>
+    <footer>
+      <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US" target="_blank"><img alt="Creative Commons License" style="border-width:0" src="//i.creativecommons.org/l/by-sa/3.0/88x31.png"></a>
+      All materials (except as noted) are by Blaine Robertson and licensed under a <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US" title="Read the license" target="_blank">Creative
+        Commons Attribution-ShareAlike 3.0 License</a>.
+    </footer>
+  </div>
+  
+</body>
+
+</html>

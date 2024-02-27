@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Debugging in VS Code  | Web Backend Development</title>
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="/340-js/css/340course-min.css" type="text/css" media="screen">
+  <link rel="stylesheet" href="/340-js/css/prism-coy-dev.min.css" media="screen">
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <header><img src="/340-js/images/small_banner.jpg" alt="Course Banner"></header>
+    <main>
+      <h1>Debugging in VS Code</h1>
+      <h2>Introduction</h2>
+      <p>Undoubtedly, you have had errors in your code as you have worked in the course. This short exercise is meant to introduce you to some basic debugging techniques.</p>
+
+      <h2>Watch the Video</h2>
+      <p>Here is a short, 6-minute video showing the essential debugging process of a Node application in VS Code. Just watch it the first time through.</p>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/o-L1OCmWPDA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      <h2>Alternative Video</h2>
+      <p>This video is longer, but covers more options and also uses a more realistic situation with an error in a function. The VS Code debugger portion begins at around 9:30. </p>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/_QtUGdaCb1c" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+      <h2>Create the launch.json debugger file</h2>
+      <ol>
+        <li>In the VS Code debugger tool, click the "create  a launch.json file" link just below the "Run and Debug" button.</li>
+        <li>When the file opens, click between the square brackets in the "configurations" item.</li>
+        <li>Begin typing "launch". In the options list that appears, select "Node.js: Launch Program". <br>
+          <img src="../images/debug-launch-node.png" alt="Node js launch program option">
+        </li>
+        <li>Alter the code to look like the image below: <br>
+<img src="../images/debug-config.png" alt="Configuration settings for CSE project">
+        </li>
+        <li>Save the file.</li>
+      </ol>
+<h2>Try it out</h2>
+
+      <ol>
+        <li>Open one of the model files and intentionally implement an error into the SQL code.</li>
+        <li>Following the process shown in the video, set a breakpoint in a controller that makes use of the model into which the error was created.</li>
+        <li>Use the debugger to view the variables and functions until you can identify the issue in the debugger.</li>
+        <li>When you feel confident that you can do this, exit the debugger and fix the error.</li>
+</ol>
+
+<h2>Paired Programming Exercise</h2>
+<p>Now that you have a small bit of experience on you own, it's time to practice while working with another member of your learning team.</p>
+<ol>
+  <li>Arrange with another member of your learning team to meet together. Give yourselves between 30 and 60 minutes to do this activity.</li>
+  <li>Just like you did before, introduce an error into your code (know where it is at, so you can fix it when you're done, if needed.)</li>
+  <li>If meeting in a classroom where you are both physically present, just trade computers to do the debugging. One will debug while the owner observes.</li>
+  <li>If in an online class, <mark>complete this in your Learning Team meeting, and complete the Learning Team report before leaving the meeting.</mark> One will share their VS Code application, and the one doing the debugging will request control and do the debugging using the Zoom interface. See <a href="https://www.helpwire.app/blog/zoom-remote-control/" target="_blank">How to use Remote Control on Zoom</a> for more information. Each person will take only 50% of the time maximum, while the other person watch. Then trade.</li>
+  <li><strong>Only set breakpoints and use the debugger to find the error. Fix the issue ONLY with the permission of the code owner! Do NOT change any other code.</strong></li>
+</ol>
+
+      <h2>Conclusion</h2>
+      <p>The intent is NOT to make you a professional debugger in one activity; rather, to expose you to the debugger tool and give you some practice. <b>I strongly encourage you to use the debugger when you encounter issues to gain more experience finding and fixing code issues.</b></p>
+    </main>
+    <footer>
+      <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="//i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a> All materials (except as
+      noted) are by Blaine Robertson and licensed under a <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US">Creative Commons Attribution-ShareAlike 3.0
+        License</a>.
+    </footer>
+  </div>
+  <script src="/340br/js/prism-coy-dev.min.js"></script>
+
+</body>
+
+</html>

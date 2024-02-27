@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Build Simple Application | Web Backend Development</title>
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="/340-js/css/340course-min.css" type="text/css" media="screen">
+</head>
+
+<body>
+  <div id="wrapper">
+    <header><img src="/340-js/images/small_banner.jpg" alt="Course Banner"></header>
+    <main>
+      <h1>Build Simple Application</h1>
+      <h2>Introduction</h2>
+      <p>With PnPM installed, let's take few minutes to build a simple application with a web server. A key difference between this backend class and your previous frontend class is that the previous class depended on an existing remote web server. You had very little control over it and how it worked. In this class, using Node, we build everything. While not difficult, the idea is that if you need or want it, you must add it.</p>
+<h2>Video Overview</h2>
+<p>The video provides a general overview of the activity, but does not contain the detail needed to complete each process. Watch the video to obtain a general idea, but follow the written steps to complete the activity. This is the <a target="_blank" href="../transcripts/sample-node-express-project.txt">Transcript</a> of the video.</p>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/gdEiH5vvZvk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+<h2>Build the Sample Folder</h2>
+      <ol>
+        <li>On your desktop create a new folder. I named mine <span class="fn">sample</span>.</li>
+        <li>Launch <span title='Visual Studio Code'>VSC</span> and open the new folder.</li>
+        <li>Open a <span title='Visual Studio Code'>VSC</span> terminal window, (<span class="fn">Terminal &gt; New Terminal</span>) or (<code class="language-markup">Control + Shift + `</code>).</li>
+        <li>Type <code class="language-javascript">pnpm init</code>, press "Enter".</li>
+        <li>Pnpm will now create a <span class="fn">package.json</span> file.</li>
+        <li>In the terminal you will see the code that was added to the <span class="fn">package.json</span> file.</li>
+        <li>Open the <span class="fn">package.json</span> file, find the <code class="language-javascript">"main": "index.js",</code> line (line 5), and change the file name to be <span class="fn">server.js</span>.</li>
+        <li>Save and close the file.</li>
+      </ol>
+
+      <h2>Add Express</h2>
+        <p>As mentioned earlier, node comes bare-bones. If we want/need anything, we have to add it. These add-ons are referred to as <span class="notice">packages.</span> Let's add one now.</p>
+      <ol>
+        <li>In the <span title='Visual Studio Code'>VSC</span> terminal, type the following:
+        <code class="language-javascript">pnpm add express</code>, press "Enter".</li>
+        <li>It should only take a moment to add the package. When done, the terminal will indicate that it finished and what version of the package was installed.</li>
+        <li>Two additional items will appear in the folder: a <span class="fn">node_modules</span> folder and a <span class="fn">pnpm-lock.yaml</span> file. Ignore both for now.</li>
+        <li>Open the <span class="fn">package.json</span> file, and you will see the package has been added to the file as a "dependency".</li>
+        <li>Save and close the file.</li>
+      </ol>
+
+      <h2>Add server.js</h2>
+      <p>Earlier, you told the <span class="fn">package.json</span> file that the application server would be a file named, <span class="fn">server.js</span>. This is THE server that is responsible for dealing with all incoming requests and directing the application to respond. It's time to build the file.</p>
+
+      <ol>
+        <li>Using <span title='Visual Studio Code'>VSC</span>, click the "New file" button or use your typical OS command (Mac: Command + N) or (Windows: Control + N) to create the file.</li>
+        <li>Name the file, <span class="fn">server.js</span>, making sure it is lowercase.</li>
+        <li>If it is not open, open it in <span title='Visual Studio Code'>VSC</span>.</li>
+        <li>At the top of the file, let's bring the Express package into "scope" and use it to create a new "application" variable. Type the following:
+<pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-javascript">/* ******************************************
+ * This is the application server
+ * ******************************************/
+const express = require("express")
+
+const app = express()</code></pre>
+        </li>
+        <li><h3>An Explanation</h3>
+        <ul>
+          <li><strong>Lines 1-3 -</strong> a comment for the file. <span class="notice">Comment your code to help yourself and others see the organization and functionality</span>.</li>
+          <li><strong>Line 4 -</strong> imports the <span class="fn">express</span> package.</li>
+          <li><strong>Lines 6 -</strong> creates the "application". Notice the parentheses? This triggers the express constructor so that <span class="fn">app</span> is now an object with all the functionality of Express.</li>
+        </ul>
+        </li>
+        <li>Save the file.</li>
+        <li>Next, we'll specify a host name for the server and port for it to listen on. Then, we'll type the code to start the server and console log it, to know if it worked. Type the following, beneath what you just typed:
+<pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-javascript">/* ******************************************
+ * Server host name and port
+ * ***************************************** */
+const HOST = 'localhost'
+const PORT = 3000
+
+/* ***********************
+* Log statement to confirm server operation
+* *********************** */
+app.listen(PORT, () =&gt; {
+console.log(`trial app listening on ${HOST}:${PORT}`)
+})</code></pre>
+        </li>
+      </ol>
+
+      <h2>Time to Test</h2>
+      <p>The server really doesn't do anything, but we can still test to see it run.</p>
+      <ol>
+        <li>Save the <span class="fn">server.js</span> file.</li>
+        <li>In the terminal, type <code class="language-javascript">node server.js</code>, press "Enter".</li>
+        <li>In the terminal, a new line should be visible, "trial app listening on localhost:3000"</li>
+        <li>Open a new browser tab and type <code class="language-javascript">localhost:3000</code> into the URL, press "Enter".</li>
+        <li>The browser should show an error, "<span class="warning">Cannot GET /</span>". This means the server is running and responding to your request. It just doesn't know how to handle the request. We'll fix that next.</li>
+      </ol>
+
+      <h2>Add a Route</h2>
+      <p>When you entered <code class="language-javascript">localhost:3000</code> into the URL, you actually sent a "GET" request to the server. By default, it wants to respond with a resource. But, it's dumb, and we haven't told it what to do about responding. Let's do that now.</p>
+      <ol>
+        <li>In the <span class="fn">server.js</span> file, between the <code class="language-javascript">const app ....</code> and comment for the server name and port, create 3 or 4 empty lines.</li>
+        <li>Add the following to the empty lines:
+          <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-javascript">/* ******************************************
+ * Default GET route
+ * ***************************************** */
+app.get("/", (req, res) =&gt; {res.send("Welcome home!")})
+</code></pre>
+        </li>
+        <li><h3>An Explanation</h3>
+        <ul>
+          <li><strong>Lines 1-3 </strong> code comment.</li>
+          <li><strong>Line 4 </strong> does a number of things. Let's look at each:
+          <ul>
+            <li><code class="language-javascript">app.get()</code> is an <span class="notice">Express handler</span>. Specifically, Express is watching for a "GET" request. We'll talk more about what GET is later.</li>
+            <li><code class="language-javascript">"/"</code> indicates the "route". A route is the path indicated by the URL. In this case, it is just the base URL, with nothing added.</li>
+            <li><code class="language-javascript">,</code> the comma separates the route, from the function that is responsible for delivering a response to the request.</li>
+            <li><code class="language-javascript">(req, res) =&gt; { ... }</code> is an anonymous function that takes the <span class="notice">request</span> and <span class="notice">response</span> objects as parameters. Again, we'll go into more depth later.</li>
+            <li><code class="language-javascript">res.send("Welcome home!")</code> is a method of the <span class="notice">response</span> object that sends a message back to the browser. It's not a web page, just a message string.</li>
+          </ul>
+          </li>
+          <li>Save the page.</li>
+        </ul>
+        </li>
+      </ol>
+      <h2>Test, Take 2</h2>
+      <p>Time to see if our added code provides a response instead of our previous error.</p>
+      <ol>
+        <li>Click in the terminal. Stop the server with your keyboard by typing <code class="language-javascript">Control + C</code>.</li>
+        <li>When the server stops, your normal cursor line reappears.</li>
+        <li>Start the server again, with <code class="language-javascript">node server.js</code>, press "Enter".</li>
+        <li>Go back the browser tab, with the error and reload the page.</li>
+        <li>You should now see the message that we instructed the server to send, "Welcome home!".</li>
+        <li>If it worked, then you have successfully built a web server. Congratulations!</li>
+        <li>If it didn't work, have someone else review your code, or ask for help.</li>
+        <li><span class="notice">Be sure to stop the server! Just as you did in step 1.</span></li>
+      </ol>
+
+      <h2>Conclusion</h2>
+      <p>This exercise introduced you to the concept of creating an application, providing a basic configuration by altering the <span class="fn">package.json</span> file. Then, adding packages for additional functionality. Finally, building an application server, adding directions to it and testing it. This process is fundamental to working with the backend of web services. We'll be doing much, much more of this in the rest of the course.</p>
+    </main>
+    <footer>
+      <a rel="license" href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License"
+          style="border-width:0" src="//i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a> All materials (except as
+      noted) are by Blaine Robertson and licensed under a <a rel="license"
+        href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US">Creative Commons Attribution-ShareAlike 3.0
+        License</a>. </footer>
+  </div>
+</body>
+
+</html>

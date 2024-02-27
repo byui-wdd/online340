@@ -1,0 +1,14 @@
+The noValidate bookmarklet is a very small piece of JavaScript that can be added to a browser's bookmark bar in order to disable client-side data validation in forms. 
+
+To install the tool, navigate your browser to the  noValidate activity, locate and drag the bookmarklet to the bookmarks toolbar.
+
+Directions for installation into browsers that do not support the drag and drop method are also provided.
+
+Once in place, when on a webpage using a form that has client-side validation, the bookmarklet can be activated by clicking it.
+
+it will dynamically insert a no validate attribute to the page's form element.  This turns off the client-side validation. This is temporary, and is effective only while the page is currently in the browser and without the page being reloaded. Once clicked, submit the form.
+
+With client-side validation disabled, the submitted data is checked by the server-side validation. Yes, it really is that easy. 
+
+When the web page is reloaded, the original client-side validation is restored.
+

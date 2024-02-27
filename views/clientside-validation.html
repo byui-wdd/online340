@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Client-side Form Validation | Web Backend Development</title>
+    <meta
+      name="description"
+      content="This activity discusses client-side form validation using Native HTML5 for CSE 340">
+    <meta name="viewport" content="width=device-width">
+    <link
+      rel="stylesheet"
+      href="/340-js/css/340course-min.css"
+      type="text/css"
+      media="screen">
+    <link
+      rel="stylesheet"
+      href="/340-js/css/prism-coy-dev.min.css"
+      media="screen">
+    <script defer src="/340-js/js/prism-coy-dev.min.js"></script>
+  </head>
+
+  <body>
+    <div id="wrapper">
+      <header id="header">
+        <img src="/340-js/images/small_banner.jpg" alt="CSE 340 Banner Image" />
+      </header>
+      <main>
+        <h1>Client-side Form Validation</h1>
+
+        <h2>Introduction</h2>
+        <p>
+          Validating the inputs from a form is critical to ensuring that the
+          data you expect is the data you receive. When done in the browser it
+          does not require data be sent to the server prior to being validated.
+          The term "<abbr>Client-side</abbr>" refers to checking data while in
+          the browser.
+        </p>
+
+        <p>
+          Checking data in the browser is typically done using
+          <b>Native HTML5 Methods</b> or using <b>JavaScript</b>. This document
+          will discuss using native HTML5 methods.
+        </p>
+
+        <h2>Video Demonstration</h2>
+        <p>The video provides a general overview of the activity, but does not contain the detail needed to complete each process. Watch the video to obtain a general idea, but follow the written steps to complete the activity. This is the <a target="_blank" href="../transcripts/client-side-validation.txt">Transcript</a> of the video.</p>
+       <iframe width="560" height="315" src="https://www.youtube.com/embed/rn5RyFnl2wA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+        <h2>The 'required' attribute</h2>
+        <p>
+          The simplest change you can make to a form is to mark an input field
+          as 'required':
+        </p>
+
+        <pre><code class="language-markup">&lt;input type=&quot;text&quot; name=&quot;account_firstname&quot; required&gt;</code></pre>
+
+        <p>
+          This informs the web browser that the field is mandatory. Most
+          browsers will mark the input box in some way if the client fails to
+          complete the input correctly. You can actually create your own
+          valid/invalid formatting using CSS to override the browser default.
+          You should be aware that the CSS pseudo-classes for doing this are
+          currently considered experimental and may result in CSS validation
+          errors.
+        </p>
+
+        <h2>Different input types</h2>
+        <p>
+          Along with the text input type, there are a host of other options,
+          including email, url, number, tel, date and others.
+        </p>
+
+        <p>
+          On the iPhone/iPad and other mobile devices the different input types
+          are associated with different keyboards, making it easier for people
+          to complete your online forms. In web browsers they can be used in
+          combination with the required attribute to limit or give advice on
+          allowable input values. For example:
+        </p>
+
+        <h3>type="email"</h3>
+
+        <p>
+          By changing the input type to email while also using the required
+          attribute, the browser can be used to validate (in a limited fashion)
+          email addresses:
+        </p>
+
+        <pre><code class="language-markup">&lt;input type=&quot;email&quot; name=&quot;account_email&quot; required placeholder=&quot;Enter a valid email address&quot;&gt;</code></pre>
+
+        <p>
+          Note that for this example we've made use of another HTML5 attribute
+          <b>placeholder</b> which lets us display a prompt or instructions
+          inside the field - something that previously had to be done using
+          JavaScript.
+          <span class="notice">Using the placeholder should NOT replace the &lt;label&gt; element
+            to place a text label adjacent to the input</span>.
+        </p>
+
+        <h2>HTML5 input types</h2>
+        <p>
+          Some additional, common HTML5 input types are shown below. To learn more about each one, or any of the other types, visit
+          <a
+            href="//developer.mozilla.org/en-US/docs/Web/HTML/Element/input"
+            title="opens in a new tab"
+            target="_blank"
+            >MDN Inputs</a
+          >.
+        </p>
+        <ul style="display:block;" id="html-inputs">
+          <li>button</li>
+          <li>checkbox</li>
+          <li>date</li>
+          <li>hidden</li>
+          <li>radio</li>
+          <li>search</li>
+        </ul>
+
+        <p>
+          Each type will prompt specific behaviors. For example, the
+          <b>tel</b> input type is handy for a mobile device as it selects a
+          different input keyboard useful for entering telephone numbers.
+        </p>
+        <p>
+          <strong
+            >In most cases the browser has a built-in display and validation
+            based on the input type, particularly when the "required" attribute
+            is added to the input.</strong
+          >
+        </p>
+
+        <h2>Patterns</h2>
+        <p>
+          The
+          <b
+            ><a
+              href="//www.w3schools.com/tags/att_input_pattern.asp"
+              title="Opens in a new tab"
+              target="_blank"
+              >Pattern</a
+            ></b
+          >
+          attribute adds additonal criteria when an input must meet specific
+          requirements. Patterns are not always needed, just when a specific
+          need exists. HTML5 patterns are actually
+          <a
+            href="//www.w3schools.com/js/js_regexp.asp"
+            title="Opens in a new tab"
+            target="_blank"
+            >JavaScript Regular Expressions</a
+          >.
+        </p>
+        <h3>Pattern Examples</h3>
+        <dl>
+          <dt>
+            IPv4 Address input pattern (four groups of up to 3 numbers separated
+            by a period):
+          </dt>
+          <dd class="language-markup">
+            <code>
+              &lt;input type=&quot;text&quot;
+              pattern=&quot;\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}&quot;&gt;
+            </code>
+          </dd>
+
+          <dt>
+            Date input pattern (one or two digits in the first two groups, four
+            digits in the last, all separated by slashes):
+          </dt>
+          <dd>
+            <code class="language-markup"
+              >&lt;input type=&quot;text&quot;
+              pattern=&quot;\d{1,2}/\d{1,2}/\d{4}&quot;&gt;</code
+            >
+          </dd>
+
+          <dt>
+            Price input pattern (digits followed by a period, followed by two
+            digits):
+          </dt>
+          <dd>
+            <code class="language-markup">
+              &lt;input type=&quot;text&quot;
+              pattern=&quot;\d+(\.\d{2})?&quot;&gt;
+            </code>
+          </dd>
+        </dl>
+        <h3>Want More Patterns?</h3>
+        <p>
+          Here are two other resources that explain more about how to use
+          regular expressions:
+        </p>
+        <ul>
+          <li>
+            <a
+              href="http://www.rexegg.com/regex-quickstart.html"
+              title="Opens the link to Rexegg.com in a new tab"
+              target="_blank"
+              >Regular Expression Cheat Sheet</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://regexr.com/"
+              title="Opens the link to Regexr.com in a new tab"
+              target="_blank"
+              >Regular Expression Building and Testing</a
+            >
+          </li>
+        </ul>
+
+        <h2>Styling valid/invalid inputs using CSS</h2>
+        <p>
+          This first set of styles can be used to mark an input box as
+          'invalid', by adding an icon, coloring the text or borders or similar.
+          It will apply to inputs that are required but empty, or to inputs that
+          have a required format/pattern which hasn't yet been met. These
+          pseudo-classes were considered experimental, but no longer are. Their
+          use should now pass CSS validation.
+        </p>
+
+        <pre><code class="language-css">input:required:invalid, input:focus:invalid {
+ /* insert your own styles for invalid form input */
+}</code></pre>
+
+        <p>
+          For inputs that are both required and 'valid' you can use the
+          following:
+        </p>
+
+        <pre><code class="language-css">input:required:valid {
+ /* insert your own styles for valid form input */
+}</code></pre>
+
+        <h2>Sample styling using images and sprites</h2>
+        <p>
+          As shown above, once you've added HTML5 attributes to your form
+          elements, they can be easily styled using CSS so that each input field
+          is clearly marked as valid or invalid. This also works for textarea
+          elements.
+        </p>
+
+        <pre
+          class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-css">input:required:invalid, input:focus:invalid {
+ background-image: url(/images/invalid.png);
+ background-position: right top;
+ background-repeat: no-repeat;
+}
+ input:required:valid {
+ background-image: url(/images/valid.png);
+ background-position: right top;
+ background-repeat: no-repeat;
+ }</code></pre>
+        <hr />
+        <h2>Apply Validation</h2>
+        <p>
+          With a basic introduction to HTML5 validation established let's apply
+          it to the <span class="fn">registration</span> and <span class="fn">login</span> views.
+        </p>
+
+        <h3>The <span class="fn">Registration</span> View</h3>
+        <ol>
+          <li>Open the <span class="fn">registration</span> view in the editor to alter its code.</li>
+          <li>
+            Since all fields are "required" make sure you add the "required"
+            attribute to all four data input fields (e.g. first name, last name,
+            email and password).
+          </li>
+          <li>
+            Make sure each of the fields has the right type value.
+            <ul>
+              <li>First name and Last name are both "text".</li>
+              <li>Email is type "email".</li>
+              <li>Password is type "password".</li>
+            </ul>
+          </li>
+          <li>
+            Let's add a pattern to the password field to make sure the password
+            is at least 12 characters and has at least 1 uppercase character, 1
+            number and 1 special character.
+            <ul>
+              <li>
+                Add a &lt;div&gt; element near the password input. Include the
+                password requirements in the div. Use CSS to style it so
+                that it is easily read before the input is typed.
+              </li>
+              <li>Add the pattern attribute and the regular expression to the password input: <mark><code>pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$"</code></mark>.</li>
+            </ul>
+            This reads, "There must be at least 12 characters, one must be a number, one must be a lowercase letter, one must be a capital letter, and one must be a non-alphanumeric character."
+          </li>
+          <li>
+            When done, the password input could look something like this:
+            <pre
+              class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-markup">&lt;label for="accountPassword"&gt;Password:&lt;/label&gt;<br> 
+&lt;span&gt;Passwords must be at least 12 characters and contain at least 1 number, 1 capital letter and 1 special character&lt;/span&gt;<br> 
+&lt;input type="password" name="account_password" id="accountPassword" required pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$"&gt;</code></pre>
+          </li>
+        </ol>
+        <h3>Test It</h3>
+        <ol>
+          <li>
+            Save the <span class="fn">registration</span> view and make sure your servers are running.
+          </li>
+          <li>
+            Launch the project <span class="fn">home page</span> and navigate through the <span class="fn">login</span> view to the <span class="fn">registration</span> view.
+          </li>
+          <li>Try submitting the view with no data. It should not allow it.</li>
+          <li>
+            Then try submitting the view with broken data in the email and
+            password fields. Again, the form should stop and tell you to fix
+            errors.
+          </li>
+          <li>
+            Finally, try submitting the form with good data. This time no errors
+            should appear.
+          </li>
+        </ol>
+
+        <h2>The <span class="fn">Login</span> View</h2>
+        <ol>
+          <li>Open the <span class="fn">login</span> view in <span title='Visual Studio Code'>VSC</span> to alter the form code.</li>
+          <li>Make sure the email input type is "email".</li>
+          <li>Add the "required" attribute to the email and password inputs.</li>
+          <li>
+            Add the same reminder as you have in the <span class="fn">registration</span> view
+            to the <span class="fn">login</span> view about the password requirements.
+          </li>
+          <li>
+            Add the same pattern attribute to the password field in this view as you have in
+            the <span class="fn">registration</span> view.
+          </li>
+        </ol>
+
+        <h3>Test It</h3>
+        <ol>
+          <li>Save the <span class="fn">login</span> view and make sure the server is running.</li>
+          <li>
+            Launch the project <span class="fn">home page</span> and navigate to the <span class="fn">login</span> view.
+          </li>
+          <li>Try submitting the view with no data. It should not work.</li>
+          <li>
+            Then try submitting the view with broken data in the email and
+            password fields. Again, the form should stop and tell you to fix
+            errors.
+          </li>
+          <li>
+            Finally, try submitting the form with good data. This time no errors
+            should appear. But, since the login process is not operational, it should do nothing.
+          </li>
+        </ol>
+
+        <h2>Summary</h2>
+        <p>
+          As you have seen, with relatively little effort we can add HTML
+          attributes and values to forms to make sure data is the right kind in
+          most cases or at least not missing in others.
+        </p>
+        <p>
+          The "fly in the ointment" is that client-side validation can be turned
+          off in the browser. JaveScript can be disabled and using tools such as
+          the novalidate! bookmarklet (the installation of which will be done in
+          its own activity this week) can disable client-side validation. As a
+          result, we cannot rely solely on client-side validation, we
+          <b>MUST</b> also have "server-side" validation and that is what we will implement in the next activity.
+        </p>
+
+        <h2>Reference</h2>
+        <ul>
+          <li>
+            <a
+              href="//www.the-art-of-web.com/html/html5-form-validation/"
+              title="Click to open in a new tab"
+              target="_blank"
+              >HTML: HTML5 Form Validation Examples</a
+            >
+          </li>
+        </ul>
+
+        <h2>Attribution</h2>
+        <p>
+          This native html5 form validation explanation was originally created
+          by David Nielsen, a Frontend Web Development student as a teaching
+          presentation during the Fall semester, 2013.
+        </p>
+      </main>
+      <footer>
+        <a
+          rel="license"
+          href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"
+          target="_blank">
+          <img
+            alt="Creative Commons License"
+            style="border-width: 0"
+            src="//i.creativecommons.org/l/by-sa/3.0/88x31.png" />
+        </a>
+        All materials (except as noted) are by Blaine Robertson and licensed
+        under a
+        <a
+          rel="license"
+          href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"
+          title="Read the license"
+          target="_blank"
+          >Creative Commons Attribution-ShareAlike 3.0 License</a
+        >.
+      </footer>
+    </div>
+    
+  </body>
+</html>

@@ -1,0 +1,60 @@
+Deleting a record from a database is part of the CRUD process of working with data.
+
+However, unlike a word processor, there is no undo. Deletions are permanent, unless a backup exists which can be used to restore data.
+
+Therefore, deletions should only be allowed by someone who is authorized or limited to delete only their own data.
+
+A delete process is nearly identical to an update, and is a two-step process.
+
+Step one of the delete delivers data to a view for confirmation that the correct data is being removed.
+
+Did I mention that a delete cannot be undone? That is the reason for step 1.
+
+Step 2 carries out the delete and reports the result back to the client.
+
+Because a model view control architecture is used, the process is distributed across the controller, a model, and some views.
+
+As the delete and update are so alike, much of the code can be copied from the update code that already exists, and inserted as delete code.
+
+The delete confirmation view was saved from the inventory update view, with most of the form fields being removed. The only items left are those that allow a clear confirmation that the correct inventory item is being deleted, as well as the hidden input with the inventory id value.
+
+With the view created, a route is placed in the inventory router, which will pass control to the inventory controller.
+
+Within the controller, a handler function is used to build the needed data for the confirmation view, and to deliver that view.
+
+A second handler function will be used to carry out the delete in step 2.
+
+This new delete handler only needs the primary key of the inventory item. Once it is collected, it can be passed to the model function to carry out the actual delete in the database table.
+
+The model function contains a SQL DELETE query and MUST include a WHERE clause to limit the delete to the single record with the matching primary key value.
+
+When the delete is done, an indicator of success or failure is returned to the controller.
+
+The controller then sets an appropriate success or failure message and returns a view to inform the client of the result.
+
+We can see the process in its entirety.
+
+From the inventory management view, an item is selected for deletion.
+
+The confirmation view is delivered. Note that nothing here can be changed.
+
+Once confirmation is complete, the delete button is clicked.
+
+The primary key value for this inventory item, which was in a hidden field, is sent, along with the route, to the application.
+
+It is ultimately collected by the controller and passed to the model. The delete is attempted and the response is returned to the controller.
+
+The controller then sets the needed message, and the view is returned to the browser.
+
+If successful, the item should no longer be accessible via the navigation items and should no longer be found in the inventory table of the database.
+
+A warning for new database users. An interesting phenomenon happens as deletions occur.
+
+Holes in the sequence of primary key values occur.
+
+There is frequently a desire to go back and fill in those missing values. Don't!
+
+The database table is capable of holding billions of records. Having gaps in the numbering is not an issue.
+
+That's it. If you can code an update process, you can code a delete process. The similarity between these processes is very strong
+

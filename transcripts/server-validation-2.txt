@@ -1,0 +1,52 @@
+In the previous activity, server-side checks were implemented using express-validator for a registration process. 
+
+This video continues the process by checking the incoming email to ensure it is unique in the database table as part of the checks.
+
+Furthermore, stickiness is added to the registration view, so that if server-side validation errors are returned, existing values are retained in the form to keep the client from having to retype them.
+
+The account email is used as the user name for the account, therefore, it should be unique. To ensure this is the case, this check will be added to the data validation.
+
+Find and open the account-validation file, in the utilities folder.
+
+Scroll down through the list of validation rules until the account_email rule is in view and, moving to the end of the rule, add a new custom check to the rule as shown in the video.
+
+The custom option allows us to add a check of our own, outside of the normal options provided, such as checking that the email does not already exist.
+
+Once the custom check is in place, scroll to the top of the file and make sure that the account model has been brought into scope.
+
+Then, open the account model and write the fuction that checks for the email in the database table as shown.
+
+If the email exists the model returns TRUE. This triggers the error in the custom check. If not, no error is triggered and the registration process continues.
+
+You may remember that in the registration check data function, if errors are detected, the data is returned (without the password) to the view.
+
+Find and open the registration view. In the inputs we will add a value attribute that uses the locals keyword, along with the variable name containing the value submitted. This is the "sticky" data.
+
+When the registration form is delivered at first, this value is empty. However, if an error is created as part of the server-side check, then the variable with the value is returned and appears in the form.
+
+Make sure that all files have been saved.
+
+Time to test.
+
+Start the local development server and open to the dev server in the browser.
+
+Navigate to the registration view.
+
+Right-click and view the source code.
+
+Notice that each of the first three inputs now contain a value attribute, but it is empty.
+
+Close the source code tab and add a legitimate first and last name, but an incorrect email. Click the NoValidate bookmarklet and submit.
+
+The form should reload, with the name inputs filled in, but the errors for the email and password showing. 
+
+Now add an email that already exists and submit after clicking the NoValidate tool.
+
+Again, the form should reload, the names should remain filled in, but a new error should appear regarding the email.
+
+If all of this is true, then things are working as planned.
+
+If not, check the code against the code shown earlier for errors.
+
+When everything is working, stop the local server.
+

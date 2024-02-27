@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Deliver Login | Web Backend Development</title>
+    <meta name="viewport" content="width=device-width" />
+    <link
+      rel="stylesheet"
+      href="/340-js/css/340course-min.css"
+      type="text/css"
+      media="screen" />
+    <link
+      rel="stylesheet"
+      href="/340-js/css/prism-coy-dev.min.css"
+      media="screen" />
+  </head>
+
+  <body>
+    <div id="wrapper">
+      <header>
+        <img src="/340-js/images/small_banner.jpg" alt="Course Banner" />
+      </header>
+      <main>
+        <h1>Account: Deliver Login</h1>
+        <h2>Introduction</h2>
+        <p>
+          From the very beginning of the project, you included a "My Account"
+          item in the site header. It has remained unused, until now. The
+          purpose of this activity is to implement the link, route, controller
+          and views to get started with implementing account functionality
+          within the project.
+        </p>
+
+        <h2>Video Overview</h2>
+        <p>The video provides a general overview of the activity, but does not contain the detail needed to complete each process. Watch the video to obtain a general idea, but follow the written steps to complete the activity. This is the <a target="_blank" href="../transcripts/account-deliver-login-view.txt">Transcript</a> of the video.</p>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/VDc1rzESAWI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        
+        <h2>The Login View Route</h2>
+        <p>
+          If you open the <span class="fn">header.ejs</span>  partial and closely look at the path for
+          the "My Account" link, you will see the value that will be sent
+          through the Request object to the application. The request expects to
+          get back a login view. So, step one is to build an "accounts" router
+          file that will handle the request.
+        </p>
+        <ol>
+          <li>
+            Using the <span class="fn">inventoryRoute</span> file as an example, build a new <span class="fn">accountRoute.js</span> file in the <span class="fn">routes</span> folder.
+          </li>
+          <li>
+            The file will need access to the following external resources:
+            <ul>
+              <li>the express package.</li>
+              <li>the express.Router() function.</li>
+              <li>the <span class="fn">utilities &gt; index</span> file.</li>
+              <li>
+                an <span class="fn">accounts controller</span> (which you will build later in this
+                activity).
+              </li>
+            </ul>
+          </li>
+          <li>
+            Add a "GET" route for the path that will be sent when the "My
+            Account" link is clicked. <span class="notice">Note: within this router file, the route should reflect only the part of the path that follows "account". The <code>account</code> part of the path should be placed in the <span class="fn">server.js</span> file, when this router is required.</span>
+          </li>
+          <li>
+            The "GET" route must use a function from the <span class="fn">account controller</span>, to
+            handle the request.
+          </li>
+          <li>Add the error handler middleware to the route to deal with any errors.</li>
+          <li>Make sure the route(s) are exported for use elsewhere.</li>
+          <li>
+            Ensure no warnings or errors are displayed by
+            <span title="Visual Studio Code">VSC</span>.
+          </li>
+          <li>Save the file.</li>
+        </ol>
+
+        <h2>Enable the Account Route</h2>
+        <p>
+          You will recall that the <span class="fn">server.js</span> file is the initial operating document for the project. If a route
+          handler is unknown, then the route doesn't do anything.
+        </p>
+        <ol>
+          <li>Open the <span class="fn">server.js</span> file.</li>
+          <li>In the "Require Statements" section, require the account route file you just created.</li>
+          <li>
+            In the "Routes" section, add the "account" route, using the
+            Inventory route as an example.
+          </li>
+          <li>As mentioned earlier, make sure that the "<code>/account</code>" element from the path is placed in the app.use() function as the first element.</li>
+          <li>
+            Ensure no warnings or errors are displayed by
+            <span title="Visual Studio Code">VSC</span>.
+          </li>
+          <li>Save the file.</li>
+        </ol>
+
+        <h2>Account Controller</h2>
+        <p>
+          With the route in place, the <span class="fn">account controller</span> needs to be built in
+          order to process the request and return a view to the browser.
+        </p>
+        <ol>
+          <li>
+            In the <span class="fn">controllers</span> folder, create a new <span class="fn">accountController.js</span>  file. This name, follows the convention of the other controller  files.
+          </li>
+          <li>
+            Once created, return to the <span class="fn">account router</span> file and make sure the
+            name of the controller matches what you are requiring.
+          </li>
+          <li>
+            For now, the only item that must be "required" by the controller is
+            the <span class="fn">utilities &gt; index.js</span> file.
+          </li>
+          <li>
+            Leaving a few empty lines below the require statement, add a comment
+            and a function that will deliver a login view (you'll build it when
+            the controller is done).
+          </li>
+          <li>
+            The login function is shown below:
+            <pre
+              class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">/* ****************************************
+*  Deliver login view
+* *************************************** */
+async function buildLogin(req, res, next) {
+  let nav = await utilities.getNav()
+  res.render("account/login", {
+    title: "Login",
+    nav,
+  })
+}
+
+module.exports = { buildLogin }
+</code></pre>
+          </li>
+          <li>
+            <h3>An Explanation</h3>
+            <ul>
+              <li>
+                <strong>Lines 1 - 3 -</strong> a multi-line comment introducing
+                the function.
+              </li>
+              <li>
+                <strong>Line 4 -</strong> begins the function, declaring it as
+                asynchronous, and passing in request, response and next as
+                parameters.
+              </li>
+              <li>
+                <strong>Line 5 -</strong> retrieves and stores the navigation
+                bar string for use in the view.
+              </li>
+              <li>
+                <strong>Line 6 -</strong> calls the render function and
+                indicates the view to be returned to the client and opens the
+                object that will carry data to the view.
+                <span class="notice"
+                  >Note: the view is inside a folder, which should be within the
+                  "views" folder. This folder doesn't exist and must be
+                  created.</span
+                >
+              </li>
+              <li>
+                <strong>Lines 7 - 8 -</strong> the data items to be sent to the
+                view.
+              </li>
+              <li>
+                <strong>Line 9 -</strong> closes the data object and the render
+                function (opened on line 6).
+              </li>
+              <li><strong>Line 10 -</strong> closes the function.</li>
+              <li><strong>Line 11 -</strong> left intentionally blank.</li>
+              <li>
+                <strong>Line 12 -</strong> exports the function for use
+                elsewhere.
+              </li>
+            </ul>
+          </li>
+          <li>
+            Ensure no warnings or errors are displayed by
+            <span title="Visual Studio Code">VSC</span>.
+          </li>
+          <li>Save the file.</li>
+        </ol>
+
+<h2>Data Trail</h2>
+<p>One of the most difficult tasks is being consistent with data as it moves around within an application. While there are many ways of doing so, a simple, easy to remember, method is to use the database table names for data throughout the application. For example, in the <span class="fn">login</span> view is a form that asks the user to supply an email address and password.</p>
+<p>If you look in the <span class="fn">accounts</span> table of the database, you'll see that the email is stored in the <code>account_email</code> field, while the password is stored in the <code>account_password</code> field.</p>
+<p>To apply this to the form, you would name the email input as <code>name="account_email"</code>. By using this method, the form and database table locations match. The same idea applies to all form fields.</p>
+
+
+        <h2>Login View</h2>
+        <p>
+          With everything else done, it is time to build the login view. As with
+          the other views built, it should meet the following specifications:
+        </p>
+        <ol>
+          <li>
+            Created inside a new folder, within the <span class="fn">views</span> folder. The new
+            folder name should match the name in the render function of the
+            controller.
+          </li>
+          <li>
+            Be named according to the name in the render function of the
+            controller.
+          </li>
+          <li>Use the title data value for both the title and h1 elements.</li>
+          <li>Have the ability to display a flash message, if one is sent.</li>
+          <li>
+            Display a login HTML form that accepts an email address (this will be the username) and password.
+          </li>
+          <li>
+            The form should include a button to submit the login credentials.
+          </li>
+          <li>Enforcement of the input data does not have to be done at this time.</li>
+          <li>
+            Beneath the form should be a link that allows the user to send a URL
+            that would request delivery of a registration view, if they do not
+            yet have an account. Refer to this example:
+            <div class="callout">
+              <img
+                src="/340-js/images/login-form.png"
+                alt="Image of an example login form." />
+            </div>
+          </li>
+          <li>
+            Add appropriate CSS to render the view and form professionally.
+          </li>
+          <li>
+            Ensure no warnings or errors are displayed by
+            <span title="Visual Studio Code">VSC</span>.
+          </li>
+          <li>Save the file.</li>
+        </ol>
+
+        <h2>Test Time</h2>
+        <p>
+          Before going any further, it is important to test the functionality
+          that has just been added.
+        </p>
+        <ol>
+          <li>
+            Ensure that all the file names are correct, particularly those
+            that are being required by other files.
+          </li>
+          <li>
+            Open a <span title="Visual Studio Code">VSC</span> terminal and
+            start the development server - <code class="language-javascript"
+              >pnpm run dev</code
+            >.
+          </li>
+          <li>
+            Open a browser to "<code class="language-markup">localhost:5500</code
+            >".
+          </li>
+          <li>Click the "My Account" link in the header.</li>
+          <li>
+            The view should be delivered, and the form is in place and styled.
+          </li>
+          <li>Test the view against the Frontend checklist.</li>
+          <li>
+            If everything worked, do a happy dance with someone you love. If
+            not, review the terminal logs to see if an error is reported, get
+            help from your learning team, the TA, or the professor.
+          </li>
+          <li>Stop the server when done testing!</li>
+        </ol>
+
+        <h2>Conclusion</h2>
+        <p>
+          The process of using routes, controllers and views is fundamental to
+          modern web development. In this instance, it was as much review as new
+          content, but soon, you'll be getting serious with saving incoming
+          information to the database.
+        </p>
+      </main>
+      <footer>
+        <a
+          rel="license"
+          href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"
+          ><img
+            alt="Creative Commons License"
+            style="border-width: 0"
+            src="//i.creativecommons.org/l/by-sa/3.0/88x31.png"
+        /></a>
+        All materials (except as noted) are by Blaine Robertson and licensed
+        under a
+        <a
+          rel="license"
+          href="//creativecommons.org/licenses/by-sa/3.0/deed.en_US"
+          >Creative Commons Attribution-ShareAlike 3.0 License</a
+        >.
+      </footer>
+    </div>
+    <script src="/340br/js/prism-coy-dev.min.js"></script>
+  </body>
+</html>

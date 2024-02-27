@@ -1,0 +1,50 @@
+This video is a high-level overview of the Model - View - Controller design pattern as implemented in this application.
+
+It will be begin with a short introduction to each of the component pieces, then demonstrates their actual workflow within the application.
+
+Everything begins with the client. The client is a browser or device which initiates the interaction with the application.
+
+The interaction is carried from the client to the application via the HTTP Request. HTTP is Hyper-text Transfer Protocol, which is a common language used to communicate across networks.
+
+The HTTP Request is received at the server.js file. This is the default server within the application and contains the primary operational logic of the application.
+
+The server.js file then "routes" the request to a different location in the application to fulfill the request. The route itself contains three items: 1) a verb, which in our application will be "GET"or "POST", although other verbs exist. This represents the type of request, 2) the route indicator, to provide information about where this request will can be fulfilled, and 3) the handler function. In our application, all handler functions will be in a controller.
+
+A controller is a collection of functions or methods with all of the logic needed to fulfill a request. A controller is typically focused on methods dealing with a single area of the application, for example dealing with all account interactions.
+
+If the controller requires data from the database to fulfill a request, it will call a function from a model to interact with the database via a query, and to return the resultset (data collection) to the controller. Like the controller, a model typically contains functions dealing with a particular area of the application.
+
+The database server itself, is a remote PostgreSQL service on Render.com. This is a relational database which uses SQL queries for INSERTing, SELECTing, UPDATEing, and DELETEing data.
+
+When data is returned to the controller, it may call a utility function to work with the data (e.g. wrap the data into an HTML structure). Utility functions are not directly part of the MVC pattern, but are helpful in having a central library of functions that can be used by any controller.
+
+Once the data is retrieved and prepared, the controller sends it to EJS. EJS then uses a template, along with partials and the primary view for the data to assemble the finished view.
+
+This fully assembled view is then sent from the application server via an HTTP Response back to the requesting client.
+
+With each component explained, let's visualize the process.
+
+The client clicks a link or submits a form, triggering the HTTP request, which eventually is received by the server.js file.
+
+The server, examines the request and forwards it to the appropriate route.
+
+The route passes the request to the designated route handler in a controller.
+
+If data is needed, the controller calls a model-based function which triggers a query to the database. The database returns a resultset to the model, which returns it to the controller.
+
+With the resultset returned to the controller, a utility function may also be called to handle some process involving the data.
+
+In a limited, special situation, the controller may call a utility function, which will call the model. The data will then be returned to the utility function, which will do something with the data, then return the manipulated data to the controller.
+
+The controller then calls EJS to compile all of the necessary components to build the view. This will include a templeate, partials and the content.
+
+With the finished view assembled an HTTP Response it triggered.
+
+The finished view, representing the fulfillment of the client's request is returned to the client. This entire process is sometimes referred to as a "round trip".
+
+For clarity and simplicity, everything that occurs in the browser or the initiating device is referred to as the "Frontend".
+
+Everything else, from the receipt of the request by the server, until the finished view is sent in the HTTP Response is referred to as the "Backend".
+
+I trust that this overview will provide meaningful insights as you build the application using the Model - View - Controller design pattern.
+

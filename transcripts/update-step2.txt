@@ -1,0 +1,48 @@
+Updating data is a two-step process.
+
+Step one triggers the update process. Data for the update is queried from the database and delivered back to the client in a view.
+
+Step two checks the edited data, using both client-side and server-side validations, before submitting the revised data to the controller.
+
+The data will then be passed to the model, which will attempt to store the data to database and report the results back to the client.
+
+Step one was covered in a previous video.
+
+This video covers step two.
+
+An MVC architecture is being used, so the processing is split between a router, a controller, a model and views.
+
+Step two begins in the inventory item update view. The data has been queried and injected into the form in step one, where the client now can alter the existing data.
+
+Reviewing the method and action attributes of the form, indicate the route to be sent to the application and the method.
+
+In addition to the actual data, a hidden input, containing the unique identifier of the inventory item is included and will be passed to the application server.
+
+When the form is submitted, the data is checked against client-side and server-side validations. If errors are found, the view is delivered to the client, the form data elements are sticky, so that the data is retained, but error messages are displayed.
+
+When the data is deemed valid, the process is then passed to the controller. There, the data is collected and stored, then passed to the model function to attempt the actual update into the database.
+
+The model returns an indication of success or failure to the controller, which, in turn, creates the appropriate message and returns a view to the client informing them of the update result.
+
+Let's demonstrate the process, beginning by indicating the item to be updated.
+
+The item data is returned in the update view, with all data being displayed in the form. Looking at the source code, we can see the form method and action, each input type and the hidden input with the unique identifier.
+
+Deleting a value and submitting the form, the client-side validation stops the process.
+
+Leaving the error, clicking the noValidate bookmarklet, and submitting we can see the stickiness of the form and the error message.
+
+Fixing the error, and changing a value, we can now submit the change.
+
+If everything worked, the management view is returned with the success message.
+
+Be aware that because we are using a PostgreSQL database, if no data is changed an error is not generated and a false positive is returned. This means that a success message is returned, even though no data values changed.
+
+It is always a good idea to check the database after doing an update during the development phase to confirm that the update actually happened.
+
+A different check would be to click through the navigation system to the inventory item that was changed and confirm it that way.
+
+When everything is working as described, you are ready to proceed with handling deletes.
+
+Be sure to close down the development server when done using it.
+
