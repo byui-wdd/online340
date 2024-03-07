@@ -52,15 +52,15 @@
         making sure that an email address is one, and that a password meets the stated requirement.</p>
         <p class="notice">Be aware that adding sanitization rules without validation rules will NOT work. If you have sanitization in place, you must have at least one validation check as well.</p>
 
-      <h2>Express Validator Documentation</h2>
-      <p>The <a href="https://express-validator.github.io/docs" target="_blank">Express Validator documentation</a> is
-        extensive. Open it and look specifically at the "Sanitization", "Validation Chain API" and "validationResult()"
-        items in the left navigation bar.</p>
-
-      <p>As you look at the documentation, you will find that the Express Validator is built on top of the validator.js
-        library. Which itself has helpful documentation. Open the <a href="https://github.com/validatorjs/validator.js" target="_blank">documentation for the validator library</a> and look through the sanitizor and validator
-        functions listed. We will not use all of these, but it is good to be familiar with what is available, so you
-        know where to look when you need these tools in the future.</p>
+        <h2>Express Validator Documentation</h2>
+        <p>The <a href="https://express-validator.github.io/docs" target="_blank">Express Validator documentation</a> is
+          extensive. Open it and look specifically at the "Sanitization", "Validation Chain API" and "validationResult()"
+          items in the left navigation bar. As you look at the documentation, you will find that the Express Validator is built on top of the validator.js
+          library.</p>
+  
+        <h2>Validator.js Documentation</h2>
+        <p>The actual sanitization and validation items belong to the Validator.js library. Open the <a href="https://github.com/validatorjs/validator.js" target="_blank">documentation for the validator library</a> and look through the <a href="https://github.com/validatorjs/validator.js?tab=readme-ov-file#sanitizers" target="_blank" rel="noopener noreferrer">sanitizer</a> and <a href="https://github.com/validatorjs/validator.js?tab=readme-ov-file#validators" target="_blank" rel="noopener noreferrer">validator</a> functions listed. We will not use all of these, but it is good to be familiar with what is available, so you
+          know where to look when you need these tools in the future.</p>
 
         <h2>Important!</h2>
         <p>Once the server-side validation is in place, and errors can be displayed in views, it is important that the following code be added to each res.render data object when the view is initially delivered:
