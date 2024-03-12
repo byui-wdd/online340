@@ -92,120 +92,125 @@ async function buildRegister(req, res, next) {
       <p>You are <strong>STRONGLY ENCOURAGED</strong> to open the links (see above) to the Express-Validator and Validator.js documentation while implementing
         the sanitizing and validation functions below.</p>
 
-      <ol>
-        <li>We'll begin with the registration data.</li>
-        <li>Create a new JavaScript file in the <span class="fn">utilities</span> folder, named <span class="fn">account-validation</span>.</li>
-        <li>At the top of the new file you'll require the <span class="fn">utilities > index.js</span> file and the express validator.
-          Finally, you'll create a "validate" object, as shown:
-          <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">const utilities = require(".")
-const { body, validationResult } = require("express-validator")
-const validate = {}</code></pre>
-        </li>
-        <li>In line 2, the express validator contains multiple tools, two of which we have indicated we wish to use:
-          body and validationResult. The body tool allows the validator to access the body object, which contains all
-          the data, sent via the HTTPRequest. The validationResult is an object that contains all errors detected by the
-          validation process. Thus, we use the first tool to access the data and the second to retrieve any errors.</li>
-        <li>Next, we will create a function that will return an array of rules to be used when checking the incoming data. Each rule focuses on a specific input from the registration form. We will build the entire function first, then examine each rule
-          individually.</li>
-        <li>
-          <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">/*  **********************************
- *  Registration Data Validation Rules
- * ********************************* */
-validate.registationRules = () =&gt; {
-  return [
-    // firstname is required and must be string
-    body("account_firstname")
+        <ol>
+          <li>We'll begin with the registration data.</li>
+          <li>Create a new JavaScript file in the <span class="fn">utilities</span> folder, named <span class="fn">account-validation</span>.</li>
+          <li>At the top of the new file you'll require the <span class="fn">utilities > index.js</span> file and the express validator.
+            Finally, you'll create a "validate" object, as shown:
+            <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">const utilities = require(".")
+  const { body, validationResult } = require("express-validator")
+  const validate = {}</code></pre>
+          </li>
+          <li>In line 2, the express validator contains multiple tools, two of which we have indicated we wish to use:
+            body and validationResult. The body tool allows the validator to access the body object, which contains all
+            the data, sent via the HTTPRequest. The validationResult is an object that contains all errors detected by the
+            validation process. Thus, we use the first tool to access the data and the second to retrieve any errors.</li>
+          <li>Next, we will create a function that will return an array of rules to be used when checking the incoming data. Each rule focuses on a specific input from the registration form. We will build the entire function first, then examine each rule
+            individually.</li>
+          <li>
+  <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it." ><code class="language-JavaScript">/*  **********************************
+  *  Registration Data Validation Rules
+  * ********************************* */
+  validate.registationRules = () =&gt; {
+    return [
+      // firstname is required and must be string
+      body("account_firstname")
+        .trim()
+        .escape()
+        .notEmpty()
+        .isLength({ min: 1 })
+        .withMessage("Please provide a first name."), // on error this message is sent.
+  
+      // lastname is required and must be string
+      body("account_lastname")
+        .trim()
+        .escape()
+        .notEmpty()
+        .isLength({ min: 2 })
+        .withMessage("Please provide a last name."), // on error this message is sent.
+  
+      // valid email is required and cannot already exist in the DB
+      body("account_email")
       .trim()
-      .isLength({ min: 1 })
-      .withMessage("Please provide a first name."), // on error this message is sent.
-
-    // lastname is required and must be string
-    body("account_lastname")
-      .trim()
-      .isLength({ min: 2 })
-      .withMessage("Please provide a last name."), // on error this message is sent.
-
-    // valid email is required and cannot already exist in the DB
-    body("account_email")
-    .trim()
-    .isEmail()
-    .normalizeEmail() // refer to validator.js docs
-    .withMessage("A valid email is required."),
-
-    // password is required and must be strong password
-    body("account_password")
-      .trim()
-      .isStrongPassword({
-        minLength: 12,
-        minLowercase: 1,
-        minUppercase: 1,
-        minNumbers: 1,
-        minSymbols: 1,
-      })
-      .withMessage("Password does not meet requirements."),
-  ]
-}</code></pre>
-        </li>
-        <li>
-          <h3>An Explanation</h3>
-          <ul>
-            <li><strong>Lines 1-3 - </strong> a multi-line comment</li>
-            <li><strong>Line 4 - </strong> creates and opens an anonymous function and assigns it to the
-              "registrationRules" property of the "validate" object.</li>
-            <li><strong>Line 5 - </strong> the "return" command and the opening of the array of checks for the incoming
-              data.</li>
-            <li><strong>Line 6 - </strong> a single line comment for the check that begins on the next line.</li>
-            <li><strong>Line 7 - </strong> looks inside the HTTPRequest body for a name - value pair, where the name is
-              "account_firstname". <i>Remember the data trail concept? The form input has been given the same name as the
-                column in the database table.</i></li>
-            <li><strong>Line 8 - </strong> <b>.trim()</b> is a sanitizing function used to remove whitespace (empty
-              characters) on either side of the incoming string.</li>
-            <li><strong>Line 9 - </strong> <b>.isLength()</b> is a validation function where a specified length
-              requirement for the incoming data can be declared. In our code, the option is an object that declares the
-              minimum required length of the first name must be 1 character.</li>
-            <li><strong>Line 10 - </strong> <b>.withMessage()</b> is a function that allows an error message, specific
-              to this rule, to be declared if the requirements are not met. If this custom message were not provided a
-              default message of "invalid value" would be provided.</li>
-            <li><strong>Line 11 - </strong> left intentionally blank.</li>
-            <li><strong>Lines 12-16 - </strong> a rule of the last name, that is nearly identical to that for the first name.</li>
-            <li><strong>Line 17 - </strong> left intentionally blank.</li>
-            <li><strong>Line 18 - </strong> a comment introducing the email check.</li>
-            <li><strong>Line 19 - </strong> indicates that the "account_email" name - value pair is to be located in the
-              HTTPRequest body.</li>
-            <li><strong>Line 20 - </strong> whitespace should be removed from either side of the text.</li>
-            <li><strong>Line 21 - </strong> <b>isEmail()</b> is a validation function that checks the string for
-              characters that should be present in a valid email address. Check the validator.js documentation for
-              additional options and default settings.</li>
-            <li><strong>Line 22 - </strong> <b>normalizeEmail()</b> is a sanitization function that makes the email all
-              lowercase, as well as additional alterations to "canonicalize" an email. Refer to the validator.js
-              documentation for default settings and options. <span class="notice">Note that the official documentation specifies that the checks on lines 21 and 22 must be in this order.</span> </li>
-            <li><strong>Line 23 - </strong> provides a custom error message for the email data.</li>
-            <li><strong>Line 24 - </strong> left intentionally blank.</li>
-            <li><strong>Line 25 - </strong> a comment for the password check</li>
-            <li><strong>Line 26 - </strong> begins the password check process.</li>
-            <li><strong>Line 27 - </strong> removes whitespace before and after the string.</li>
-            <li><strong>Line 28 - </strong> <b>isStrongPassword()</b> is a function for checking a password string to
-              meet specific requirements to be considered a strong password. By default, the function returns a boolean - True or
-              False. Can also have an option added to return a strength score.</li>
-            <li><strong>Line 29 - </strong> a name - value pair within the options object that indicates the minimum
-              length of the password must be 12 characters.</li>
-            <li><strong>Line 30 - </strong> a name - value pair within the options object that indicates the minimum
-              number of lowercase alphabetic characters must be one.</li>
-            <li><strong>Line 31 - </strong> a name - value pair within the options object that indicates the minimum
-              number of uppercase alphabetic characters must be one.</li>
-            <li><strong>Line 32 - </strong> a name - value pair within the options object that indicates the minimum
-              number of numeric characters must be one.</li>
-            <li><strong>Line 33 - </strong> a name - value pair within the options object that indicates the minimum
-              number of symbol characters must be one.</li>
-            <li><strong>Line 34 - </strong> ends the option object and isStrongPassword function.</li>
-            <li><strong>Line 35 - </strong> the custom message if the password check fails.</li>
-            <li><strong>Line 36 - </strong> ends the array containing all the checks.</li>
-            <li><strong>Line 37 - </strong> ends the anonymous function opened on line 4.</li>
-          </ul>
-        </li>
-        <li>Carefully review the code for any warnings or errors.</li>
-        <li>Save the file.</li>
-      </ol>
+      .escape()
+      .notEmpty()
+      .isEmail()
+      .normalizeEmail() // refer to validator.js docs
+      .withMessage("A valid email is required."),
+  
+      // password is required and must be strong password
+      body("account_password")
+        .trim()
+        .notEmpty()
+        .isStrongPassword({
+          minLength: 12,
+          minLowercase: 1,
+          minUppercase: 1,
+          minNumbers: 1,
+          minSymbols: 1,
+        })
+        .withMessage("Password does not meet requirements."),
+    ]
+  }</code></pre>
+          </li>
+          <li>
+            <h3>An Explanation</h3>
+            <ul>
+              <li><strong>Lines 1-3 - </strong> a multi-line comment</li>
+              <li><strong>Line 4 - </strong> creates and opens an anonymous function and assigns it to the
+                "registrationRules" property of the "validate" object.</li>
+              <li><strong>Line 5 - </strong> the "return" command and the opening of the array of checks for the incoming
+                data.</li>
+              <li><strong>Line 6 - </strong> a single line comment for the check that begins on the next line.</li>
+              <li><strong>Line 7 - </strong> looks inside the HTTPRequest body for a name - value pair, where the name is
+                "account_firstname". <i>Remember the data trail concept? The form input has been given the same name as the
+                  column in the database table.</i></li>
+              <li><strong>Lines 8-9 - </strong> <b>.trim()</b> is a sanitizing function used to remove whitespace (empty
+                    characters) on either side of the incoming string. <b>.escape()</b> finds any special character and transform it to an HTML Entity rendering it not operational as code. </li>
+              <li><strong>Lines 10-11 - </strong> <b>.notEmpty()</b> is a validatator ensuring that a value exists. <b>.isLength()</b> is a validatator checking for a specified length requirement. In our code, the option is an object that declares the minimum required length of the first name must be 1 character.</li>
+              <li><strong>Line 12 - </strong> <b>.withMessage()</b> is a function that allows an error message, specific
+                to this rule, to be declared if the requirements are not met. If this custom message were not provided a
+                default message of "invalid value" would be provided.</li>
+              <li><strong>Line 13 - </strong> left intentionally blank.</li>
+              <li><strong>Lines 12-20 - </strong> a rule of the last name, that is nearly identical to that for the first name.</li>
+              <li><strong>Line 21 - </strong> left intentionally blank.</li>
+              <li><strong>Line 22 - </strong> a comment introducing the email check.</li>
+              <li><strong>Line 23 - </strong> indicates that the "account_email" name - value pair is to be located in the
+                HTTPRequest body.</li>
+              <li><strong>Lines 24-26 - </strong> sanitizers and a validator, the same as those for the first and last names.</li>
+              <li><strong>Line 27 - </strong> <b>isEmail()</b> is a validation function that checks the string for
+                characters that should be present in a valid email address. Check the validator.js documentation for
+                additional options and default settings.</li>
+              <li><strong>Line 28 - </strong> <b>normalizeEmail()</b> is a sanitization function that makes the email all
+                lowercase, as well as additional alterations to "canonicalize" an email. Refer to the validator.js
+                documentation for default settings and options. <span class="notice">Note that the official documentation specifies that the checks on lines 27 and 28 must be in this order.</span> </li>
+              <li><strong>Line 29 - </strong> provides a custom error message for the email data.</li>
+              <li><strong>Line 30 - </strong> left intentionally blank.</li>
+              <li><strong>Line 31 - </strong> a comment for the password check</li>
+              <li><strong>Line 32 - </strong> begins the password check process.</li>
+              <li><strong>Lines 33-34 - </strong> same sanitizer and validator as previous inputs.</li>
+              <li><strong>Line 35 - </strong> <b>isStrongPassword()</b> is a function for checking a password string to
+                meet specific requirements to be considered a strong password. By default, the function returns a boolean - True or
+                False. Can also have an option added to return a strength score.</li>
+              <li><strong>Line 36 - </strong> a name - value pair within the options object that indicates the minimum
+                length of the password must be 12 characters.</li>
+              <li><strong>Line 37 - </strong> a name - value pair within the options object that indicates the minimum
+                number of lowercase alphabetic characters must be one.</li>
+              <li><strong>Line 38 - </strong> a name - value pair within the options object that indicates the minimum
+                number of uppercase alphabetic characters must be one.</li>
+              <li><strong>Line 39 - </strong> a name - value pair within the options object that indicates the minimum
+                number of numeric characters must be one.</li>
+              <li><strong>Line 40 - </strong> a name - value pair within the options object that indicates the minimum
+                number of symbol characters must be one.</li>
+              <li><strong>Line 41 - </strong> ends the option object and isStrongPassword function.</li>
+              <li><strong>Line 42 - </strong> the custom message if the password check fails.</li>
+              <li><strong>Line 43 - </strong> ends the array containing all the checks.</li>
+              <li><strong>Line 44 - </strong> ends the anonymous function opened on line 4.</li>
+            </ul>
+          </li>
+          <li>Carefully review the code for any warnings or errors.</li>
+          <li>Save the file.</li>
+        </ol>
 
       <h3>The Registration Check Function</h3>
       <p>The previous function declares the rules to be used to check the incoming registration data. Now, we will
