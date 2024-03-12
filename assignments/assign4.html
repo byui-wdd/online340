@@ -103,7 +103,7 @@
             <li>Contain a form for adding a new vehicle to the inventory table. (<i>Hint: Check the inventory table in the database for the fields that will be needed in the form. <b>DO NOT</b> have a form field for the primary key as it is auto-incrementing in the database table</i>).
             </li>
             <li>The form must use client-side validation for all inputs.</li>
-            <li>Form inputs, including the select list for classifications, must be sticky, to retain the information when errors are detected and returned.</li>
+            <li>Form inputs, including the select list for classifications, <b>must be sticky</b>, to retain the information when errors are detected and returned.</li>
             <li>When indicating the classification the vehicle belongs to, the classification options must appear in a
               <a href="//www.w3schools.com/html/html_form_elements.asp" title="See an example of a select element"
                 target="_blank">drop-down select list</a>. The classification name must appear to the human eye, but
@@ -111,6 +111,26 @@
               been dynamically pre-built in the <span class="fn">utilities &gt; index</span> file and passed to the view by the controller. (<i>Hint: This will be similar to
                 building the navigation bar, but will be wrapped inside a select element with options instead of an
                 unordered list with list items.)</i>
+                <p>To help you, the following code exemplifies what the select list would look like:
+  <pre class="line-numbers" title="Copy - Paste does NOT help you learn. Type it."><code class="language-JavaScript">Util.buildClassificationList = async function (classification_id = null) {
+    let data = await invModel.getClassifications()
+    let classificationList =
+      '&lt;select name="classification_id" id="classificationList" required&gt;'
+    classificationList += "&lt;option value=''&gt;Choose a Classification&lt;/option&gt;"
+    data.rows.forEach((row) =&gt; {
+      classificationList += '&lt;option value="' + row.classification_id + '"'
+      if (
+        classification_id != null &&
+        row.classification_id == classification_id
+      ) {
+        classificationList += " selected "
+      }
+      classificationList += "&gt;" + row.classification_name + "&lt;/option&gt;"
+    })
+    classificationList += "&lt;/select&gt;"
+    return classificationList
+  }</code></pre>
+  An explanation of the code is not provided here. It is expected that you will study the code and discuss it with others in your learning team to ensure you understand it. If you have questions, please ask them in the discussion board.</p>
             </li>
             <li>When adding image paths, use the path to the <span class="fn">No Image Available</span> image and thumbnail respectively, that already exists in the
               <span class="fn">vehicle images</span> folder, or you could find and add a new image for the vehicle manually to the images folder
@@ -120,7 +140,7 @@
           </ul>
         </li>
         <li>The form must send all data via a route and using the MVC architecture as with other processes.</li>
-        <li>The data must be written to the inventory table within the database.</li>
+        <li>The data must be written to the inventory table within the database using a model-based function.</li>
         <li>If the new inventory item is added successfully, a success message must be displayed in the <span class="fn">management</span> view. <mark>If successful, you can navigate through the appropriate navigation item to ensure the item appears in the inventory by classification view, and can be clicked to see all the item's details.</mark></li>
         <li>If the new item fails to be added to the database, a failure message must be displayed in the <span class="fn">add inventory</span> view.</li>
         <li>Thoroughly test all operations for functionality! Make sure it works.</li>
