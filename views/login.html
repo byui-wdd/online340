@@ -119,7 +119,7 @@ async function accountLogin(req, res) {
  try {
   if (await bcrypt.compare(account_password, accountData.account_password)) {
   delete accountData.account_password
-  const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 * 1000 })
+  const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 })
   if(process.env.NODE_ENV === 'development') {
     res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 })
     } else {
@@ -152,7 +152,7 @@ async function accountLogin(req, res) {
           <li><strong>Line 18 - </strong> opens a try-catch block.</li>
           <li><strong>Line 19 - </strong> uses the bcrypt.compare() function which takes the incoming, plain text password and the hashed password from the database and compares them to see if they match. (The plain text password is hashed using the same algorithm and secret used with the original password. The two hashes are compared to see if they match.) The resulting "TRUE" or "FALSE" is evaluated by the "if".</li>
           <li><strong>Line 20 - </strong> If the passwords match, then the JavaScript delete function is used to remove the hashed password from the accountData array.</li>
-          <li><strong>Line 21 - </strong> the JWT token is created. The accountData is inserted as the payload. The secret is read from the <span class="fn">.env</span> file. When the token is ready, it is stored into an "accessToken" variable. <span class="notice">Note! The token expiration must be set in milliseconds. Thus, 60 seconds x 60 minutes = 3600 seconds. Multiply that by 1000 to convert it to milliseconds. In short, the token will be given a life of 1 hour, measured in milliseconds</span>.
+          <li><strong>Line 21 - </strong> the JWT token is created. The accountData is inserted as the payload. The secret is read from the <span class="fn">.env</span> file. When the token is ready, it is stored into an "accessToken" variable. <span class="notice">Note! The token expiration must be set in seconds. Thus, 60 seconds x 60 minutes = 3600 seconds. In short, the token will be given a life of 1 hour, measured in seconds</span>.
           </li>
           <li><strong>Line 22 - </strong> checks to see if the development environment is "development" (meaning local for testing). If TRUE, a new cookie is created, named "jwt", the JWT token is stored in the cookie, and the options of "httpOnly: true" and "maxAge: 3600 * 1000" are set. This means that the cookie can only be passed through the HTTP protocol and cannot be accessed by client-side JavaScript. It will also expire in 1 hour.</li>
           <li><strong>Line 24 - </strong> an "else", (meaning the the environment is not "development"), then the cookie is created with the same name and token, but with the added option of "secure: true". This means that the cookie can only be passed through HTTPS and not HTTP. This is a security measure to ensure that the cookie is not passed through an unsecured connection.</li>
