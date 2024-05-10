@@ -5,12 +5,12 @@
   <meta charset="UTF-8">
   <title>baseController | Web Backend Development</title>
   <meta name="viewport" content="width=device-width">
-  <link rel="stylesheet" href="/online340/css/340course-min.css" type="text/css" media="screen">
+  <link rel="stylesheet" href="/cse340-ww-content/css/340course-min.css" type="text/css" media="screen">
 </head>
 
 <body>
   <div id="wrapper">
-    <header><img src="/online340/images/small_banner.jpg" alt="Course Banner"></header>
+    <header><img src="/cse340-ww-content/images/small_banner.jpg" alt="Course Banner"></header>
     <main>
       <h1>baseController</h1>
       <h2>Introduction</h2>
@@ -22,7 +22,7 @@
       <p>Let's start by altering the existing index route.</p>
       <ol>
         <li>Find the existing code for the index route. Alter it to look like the image below:</li>
-        <li><div class="callout"><img src="/online340/images/index-route.png"
+        <li><div class="callout"><img src="/cse340-ww-content/images/index-route.png"
               alt="Altered server.js code for the index route"></div>
         </li>
         <li>The second line does a number of things:
@@ -38,7 +38,7 @@
   <li>Scroll up to the top of the server.js file and find the "Require Statements" comment.</li>
   <li>Create a new empty line beneath the last line that has a "require" function in it.</li>
   <li>Add the line of code shown in the image below. This line will bring the controller file into the scope of the page, and store it in a local variable. The variable used here, must match the variable used in the route (e.g. baseController).
-    <div class="callout"><img src="/online340/images/base-controller-import.png"
+    <div class="callout"><img src="/cse340-ww-content/images/base-controller-import.png"
         alt="Code to import the base controller to server.js"></div>
   </li>
 </ol></li>
@@ -50,7 +50,7 @@
         <li>Click the "controllers" folder, to highlight it.</li>
         <li>Click the new file icon, name the new file "<mark>baseController.js</mark>.</li>
         <li>Add the code shown in the image to the file:
-          <div class="callout"><img src="/online340/images/base-controller-start.png"
+          <div class="callout"><img src="/cse340-ww-content/images/base-controller-start.png"
               alt="Code for the base controller"></div>
         </li>
         <li>Save the file.</li>
@@ -73,7 +73,7 @@
         <li>Find and open the navigation.ejs file in the partials folder.</li>
         <li>Highlight and delete the unordered list.</li>
         <li>Add a code block and variable name for the dynamic navigation code as shown in the image:
-          <div class="callout"><img src="/online340/images/navigation-dynamic.png" alt="Code for the dynamic navigation variable"></div>
+          <div class="callout"><img src="/cse340-ww-content/images/navigation-dynamic.png" alt="Code for the dynamic navigation variable"></div>
         </li>
         <li>Save the file.</li>
         <li>With this alteration, it is critical to understand that whenever a view is rendered, the "nav" variable MUST be included or else the view will not render and an error will be thrown.</li>
@@ -84,7 +84,7 @@
         <li>Find and open the server.js file.</li>
         <li>Locate the existing route to render the index view.</li>
         <li>Alter the code to remove the response.render methods and replace it with the call to the controller function, as shown in this image:
-          <div class="callout"><img src="/online340/images/index-route.png"
+          <div class="callout"><img src="/cse340-ww-content/images/index-route.png"
               alt="Code for the modified index route in server.js"></div>
         </li>
         <li>Save the file.</li>

@@ -8,4 +8,4 @@ Units shown in the **overviews** folder are representative of the five learning 
 All units have a suggested duration of two weeks. During week 1, the learning activities are to be completed. During week 2, the focus should be entirely on the assignment.
 
 ## Base URL
-The base URL to access any materials in this repo is **https://byui-wdd.github.io/online340/**
+The base URL to access any materials in this repo is **https://byui-wdd.github.io/cse340-ww-content/**
