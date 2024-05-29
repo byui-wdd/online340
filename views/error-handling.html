@@ -54,7 +54,7 @@ Util.handleErrors = fn =&gt; (req, res, next) =&gt; Promise.resolve(fn(req, res,
       <p>The function you just wrote is middleware. Middleware is applied between the request arriving at the server, and the response sending something back to the client. This is almost always done in a route. The concept is relatively straight forward - middleware is a way to handle a sequence of interactions and move from one to the next as needed. It is "middleware" because it occurs between receiving the request and before sending the response. Here is a link to an 11-minute video that I think does a pretty good job of explaining and illustrating middleware - <a href="https://youtu.be/MIr1oxQ3pao" target="_blank" title="Open video in new tab">https://youtu.be/MIr1oxQ3pao</a>. We will begin using middleware, a lot, in the rest of the course.</p>
 
       <h2>Time to Test</h2>
-<p>The most basic route in the application is the one that delivers the application home view. That's were we will test our code.</p>
+<p>The most basic route in the application is the one that delivers the application home view. That's where we will test our code.</p>
 
       <ol>
         <li>Open the <span class="fn">server.js</span> file.</li>
