@@ -25,8 +25,6 @@
       <ul>
         <li>A sql file containing six queries as described in Task One.</li>
         <li>A sql file containing all the code to create a PostgreSQL type, three tables and insert statements to populate two of the tables, built during the activities.</li>
-        <li>A video demonstrating the deletion of a database service and the reestablishment of the service, the remote connection to that service and the execution of SQL code to build the type and tables and populate the tables as described in Task Two.
-        </li>
       </ul>
 
       <h2>Video Demo</h2>
@@ -63,7 +61,7 @@
             </li>
             <li>Modify the Tony Stark record to change the account_type to "<mark>Admin</mark>".</li>
             <li>Delete the Tony Stark record from the database.</li>
-            <li>Modify the "GM Hummer" record to read "a huge interior" rather than "the small interiors" using a single query.
+            <li>Modify the "GM Hummer" record to read "a huge interior" rather than "small interiors" using a single query.
               Explore the <a href="https://www.postgresqltutorial.com/postgresql-string-functions/postgresql-replace/" title="Opens in a new tab" target="_blank">PostgreSQL Replace function</a> <mark>Do NOT retype the entire description as part of the query.</mark>.
               It needs to be part of an Update query as shown in the code examples of the <a href="https://go.oreilly.com/byu-idaho/library/view/simply-sql/9780980455250/Text/ch01.html" title="Opens in a new tab" target="_blank">SQL Reading</a> - Read Ch. 1, section 3.</li>
             <li>Use an inner join to select the make and model fields from the inventory table and the classification name field from the classification table for inventory items that belong to the "Sport" category. These resources may help you: <a href="https://www.postgresqltutorial.com/postgresql-tutorial/postgresql-joins/" title="Link opens in a new tab" target="_blank">https://www.postgresqltutorial.com/postgresql-tutorial/postgresql-joins/</a>. Two
@@ -79,7 +77,7 @@
 
       <h3>Task Two - Destroy and Rebuild the Database</h3>
 
-      <p>You should already be aware that Render.com removes free-tier databases after 90 days. Therefore, it is critical that you know how to restore your database when that happens. Task two requires you to go through the entire process manually, so you know how to do it again when the time comes. You will probably need to do this at least twice. Once to make sure you know the process and the second time to record a video of you doing so. The video should be <strong>less than four minutes in length</strong> - so you need to know exactly what you're doing.</p>
+      <p>You should already be aware that Render.com removes free-tier databases after 90 days. Therefore, it is critical that you know how to restore your database when that happens. Task two requires you to go through the entire process manually, so you know how to do it again when the time comes. This is entirely for your benefit. Be sure you do the process on your own.</p>
 
       <ol>
         <li>Destroy the database service in the Render.com dashboard by clicking on the database service, scrolling to the bottom and clicking "Delete Database" and following the provided directions.</li>
@@ -87,19 +85,15 @@
         <li>Delete the existing connection to the remote database in the local tool: pgAdmin or SQLTools.</li>
         <li>Create a new connection between the database and one of the local tools: pgAdmin or SQLTools.</li>
         <li>Run the SQL code (you should already have all these queries stored in the database folder of your project), as a set of queries, run at the same time, to build the Type object, the three tables, and populate the classification and inventory tables. And, the copies of queries 4 and 6 from Task 1, should be run as the last items in the restore file.</li>
-        <li>Show that the structures and data exist.</li>
+        <li>Test that the structures and data exist.</li>
       </ol>
       <h2>Submission</h2>
       <ul>
         <li>Work with your learning team to help one another to accomplish each task and post to and read the weekly discussion board to help one another. <strong>Remember that each individual is responsible for her or his own work, this is not a group project.</strong></li>
         <li>Check your work to ensure that it meets all the expectations listed.</li>
-        <li>Create a video showing the process described in task 2. You will want to pause the video while the database is being created, which is usually less than five minutes.</li>
-        <li>Post your video to your YouTube channel as <b>"Unlisted"</b> and copy the link to the video when published.</li>
         <li>Upload the project to your GitHub repository and copy the URL to the repository.</li>
-        <li>Submit the YouTube video URL <b>AND</b> the GitHub repository URL as a comment in the assignment submission.</li>
-        <li><mark>Note: Because the production server does not change with this assignment, you do NOT need to submit the production URL for assignment 2. However, you will need to do so for all other assignments!</mark></li>
-        <!-- <li>Zip the <span class="language-markup">database</span> folder, making sure it contains the SQL files used in the lesson activities and this assignment, and name it assignment 2 (save this zip file outside your website)</li> -->
-        <!-- <li>Submit the zip file to the assignment 2 submission and add the video URL to the assignment submission comment.</li> -->
+        <li>Submit the production URL <b>AND</b> the GitHub repository URL as a comment in the assignment submission.</li>
+        <li><mark>Note: Even though the production server does not change with this assignment, submit the production URL for consistency.</mark></li>
         </ol>
         </li>
       </ul>
@@ -120,9 +114,8 @@
 
       <h3>Objective 6</h3>
       <ul>
-        <li>The Task 2 video showing the database delete and restoration process is present and complete, narrated using your voice, and less than 4 minutes in length. The video URL must be present and correct for Task 2 to be graded.</li>
+        <li>The GitHub and production URL's must be present and correct for assignment 2 to be graded.</li>
         <li>The files for Tasks 1 and 2 are both present and complete in the "database" folder within the GitHub repository.</li>
-<!-- <li>The zip file of the database folder, containing all the SQL files used in the activities and assignment, is present. The zip file and video URL are submitted correctly and on time.</li> -->
         <li>Obj. 6 value: Refer to grade book</li>
       </ul>
     </main>
