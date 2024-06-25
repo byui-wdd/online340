@@ -5,14 +5,14 @@
   <meta charset="UTF-8">
   <title>EJS View Engine | Web Backend Development</title>
   <meta name="viewport" content="width=device-width">
-  <link rel="stylesheet" href="/online340/css/340course-min.css" type="text/css" media="screen">
-  <link rel="stylesheet" href="/online340/css/prism-coy-dev.min.css" media="screen">
-  <script defer src="/online340/js/prism-coy-dev.min.js"></script>
+  <link rel="stylesheet" href="/cse340-ww-content/css/340course-min.css" type="text/css" media="screen">
+  <link rel="stylesheet" href="/cse340-ww-content/css/prism-coy-dev.min.css" media="screen">
+  <script defer src="/cse340-ww-content/js/prism-coy-dev.min.js"></script>
 </head>
 
 <body>
   <div id="wrapper">
-    <header><img src="/online340/images/small_banner.jpg" alt="Course Banner"></header>
+    <header><img src="/cse340-ww-content/images/small_banner.jpg" alt="Course Banner"></header>
     <main>
       <h1>EJS View Engine</h1>
 <p>The video provides a general overview of the activity, but does not contain the detail needed to complete each process. Watch the video to obtain a general idea, but follow the written steps to complete the activity. This is the <a target="_blank" href="../transcripts/ejs-view-engine.txt">Transcript</a> of the video.</p>
@@ -27,7 +27,7 @@
         you may already be familiar with. In this activity we will install and implement both packages.</p>
         <h3>EJS Tags</h3>
         <p>This image, from the EJS documentation shows the various EJS code blocks and what each annotation means. <span class="notice">I suggest you save the image and refer to it or print it as a reference as you work through the code in this and future activities for the course.</span>
-<div class="callout"><img src="/online340/images/ejs-tags.png" alt="EJS tags reference image"></div>
+<div class="callout"><img src="/cse340-ww-content/images/ejs-tags.png" alt="EJS tags reference image"></div>
 
         </p>
 
@@ -110,7 +110,7 @@ app.set("layout", "./layouts/layout") // not at views root</code></pre>
         the <a href="https://ejs.co" target="_blank">EJS documentation</a> for the meanings of the various code blocks
         as shown in red
         (&lt;%&nbsp;%&gt;)</p>
-      <div><img src="/online340/images/layout-template.png" alt="Code for EJS layout file"></div>
+      <div><img src="/cse340-ww-content/images/layout-template.png" alt="Code for EJS layout file"></div>
 
       <h2>Partials</h2>
       <p>A partial is what it sounds like, a part of a whole. In this case, each partial represents code for that
@@ -123,7 +123,7 @@ app.set("layout", "./layouts/layout") // not at views root</code></pre>
         <li>Just like you did previously, click the views folder then create the file and the folder at the same time.
           Remember that each of these files will end with the "ejs" extension.</li>
         <li>Once the <span class="fn">head</span> file is created, add the following code to it (do not include the line numbers on the left):
-          <div><img src="/online340/images/head.png" alt="Code for the head partial"></div>
+          <div><img src="/cse340-ww-content/images/head.png" alt="Code for the head partial"></div>
         </li>
         <li>Everything here should look familiar, except you'll notice that the title contains an EJS code block for a
           dynamic value and the path for the CSS file does NOT contain the <span class="fn">public</span> folder name. <span class="notice">Remember that EJS
@@ -163,7 +163,7 @@ app.set("layout", "./layouts/layout") // not at views root</code></pre>
 <ol>
   <li>Create the navigation partial in the <span class="fn">partials</span> folder.</li>
   <li>Enter the code shown in the image:
-    <div><img src="/online340/images/navigation-static.png" alt="Code for the navigation partial"></div>
+    <div><img src="/cse340-ww-content/images/navigation-static.png" alt="Code for the navigation partial"></div>
   </li>
   <li>Impressive, isn't it?!</li>
   <li>For now, this is temporary filler code. It will be replaced with dynamic code shortly.</li>
@@ -190,7 +190,7 @@ let year = d.getFullYear() %&gt;
 <p>Compare your folder and file structure against the illustration below. If anything is out of place, be sure to correct it.
 <div class="callout">
   <img
-    src="/online340/images/folder-file-structure-check.png"
+    src="/cse340-ww-content/images/folder-file-structure-check.png"
     alt="Project folder and file structure"
   />
 </div>

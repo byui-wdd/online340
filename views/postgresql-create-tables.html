@@ -5,17 +5,17 @@
   <meta charset="UTF-8">
   <title>PostgreSQL Tables | Web Backend Development</title>
   <meta name="viewport" content="width=device-width">
-  <link rel="stylesheet" href="/online340/css/340course-min.css" type="text/css" media="screen">
+  <link rel="stylesheet" href="/cse340-ww-content/css/340course-min.css" type="text/css" media="screen">
 </head>
 
 <body>
   <div id="wrapper">
-    <header><img src="/online340/images/small_banner.jpg" alt="Course Banner"></header>
+    <header><img src="/cse340-ww-content/images/small_banner.jpg" alt="Course Banner"></header>
     <main>
       <h1>PostgreSQL Tables</h1>
       <h2>Introduction</h2>
       <p>We're now ready to create the tables for the database. You'll create three: classification, account, and inventory. The tables, their fields and types, and the relationship between the classification and inventory tables are shown in the Entity Relationship Diagram (ERD). 
-        <div class="callout"><img src="/online340/images/postgresql-erd.png"
+        <div class="callout"><img src="/cse340-ww-content/images/postgresql-erd.png"
             alt="Entity relationship diagram for the PostgreSQL tables"></div>
         Specific details for each table is found below.</p>
 
@@ -47,13 +47,13 @@
         <li>Right-click on the "Tables" item, select "Query Tool".</li>
         <li>A new work window will open where SQL code is expected to be entered.</li>
         <li>Type the code shown below into the window:
-        <div class="callout"><img src="/online340/images/postgresql-create-classification-sql.png"
+        <div class="callout"><img src="/cse340-ww-content/images/postgresql-create-classification-sql.png"
             alt="SQL code to create classification table"></div>
         </li>
         <li>Double check that the code is typed correctly and that there are no errors or warnings being indicated by pgAdmin.</li>
         <li>Copy the code and paste it into the <span title='Visual Studio Code'>VSC</span> SQL file that holds the code to create the PostgreSQL Type from the last activity. Save and close the file when done.</li>
         <li>Click the "Execute / Refresh" icon in pgAdmin. 
-          <div class="callout"><img src="/online340/images/pgadmin-execute-btn.png"
+          <div class="callout"><img src="/cse340-ww-content/images/pgadmin-execute-btn.png"
               alt="Image of the pgAdmin Execute / Refresh button"></div>
         </li>
         <li>The code should run and a new "classification" table should appear in the "Tables" item of the database. <mark>If the table does not appear, right-click on the Tables item, and select "Refresh". Do this after each table is created if the table does not appear in the list.</mark></li>
@@ -67,14 +67,14 @@
   <li>Right-click on the "Tables" item, select "Query Tool".</li>
   <li>A new work window will open where SQL code is expected to be entered.</li>
   <li>Type the code shown below into the window:
-    <div class="callout"><img src="/online340/images/postgresql-create-inventory-sql.png"
+    <div class="callout"><img src="/cse340-ww-content/images/postgresql-create-inventory-sql.png"
         alt="SQL code to create inventory table"></div>
   </li>
   <li>Double check that the code is typed correctly and that there are no errors or warnings being indicated by pgAdmin.
   </li>
   <li>Copy the code and paste it into the <span title='Visual Studio Code'>VSC</span> SQL file that holds the code to create the PostgreSQL Type and classification table from earlier. Save and close the file when done.</li>
   <li>Click the "Execute / Refresh" icon in pgAdmin.
-    <div class="callout"><img src="/online340/images/pgadmin-execute-btn.png"
+    <div class="callout"><img src="/cse340-ww-content/images/pgadmin-execute-btn.png"
         alt="Image of the pgAdmin Execute / Refresh button"></div>
   </li>
   <li>The code should run and a new "inventory" table should appear in the "Tables" item of the database.</li>
@@ -89,14 +89,14 @@
   <li>Right-click on the "Tables" item, select "Query Tool".</li>
   <li>A new work window will open where SQL code is expected to be entered.</li>
   <li>Type the code shown below into the window:
-    <div class="callout"><img src="/online340/images/postgresql-create-relationship-sql.png"
+    <div class="callout"><img src="/cse340-ww-content/images/postgresql-create-relationship-sql.png"
         alt="SQL code to create relationsip between classification and inventory tables"></div>
   </li>
   <li>Double check that the code is typed correctly and that there are no errors or warnings being indicated by pgAdmin.
   </li>
   <li>Copy the code and paste it into the <span title='Visual Studio Code'>VSC</span> SQL file that holds the code to create the PostgreSQL Type and tables from earlier. <mark>Order matters! Make sure the order of the code is: 1) create the type at the top, 2) create the classification table next, 3) create the inventory table third, and 4) create the relationship at the bottom.</mark> Close the file when done.</li>
   <li>Click the "Execute / Refresh" icon in pgAdmin.
-    <div class="callout"><img src="/online340/images/pgadmin-execute-btn.png"
+    <div class="callout"><img src="/cse340-ww-content/images/pgadmin-execute-btn.png"
         alt="Image of the pgAdmin Execute / Refresh button"></div>
   </li>
   <li>The code should run. No new table will appear, but the relationship should have been created.</li>
@@ -118,7 +118,7 @@
   <li>Right-click on the "Tables" item, select "Query Tool".</li>
   <li>A new work window will open where SQL code is expected to be entered.</li>
   <li>Type the code shown below into the window:
-    <!-- <div class="callout"><img src="/online340/images/postgresql-create-client-sql.png"
+    <!-- <div class="callout"><img src="/cse340-ww-content/images/postgresql-create-client-sql.png"
         alt="SQL code to create client table"></div> -->
   </li>
   </ol>
@@ -140,7 +140,7 @@ CREATE TABLE IF NOT EXISTS public.account
     earlier. <mark>Order matters! Make sure the order of the code is: 1) create the type at the top, 2) create the
       classification table next, 3) create the inventory table third, and 4) create the relationship next, and 5) create the account table at the bottom.</mark> Close the file when done.</li>
   <li>Click the "Execute / Refresh" icon in pgAdmin.
-    <div class="callout"><img src="/online340/images/pgadmin-execute-btn.png"
+    <div class="callout"><img src="/cse340-ww-content/images/pgadmin-execute-btn.png"
         alt="Image of the pgAdmin Execute / Refresh button"></div>
   </li>
   <li>The code should run and a new "account" table should appear in the "Tables" item of the database.</li>
